@@ -1,0 +1,40 @@
+{
+  "name": "runtime-data-validation",
+  "version": "0.1.0",
+  "description": "TypeScript Decorators for automatic runtime data validation in accessors and method parameters",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "type": "commonjs",
+  "scripts": {
+    "build": "npx tsc",
+    "watch": "npx tsc -w"
+  },
+  "keywords": [
+    "validator",
+    "validation",
+    "validate",
+    "sanitization",
+    "sanitize",
+    "sanitisation",
+    "sanitise",
+    "typescript",
+    "decorator",
+    "decorators",
+    "annotation"
+  ],
+  "author": "David Herron <david@davidherron.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.15",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "decorator-inspectors": "^0.2.0",
+    "reflect-metadata": "^0.1.13",
+    "validator": "^13.7.0"
+  }
+}
