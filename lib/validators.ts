@@ -101,7 +101,7 @@ export function ValidateParams(
     // Store the original value
     const savedValue = descriptor.value;
     // Attach validation logic
-    descriptor.value = (...args: any[]) => {
+    descriptor.value = function(...args: any[]) {
         let validators = Reflect.getMetadata(PARAMETER_VALIDATORS,
                                 target, propertyKey)
                         || [];
@@ -117,10 +117,9 @@ export function ValidateParams(
             }
         }
         // Actually call the function
-        return Reflect.apply(savedValue, target, args);
+        return savedValue.call(this, ...args);
     };
 }
-
 
 export function ValidateAccessor<T>() {
     return (target: Object, propertyKey: string,
