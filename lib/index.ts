@@ -10,22 +10,42 @@ import { generateValidationDecorator } from './validators';
 export { ValidateParams, ValidateAccessor } from './validators';
 import { default as validator } from 'validator';
 
-export function Contains(seed: string, options?: object) {
+export type ContainsType = {
+    ignoreCase?: boolean;
+    minOccurrences?: number;
+};
+
+export function Contains(seed: string, options?: ContainsType) {
     return generateValidationDecorator(
-        (value) => {
-            // console.log(`Contains ${value} ${seed}`);
-            return validator.contains(value, seed, options)
-        },
+        (value) => validator.contains(value, seed, options),
         `Value :value: does not contain ${seed}`);
 }
 
 export function Equals(comparison: string) {
     return generateValidationDecorator(
-        (value) => {
-            // console.log(`Contains ${value} ${seed}`);
-            return validator.equals(value, comparison)
-        },
+        (value) => validator.equals(value, comparison),
         `Value :value: does not equal ${comparison}`);
+}
+
+// TBD: isAfter 
+// isAfter(str [, date]) 	check if the string is a date that's after the specified date (defaults to now).
+
+export type IsAlphaOptions = {
+    ignore?: string | RegExp;
+};
+
+export function IsAlpha(locale?: string,
+            options?: IsAlphaOptions) {
+    return generateValidationDecorator(
+        (value) => validator.isAlpha(value, locale, options),
+        `Value :value: is not alpha ${locale}`);
+}
+
+export function IsAlphanumeric(locale?: string,
+            options?: IsAlphaOptions) {
+    return generateValidationDecorator(
+        (value) => validator.isAlphanumeric(value, locale, options),
+        `Value :value: is not alpha ${locale}`);
 }
 
 export function IsIntRange(min: number, max: number) {

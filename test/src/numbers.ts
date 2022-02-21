@@ -10,21 +10,31 @@ import * as url from 'url';
 // const __filename = url.fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
-describe('Integers', function() {
+describe('Integers - IsInt - IsIntRange', function() {
     class IntegerExample {
         #value: number;
 
-        @ValidateAccessor()
+        @ValidateAccessor<number>()
         @IsInt()
         set value(nv: number) { this.#value = nv; }
         get value() { return this.#value; }
 
         #range: number;
 
-        @ValidateAccessor()
+        @ValidateAccessor<number>()
         @IsIntRange(10, 100)
         set range(nr: number) { this.#range = nr; }
         get range() { return this.#range; }
+
+        @ValidateParams
+        scale(
+            @IsInt()
+            value: number,
+            @IsFloat()
+            factor: number
+        ) {
+            return value * factor;
+        }
     }
 
     const ie = new IntegerExample();
@@ -79,24 +89,111 @@ describe('Integers', function() {
             failed = true;
         }
         assert.equal(failed, true);
-    })
+    });
+
+    it('Should work with string number', function() {
+        ie.value = '3';
+        assert.equal(ie.value, 3);
+    });
+
+    it('Should fail on invalid data type', function() {
+        let failed = false;
+        try {
+            ie.value = 'Most definitely not a number';
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+    });
+
+    it('Should handle method params', function() {
+        let result = ie.scale(5, 0.5);
+        assert.equal(result, 2.5);
+
+        result = ie.scale(5, 2);
+        assert.equal(result, 10);
+    });
+
+    it('Should handle string method params', function() {
+        let result = ie.scale('5', 0.5);
+        assert.equal(result, 2.5);
+
+        result = ie.scale(5, '2');
+        assert.equal(result, 10);
+    });
+
+    it('Should fail bad scale', function() {
+        let failed = false;
+        try {
+            let result = ie.scale(5.5, 2);
+            assert.equal(result, 11);
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+    });
+
+    it('Should fail with bad parameters', function() {
+        let failed = false;
+        try {
+            let result = ie.scale('five point five', 2);
+            assert.equal(result, 11);
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            let result = ie.scale(5, 'two');
+            assert.equal(result, 10);
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+    });
+
 });
 
-describe('Floats', function() {
+describe('Floats - IsFloat - IsFloatRange', function() {
     class FloatExample {
         #value: number;
 
-        @ValidateAccessor()
+        @ValidateAccessor<number>()
         @IsFloat()
-        set value(nv: number) { this.#value = nv; }
+        set value(nv: number | string) {
+            this.#value = typeof nv === 'string'
+            ? Number.parseFloat(nv)
+            : nv;
+        }
         get value() { return this.#value; }
 
         #range: number;
 
-        @ValidateAccessor()
+        @ValidateAccessor<number>()
         @IsFloatRange(10, 100)
-        set range(nr: number) { this.#range = nr; }
+        set range(nr: number | string) {
+            this.#range = typeof nr === 'string'
+                ? Number.parseFloat(nr)
+                : nr;
+        }
         get range() { return this.#range; }
+
+        @ValidateParams
+        scale(
+            @IsFloat()
+            value: number | string,
+            @IsFloat()
+            factor: number | string
+        ) {
+            const v = typeof value === 'string'
+                ? Number.parseFloat(value)
+                : value;
+            const f = typeof factor === 'string'
+                ? Number.parseFloat(factor)
+                : factor;
+            return v * f;
+        }
     }
 
     const fe = new FloatExample();
@@ -153,5 +250,68 @@ describe('Floats', function() {
             failed = true;
         }
         assert.equal(failed, true);
-    })
+    });
+
+    it('Should work with string number', function() {
+        fe.value = '3';
+        assert.equal(fe.value, 3);
+    });
+
+    it('Should fail on invalid data type', function() {
+        let failed = false;
+        try {
+            fe.value = 'Most definitely not a number';
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+    });
+
+    it('Should handle method params', function() {
+        let result = fe.scale(5, 0.5);
+        assert.equal(result, 2.5);
+
+        result = fe.scale(5, 2);
+        assert.equal(result, 10);
+    });
+
+    it('Should handle string method params', function() {
+        let result = fe.scale('5', 0.5);
+        assert.equal(result, 2.5);
+
+        result = fe.scale(5, '2');
+        assert.equal(result, 10);
+    });
+
+    it('Should accept float scale', function() {
+        let failed = false;
+        try {
+            let result = fe.scale(5.5, 2);
+            assert.equal(result, 11);
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, false);
+    });
+
+    it('Should fail with bad parameters', function() {
+        let failed = false;
+        try {
+            let result = fe.scale('five point five', 2);
+            assert.equal(result, 11);
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            let result = fe.scale(5, 'two');
+            assert.equal(result, 10);
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+    });
+
 });
