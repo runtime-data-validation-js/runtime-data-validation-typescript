@@ -10,7 +10,8 @@
   "type": "commonjs",
   "scripts": {
     "build": "npx tsc",
-    "watch": "npx tsc -w"
+    "watch": "npx tsc -w",
+    "dopublish": "npm publish --access public"
   },
   "keywords": [
     "validator",
