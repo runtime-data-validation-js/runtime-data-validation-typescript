@@ -2,6 +2,7 @@
 import { assert } from 'chai';
 import {
     IsIntRange, IsInt, IsFloatRange, IsFloat,
+    ToInt, ToFloat,
     Contains,
     ValidateParams, ValidateAccessor
 } from 'runtime-data-validation';
@@ -16,7 +17,9 @@ describe('Integers - IsInt - IsIntRange', function() {
 
         @ValidateAccessor<number>()
         @IsInt()
-        set value(nv: number) { this.#value = nv; }
+        set value(nv: number | string) {
+            this.#value = ToInt(nv);
+        }
         get value() { return this.#value; }
 
         #range: number;
@@ -29,11 +32,11 @@ describe('Integers - IsInt - IsIntRange', function() {
         @ValidateParams
         scale(
             @IsInt()
-            value: number,
+            value: number | string,
             @IsFloat()
-            factor: number
+            factor: number | string
         ) {
-            return value * factor;
+            return ToInt(value) * ToFloat(factor);
         }
     }
 
@@ -162,9 +165,7 @@ describe('Floats - IsFloat - IsFloatRange', function() {
         @ValidateAccessor<number>()
         @IsFloat()
         set value(nv: number | string) {
-            this.#value = typeof nv === 'string'
-            ? Number.parseFloat(nv)
-            : nv;
+            this.#value = ToFloat(nv);
         }
         get value() { return this.#value; }
 
@@ -173,9 +174,7 @@ describe('Floats - IsFloat - IsFloatRange', function() {
         @ValidateAccessor<number>()
         @IsFloatRange(10, 100)
         set range(nr: number | string) {
-            this.#range = typeof nr === 'string'
-                ? Number.parseFloat(nr)
-                : nr;
+            this.#range = ToFloat(nr);
         }
         get range() { return this.#range; }
 
@@ -186,13 +185,7 @@ describe('Floats - IsFloat - IsFloatRange', function() {
             @IsFloat()
             factor: number | string
         ) {
-            const v = typeof value === 'string'
-                ? Number.parseFloat(value)
-                : value;
-            const f = typeof factor === 'string'
-                ? Number.parseFloat(factor)
-                : factor;
-            return v * f;
+            return ToFloat(value) * ToFloat(factor);
         }
     }
 

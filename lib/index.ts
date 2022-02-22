@@ -48,6 +48,12 @@ export function IsAlphanumeric(locale?: string,
         `Value :value: is not alpha ${locale}`);
 }
 
+export function ToInt(value: number | string): number {
+    return typeof value === 'string'
+                    ? validator.toInt(value)
+                    : value;
+}
+
 export function IsIntRange(min: number, max: number) {
     // console.log(`params.IsIntRange ${min} ${max}`);
     return generateValidationDecorator(
@@ -60,6 +66,12 @@ export function IsInt() {
     return generateValidationDecorator(
         (value) => numbers.IsInt(value),
         `Value :value: not an integer`);
+}
+
+export function ToFloat(value: number | string): number {
+    return typeof value === 'string'
+                    ? validator.toFloat(value)
+                    : value;
 }
 
 export function IsFloatRange(min: number, max: number) {
