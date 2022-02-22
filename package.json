@@ -1,6 +1,6 @@
 {
   "name": "runtime-data-validation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TypeScript Decorators for automatic runtime data validation in accessors and method parameters",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
