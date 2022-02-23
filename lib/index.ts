@@ -21,6 +21,3 @@ export * from './strings.js';
 
 // isBefore(str [, date]) 	check if the string is a date that's before the specified date.
 
-
-// isDate(input [, options]) 	Check if the input is a valid date. e.g. [2002-07-15, new Date()].
-

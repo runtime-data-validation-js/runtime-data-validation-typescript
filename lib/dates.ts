@@ -5,14 +5,17 @@ import { generateValidationDecorator } from './validators';
 import { default as validator } from 'validator';
 
 type IsDateOptions = {
-    format: string;
-    strictMode: boolean;
-    delimiters: Array<string>
+    format?: string;
+    strictMode?: boolean;
+    delimiters?: Array<string>
 };
 
 export function IsDate(options?: IsDateOptions) {
     return generateValidationDecorator(
-        (value) => validator.isDate(value, options),
+        (value) => {
+            // console.log(`IsDate ${value}`, options);
+            return validator.isDate(value, options)
+        },
         `Value :value: is not a Date`);
 }
 
