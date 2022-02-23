@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "watch": "npx tsc -w",
-    "test": "mocha ./lib/numbers.js ./lib/strings.js",
+    "test": "mocha ./lib/numbers.js ./lib/strings.js ./lib/formats.js ./lib/dates.js",
     "monitor": "nodemon --watch lib --watch ../dist --exec 'npm run test'"
   },
   "keywords": [],
