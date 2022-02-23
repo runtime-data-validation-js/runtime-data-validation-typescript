@@ -2,6 +2,11 @@
   "name": "runtime-data-validation",
   "version": "0.1.1",
   "description": "TypeScript Decorators for automatic runtime data validation in accessors and method parameters",
+  "homepage": "https://github.com/robogeek/runtime-data-validation-typescript",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robogeek/runtime-data-validation-typescript.git"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
