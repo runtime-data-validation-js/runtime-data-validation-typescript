@@ -30,6 +30,18 @@ export function ToBoolean(bool: boolean | string): boolean {
     throw new Error(`ToBoolean received unknown value ${util.inspect(bool)}`);
 }
 
+type IsDecimalOptions = {
+    force_decimal?: boolean; 
+    decimal_digits?: string;
+    locale?: string;
+}
+
+export function IsDecimal(options?: IsDecimalOptions) {
+    return generateValidationDecorator(
+        (value) => validator.isDecimal(value, options),
+        `Value :value: not a decimal number`);
+}
+
 export function ToInt(value: number | string): number {
     return typeof value === 'string'
                     ? validator.toInt(value)

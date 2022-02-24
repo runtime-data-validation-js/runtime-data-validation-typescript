@@ -5,7 +5,7 @@ import {
     ToInt, ToFloat,
     IsBoolean, ToBoolean,
     Contains,
-    ValidateParams, ValidateAccessor, 
+    ValidateParams, ValidateAccessor, IsDecimal, 
 } from 'runtime-data-validation';
 import { default as validator } from 'validator';
 
@@ -309,6 +309,101 @@ describe('Floats - IsFloat - IsFloatRange', function() {
         assert.equal(failed, true);
     });
 
+});
+
+describe('Decimals', function() {
+
+    class DecimalExamples {
+
+        #decimal: string;
+
+        @ValidateAccessor<string>()
+        @IsDecimal()
+        set decimal(nd: string) { this.#decimal = nd; }
+        get decimal() { return this.#decimal; }
+
+        @ValidateParams
+        checkDecimal(
+            @IsDecimal()
+            nd: string
+        ) {
+            return nd;
+        }
+    }
+
+    const de = new DecimalExamples();
+
+    const valid = [
+        '123',
+        '00123',
+        '-00123',
+        '0',
+        '-0',
+        '+123',
+        '0.01',
+        '.1',
+        '1.0',
+        '-.25',
+        '-0',
+        '0.0000000000001',
+    ];
+    const invalid = [
+        '0,01',
+        ',1',
+        '1,0',
+        '-,25',
+        '0,0000000000001',
+        '0٫01',
+        '٫1',
+        '1٫0',
+        '-٫25',
+        '0٫0000000000001',
+        '....',
+        ' ',
+        '',
+        '-',
+        '+',
+        '.',
+        '0.1a',
+        'a',
+        '\n',
+      ];
+
+      it('should validate correct decimals accessors', function() {
+        for (const v of valid) {
+            de.decimal = v;
+            assert.equal(v, de.decimal);
+        }
+    });
+
+    it('should validate correct decimals parameters', function() {
+        for (const v of valid) {
+            const result = de.checkDecimal(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid decimals accessors', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                de.decimal = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid decimals parameters', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                const result = de.checkDecimal(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
 });
 
 describe('Logic', function() {
