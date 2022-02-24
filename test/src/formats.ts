@@ -4,8 +4,9 @@ import {
     IsIntRange, IsInt, IsFloatRange, IsFloat,
     Contains, Equals, IsAlpha, IsAlphanumeric,
     IsAscii, IsBase32, IsBase58, IsBase64,
-    IsBtcAddress,
-    ValidateParams, ValidateAccessor, IsCreditCard, IsDataURI
+    IsBtcAddress, IsCreditCard, IsDataURI,
+    IsEAN,
+    ValidateParams, ValidateAccessor,
 } from 'runtime-data-validation';
 
 describe('Crypto', function() {
@@ -183,7 +184,7 @@ describe('Banking', function() {
     });
 });
 
-describe('URL - URI', function() {
+describe('URL - URI - EAN', function() {
 
     class URLURIExamples {
         #datauri: string;
@@ -200,6 +201,22 @@ describe('URL - URI', function() {
         ) {
             return nd;
         }
+
+        #ean: string;
+
+        @ValidateAccessor<string>()
+        @IsEAN()
+        set ean(nd: string) { this.#ean = nd; }
+        get ean() { return this.#ean; }
+
+        @ValidateParams
+        checkEAN(
+            @IsEAN()
+            nd: string
+        ) {
+            return nd;
+        }
+
     }
 
     const uue = new URLURIExamples();
@@ -262,6 +279,59 @@ describe('URL - URI', function() {
             let failed = false;
             try {
                 const result = uue.checkDataURI(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validEAN = [
+        '9421023610112',
+        '1234567890128',
+        '4012345678901',
+        '9771234567003',
+        '9783161484100',
+        '73513537',
+        '00012345600012',
+        '10012345678902',
+        '20012345678909',
+    ];
+    const invalidEAN = [
+        '5901234123451',
+        '079777681629',
+        '0705632085948',
+    ];
+
+    it('should validate correct EAN accessors', function() {
+        for (const v of validEAN) {
+            uue.ean = v;
+            assert.equal(v, uue.ean);
+        }
+    });
+
+    it('should validate correct EAN parameters', function() {
+        for (const v of validEAN) {
+            const result = uue.checkEAN(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid EAN accessors', function() {
+
+        for (const iv of invalidEAN) {
+            let failed = false;
+            try {
+                uue.ean = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid EAN parameters', function() {
+
+        for (const iv of invalidEAN) {
+            let failed = false;
+            try {
+                const result = uue.checkEAN(iv);
             } catch (e) { failed = true; }
             assert.equal(failed, true);
         }

@@ -27,3 +27,9 @@ export function IsDataURI() {
         (value) => validator.isDataURI(value),
         `Value :value: is not a Data URI`);
 }
+
+export function IsEAN() {
+    return generateValidationDecorator(
+        (value) => validator.isEAN(value),
+        `Value :value: is not an EAN`);
+}
