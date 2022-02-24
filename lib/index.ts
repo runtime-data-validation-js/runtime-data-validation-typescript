@@ -21,3 +21,4 @@ export * from './strings.js';
 
 // isBefore(str [, date]) 	check if the string is a date that's before the specified date.
 
+// isDivisibleBy(str, number) 	check if the string is a number that's divisible by another.

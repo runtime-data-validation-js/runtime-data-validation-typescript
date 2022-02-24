@@ -322,6 +322,52 @@ describe('Decimals', function() {
         set decimal(nd: string) { this.#decimal = nd; }
         get decimal() { return this.#decimal; }
 
+        @ValidateAccessor<string>()
+        @IsDecimal({ force_decimal: true })
+        set decimalDecimal(nd: string) { this.#decimal = nd; }
+        get decimalDecimal() { return this.#decimal; }
+
+        @ValidateAccessor<string>()
+        @IsDecimal({ locale: 'en-AU' })
+        set decimalENAU(nd: string) { this.#decimal = nd; }
+        get decimalENAU() { return this.#decimal; }
+
+        @ValidateAccessor<string>()
+        @IsDecimal({ locale: 'bg-BG' })
+        set decimalBGBG(nd: string) { this.#decimal = nd; }
+        get decimalBGBG() { return this.#decimal; }
+
+        @ValidateAccessor<string>()
+        @IsDecimal({ locale: 'cs-CZ' })
+        set decimalCSCZ(nd: string) { this.#decimal = nd; }
+        get decimalCSCZ() { return this.#decimal; }
+
+        @ValidateAccessor<string>()
+        @IsDecimal({ locale: 'ar-JO' })
+        set decimalARJO(nd: string) { this.#decimal = nd; }
+        get decimalARJO() { return this.#decimal; }
+
+        @ValidateAccessor<string>()
+        @IsDecimal({ locale: 'ar-EG' })
+        set decimalAREG(nd: string) { this.#decimal = nd; }
+        get decimalAREG() { return this.#decimal; }
+
+        @ValidateAccessor<string>()
+        @IsDecimal({ locale: 'en-ZM' })
+        set decimalENZM(nd: string) { this.#decimal = nd; }
+        get decimalENZM() { return this.#decimal; }
+
+        @ValidateAccessor<string>()
+        @IsDecimal({ decimal_digits: '2,3' })
+        set decimal23(nd: string) { this.#decimal = nd; }
+        get decimal23() { return this.#decimal; }
+
+        // purposely invalid locale
+        @ValidateAccessor<string>()
+        @IsDecimal({ locale: 'is-NOT' })
+        set decimalISNOT(nd: string) { this.#decimal = nd; }
+        get decimalISNOT() { return this.#decimal; }
+
         @ValidateParams
         checkDecimal(
             @IsDecimal()
@@ -329,6 +375,81 @@ describe('Decimals', function() {
         ) {
             return nd;
         }
+
+        @ValidateParams
+        checkDecimalDecimal(
+            @IsDecimal({ force_decimal: true })
+            nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateParams
+        checkDecimalENAU(
+            @IsDecimal({ locale: 'en-AU' })
+            nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateParams
+        checkDecimalBGBG(
+            @IsDecimal({ locale: 'bg-BG' })
+            nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateParams
+        checkDecimalCSCZ(
+            @IsDecimal({ locale: 'cs-CZ' })
+            nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateParams
+        checkDecimalARJO(
+            @IsDecimal({ locale: 'ar-JO' })
+            nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateParams
+        checkDecimalAREG(
+            @IsDecimal({ locale: 'ar-EG' })
+            nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateParams
+        checkDecimalENZM(
+            @IsDecimal({ locale: 'en-ZM' })
+            nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateParams
+        checkDecimal23(
+            @IsDecimal({ decimal_digits: '2,3' })
+            nd: string
+        ) {
+            return nd;
+        }
+
+        // Purposely invalid locale
+        @ValidateParams
+        checkDecimalISNOT(
+            @IsDecimal({ locale: 'is-NOT' })
+            nd: string
+        ) {
+            return nd;
+        }
+
+
     }
 
     const de = new DecimalExamples();
@@ -367,9 +488,9 @@ describe('Decimals', function() {
         '0.1a',
         'a',
         '\n',
-      ];
+    ];
 
-      it('should validate correct decimals accessors', function() {
+    it('should validate correct decimals accessors', function() {
         for (const v of valid) {
             de.decimal = v;
             assert.equal(v, de.decimal);
@@ -404,6 +525,552 @@ describe('Decimals', function() {
             assert.equal(failed, true);
         }
     });
+
+    const validENAU = [
+      '123',
+      '00123',
+      '-00123',
+      '0',
+      '-0',
+      '+123',
+      '0.01',
+      '.1',
+      '1.0',
+      '-.25',
+      '-0',
+      '0.0000000000001',
+    ];
+    const invalidENAU = [
+      '0,01',
+      ',1',
+      '1,0',
+      '-,25',
+      '0,0000000000001',
+      '0٫01',
+      '٫1',
+      '1٫0',
+      '-٫25',
+      '0٫0000000000001',
+      '....',
+      ' ',
+      '',
+      '-',
+      '+',
+      '.',
+      '0.1a',
+      'a',
+      '\n',
+    ];
+
+
+    it('should validate correct decimals en-AU accessors', function() {
+        for (const v of validENAU) {
+            de.decimalENAU = v;
+            assert.equal(v, de.decimalENAU);
+        }
+    });
+
+    it('should validate correct decimals en-AU parameters', function() {
+        for (const v of validENAU) {
+            const result = de.checkDecimalENAU(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid decimals en-AU accessors', function() {
+
+        for (const iv of invalidENAU) {
+            let failed = false;
+            try {
+                de.decimalENAU = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid decimals en-AU parameters', function() {
+
+        for (const iv of invalidENAU) {
+            let failed = false;
+            try {
+                const result = de.checkDecimalENAU(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validBGBG = [
+      '123',
+      '00123',
+      '-00123',
+      '0',
+      '-0',
+      '+123',
+      '0,01',
+      ',1',
+      '1,0',
+      '-,25',
+      '-0',
+      '0,0000000000001',
+    ];
+    const invalidBGBG = [
+      '0.0000000000001',
+      '0.01',
+      '.1',
+      '1.0',
+      '-.25',
+      '0٫01',
+      '٫1',
+      '1٫0',
+      '-٫25',
+      '0٫0000000000001',
+      '....',
+      ' ',
+      '',
+      '-',
+      '+',
+      '.',
+      '0.1a',
+      'a',
+      '\n',
+    ];
+
+
+    it('should validate correct decimals bg-BG accessors', function() {
+        for (const v of validBGBG) {
+            de.decimalBGBG = v;
+            assert.equal(v, de.decimalBGBG);
+        }
+    });
+
+    it('should validate correct decimals bg-BG parameters', function() {
+        for (const v of validBGBG) {
+            const result = de.checkDecimalBGBG(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid decimals bg-BG accessors', function() {
+
+        for (const iv of invalidBGBG) {
+            let failed = false;
+            try {
+                de.decimalBGBG = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid decimals bg-BG parameters', function() {
+
+        for (const iv of invalidBGBG) {
+            let failed = false;
+            try {
+                const result = de.checkDecimalBGBG(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validCSCZ = [
+      '123',
+      '00123',
+      '-00123',
+      '0',
+      '-0',
+      '+123',
+      '0,01',
+      ',1',
+      '1,0',
+      '-,25',
+      '-0',
+      '0,0000000000001',
+    ];
+    const invalidCSCZ = [
+      '0.0000000000001',
+      '0.01',
+      '.1',
+      '1.0',
+      '-.25',
+      '0٫01',
+      '٫1',
+      '1٫0',
+      '-٫25',
+      '0٫0000000000001',
+      '....',
+      ' ',
+      '',
+      '-',
+      '+',
+      '.',
+      '0.1a',
+      'a',
+      '\n',
+    ];
+
+    it('should validate correct decimals cs-CZ accessors', function() {
+        for (const v of validCSCZ) {
+            de.decimalCSCZ = v;
+            assert.equal(v, de.decimalCSCZ);
+        }
+    });
+
+    it('should validate correct decimals cs-CZ parameters', function() {
+        for (const v of validCSCZ) {
+            const result = de.checkDecimalCSCZ(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid decimals cs-CZ accessors', function() {
+
+        for (const iv of invalidCSCZ) {
+            let failed = false;
+            try {
+                de.decimalCSCZ = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid decimals cs-CZ parameters', function() {
+
+        for (const iv of invalidCSCZ) {
+            let failed = false;
+            try {
+                const result = de.checkDecimalCSCZ(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validARJO = [
+      '123',
+      '00123',
+      '-00123',
+      '0',
+      '-0',
+      '+123',
+      '0٫01',
+      '٫1',
+      '1٫0',
+      '-٫25',
+      '-0',
+      '0٫0000000000001',
+    ];
+    const invalidARJO = [
+      '0,0000000000001',
+      '0,01',
+      ',1',
+      '1,0',
+      '-,25',
+      '0.0000000000001',
+      '0.01',
+      '.1',
+      '1.0',
+      '-.25',
+      '....',
+      ' ',
+      '',
+      '-',
+      '+',
+      '.',
+      '0.1a',
+      'a',
+      '\n',
+    ];
+
+    it('should validate correct decimals ar-JO accessors', function() {
+        for (const v of validARJO) {
+            de.decimalARJO = v;
+            assert.equal(v, de.decimalARJO);
+        }
+    });
+
+    it('should validate correct decimals ar-JO parameters', function() {
+        for (const v of validARJO) {
+            const result = de.checkDecimalARJO(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid decimals ar-JO accessors', function() {
+
+        for (const iv of invalidARJO) {
+            let failed = false;
+            try {
+                de.decimalARJO = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid decimals ar-JO parameters', function() {
+
+        for (const iv of invalidARJO) {
+            let failed = false;
+            try {
+                const result = de.checkDecimalARJO(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validAREG = [
+      '0.01',
+    ];
+    const invalidAREG = [
+      '0,01',
+    ];
+
+    it('should validate correct decimals ar-EG accessors', function() {
+        for (const v of validAREG) {
+            de.decimalAREG = v;
+            assert.equal(v, de.decimalAREG);
+        }
+    });
+
+    it('should validate correct decimals ar-EG parameters', function() {
+        for (const v of validAREG) {
+            const result = de.checkDecimalAREG(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid decimals ar-EG accessors', function() {
+
+        for (const iv of invalidAREG) {
+            let failed = false;
+            try {
+                de.decimalAREG = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid decimals ar-EG parameters', function() {
+
+        for (const iv of invalidAREG) {
+            let failed = false;
+            try {
+                const result = de.checkDecimalAREG(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validENZM = [
+      '0,01',
+    ];
+    const invalidENZM = [
+      '0.01',
+    ];
+
+
+    it('should validate correct decimals en-ZM accessors', function() {
+        for (const v of validENZM) {
+            de.decimalENZM = v;
+            assert.equal(v, de.decimalENZM);
+        }
+    });
+
+    it('should validate correct decimals en-ZM parameters', function() {
+        for (const v of validENZM) {
+            const result = de.checkDecimalENZM(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid decimals en-ZM accessors', function() {
+
+        for (const iv of invalidENZM) {
+            let failed = false;
+            try {
+                de.decimalENZM = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid decimals en-ZM parameters', function() {
+
+        for (const iv of invalidENZM) {
+            let failed = false;
+            try {
+                const result = de.checkDecimalENZM(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validDecimal = [
+        '0.01',
+        '.1',
+        '1.0',
+        '-.25',
+        '0.0000000000001',
+    ];
+    const invalidDecimal = [
+        '-0',
+        '123',
+        '00123',
+        '-00123',
+        '0',
+        '-0',
+        '+123',
+        '0,0000000000001',
+        '0,01',
+        ',1',
+        '1,0',
+        '-,25',
+        '....',
+        ' ',
+        '',
+        '-',
+        '+',
+        '.',
+        '0.1a',
+        'a',
+        '\n',
+    ];
+
+
+    it('should validate correct decimals decimal accessors', function() {
+        for (const v of validDecimal) {
+            de.decimalDecimal = v;
+            assert.equal(v, de.decimalDecimal);
+        }
+    });
+
+    it('should validate correct decimals decimal parameters', function() {
+        for (const v of validDecimal) {
+            const result = de.checkDecimalDecimal(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid decimals decimal accessors', function() {
+
+        for (const iv of invalidDecimal) {
+            let failed = false;
+            try {
+                de.decimalDecimal = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid decimals decimal parameters', function() {
+
+        for (const iv of invalidDecimal) {
+            let failed = false;
+            try {
+                const result = de.checkDecimalDecimal(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const valid23 = [
+        '123',
+        '00123',
+        '-00123',
+        '0',
+        '-0',
+        '+123',
+        '0.01',
+        '1.043',
+        '.15',
+        '-.255',
+        '-0',
+    ];
+    const invalid23 = [
+        '0.0000000000001',
+        '0.0',
+        '.1',
+        '1.0',
+        '-.2564',
+        '0.0',
+        '٫1',
+        '1٫0',
+        '-٫25',
+        '0٫0000000000001',
+        '....',
+        ' ',
+        '',
+        '-',
+        '+',
+        '.',
+        '0.1a',
+        'a',
+        '\n',
+    ];
+
+    it('should validate correct decimals decimal_digits: 2,3 accessors', function() {
+        for (const v of valid23) {
+            de.decimal23 = v;
+            assert.equal(v, de.decimal23);
+        }
+    });
+
+    it('should validate correct decimals  decimal_digits: 2,3 parameters', function() {
+        for (const v of valid23) {
+            const result = de.checkDecimal23(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid decimals  decimal_digits: 2,3 accessors', function() {
+
+        for (const iv of invalid23) {
+            let failed = false;
+            try {
+                de.decimal23 = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid decimals  decimal_digits: 2,3 parameters', function() {
+
+        for (const iv of invalid23) {
+            let failed = false;
+            try {
+                const result = de.checkDecimal23(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const invalidISNOT = [
+      '123',
+      '0.01',
+      '0,01',
+    ];
+
+    it('Should reject invalid locale accessors', function() {
+
+        for (const iv of invalidISNOT) {
+            let failed = false;
+            try {
+                de.decimalISNOT = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid  invalid locale parameters', function() {
+
+        for (const iv of invalidISNOT) {
+            let failed = false;
+            try {
+                const result = de.checkDecimalISNOT(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+
 });
 
 describe('Logic', function() {
