@@ -33,3 +33,20 @@ export function IsEAN() {
         (value) => validator.isEAN(value),
         `Value :value: is not an EAN`);
 }
+
+type IsEmailOptions = {
+    allow_display_name?: boolean,
+    require_display_name?: boolean,
+    allow_utf8_local_part?: boolean,
+    require_tld?: boolean,
+    allow_ip_domain?: boolean,
+    domain_specific_validation?: boolean,
+    blacklisted_chars?: string,
+    host_blacklist?: Array<string>
+};
+
+export function IsEmail(options?: IsEmailOptions) {
+    return generateValidationDecorator(
+        (value) => validator.isEmail(value, options),
+        `Value :value: is not an E-Mail address`);
+}

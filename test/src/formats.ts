@@ -6,8 +6,16 @@ import {
     IsAscii, IsBase32, IsBase58, IsBase64,
     IsBtcAddress, IsCreditCard, IsDataURI,
     IsEAN,
-    ValidateParams, ValidateAccessor,
+    ValidateParams, ValidateAccessor, IsEmail,
 } from 'runtime-data-validation';
+
+function repeat(str, count) {
+    let result = '';
+    for (; count; count--) {
+      result += str;
+    }
+    return result;
+}  
 
 describe('Crypto', function() {
 
@@ -182,6 +190,393 @@ describe('Banking', function() {
             assert.equal(failed, true);
         }
     });
+});
+
+describe('E-Mail', function() {
+
+    class EMAILExample {
+
+        #email: string;
+
+        @ValidateAccessor<string>()
+        @IsEmail()
+        set email(email: string) { this.#email = email; }
+        get email() { return this.#email; }
+
+        @ValidateAccessor<string>()
+        @IsEmail({ allow_utf8_local_part: false })
+        set emailUTF8(email: string) { this.#email = email; }
+        get emailUTF8() { return this.#email; }
+
+        @ValidateAccessor<string>()
+        @IsEmail({ allow_display_name: true })
+        set emailDN(email: string) { this.#email = email; }
+        get emailDN() { return this.#email; }
+
+        @ValidateAccessor<string>()
+        @IsEmail({ require_display_name: true })
+        set emailDNReq(email: string) { this.#email = email; }
+        get emailDNReq() { return this.#email; }
+
+        @ValidateParams
+        checkEmail(
+            @IsEmail()
+            email: string
+        ) {
+            return email;
+        }
+
+        @ValidateParams
+        checkEmailUTF8(
+            @IsEmail({ allow_utf8_local_part: false })
+            email: string
+        ) {
+            return email;
+        }
+
+        @ValidateParams
+        checkEmailDN(
+            @IsEmail({ allow_display_name: true })
+            email: string
+        ) {
+            return email;
+        }
+
+        @ValidateParams
+        checkEmailDNReq(
+            @IsEmail({ require_display_name: true })
+            email: string
+        ) {
+            return email;
+        }
+
+    }
+
+    const ee = new EMAILExample();
+
+    const valid = [
+        'foo@bar.com',
+        'x@x.au',
+        'foo@bar.com.au',
+        'foo+bar@bar.com',
+        'hans.m端ller@test.com',
+        'hans@m端ller.com',
+        'test|123@m端ller.com',
+        'test123+ext@gmail.com',
+        'some.name.midd.leNa.me.and.locality+extension@GoogleMail.com',
+        '"foobar"@example.com',
+        '"  foo  m端ller "@example.com',
+        '"foo\\@bar"@example.com',
+        `${repeat('a', 64)}@${repeat('a', 63)}.com`,
+        `${repeat('a', 64)}@${repeat('a', 63)}.com`,
+        `${repeat('a', 31)}@gmail.com`,
+        'test@gmail.com',
+        'test.1@gmail.com',
+        'test@1337.com',
+    ];
+    const invalid = [
+        'invalidemail@',
+        'invalid.com',
+        '@invalid.com',
+        'foo@bar.com.',
+        'somename@ｇｍａｉｌ.com',
+        'foo@bar.co.uk.',
+        'z@co.c',
+        'ｇｍａｉｌｇｍａｉｌｇｍａｉｌｇｍａｉｌｇｍａｉｌ@gmail.com',
+        `${repeat('a', 64)}@${repeat('a', 251)}.com`,
+        `${repeat('a', 65)}@${repeat('a', 250)}.com`,
+        `${repeat('a', 64)}@${repeat('a', 64)}.com`,
+        `${repeat('a', 64)}@${repeat('a', 63)}.${repeat('a', 63)}.${repeat('a', 63)}.${repeat('a', 58)}.com`,
+        'test1@invalid.co m',
+        'test2@invalid.co m',
+        'test3@invalid.co m',
+        'test4@invalid.co m',
+        'test5@invalid.co m',
+        'test6@invalid.co m',
+        'test7@invalid.co m',
+        'test8@invalid.co m',
+        'test9@invalid.co m',
+        'test10@invalid.co m',
+        'test11@invalid.co m',
+        'test12@invalid.co　m',
+        'test13@invalid.co　m',
+        'multiple..dots@stillinvalid.com',
+        'test123+invalid! sub_address@gmail.com',
+        'gmail...ignores...dots...@gmail.com',
+        'ends.with.dot.@gmail.com',
+        'multiple..dots@gmail.com',
+        'wrong()[]",:;<>@@gmail.com',
+        '"wrong()[]",:;<>@@gmail.com',
+        'username@domain.com�',
+        'username@domain.com©',
+    ];
+
+    it('should validate correct E-Mail accessors', function() {
+        for (const v of valid) {
+            ee.email = v;
+            assert.equal(v, ee.email);
+        }
+    });
+
+    it('should validate correct E-Mail parameters', function() {
+        for (const v of valid) {
+            const result = ee.checkEmail(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid E-Mail accessors', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                ee.email = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid E-Mail parameters', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                const result = ee.checkEmail(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validUTF8 = [
+        'foo@bar.com',
+        'x@x.au',
+        'foo@bar.com.au',
+        'foo+bar@bar.com',
+        'hans@m端ller.com',
+        'test|123@m端ller.com',
+        'test123+ext@gmail.com',
+        'some.name.midd.leNa.me+extension@GoogleMail.com',
+        '"foobar"@example.com',
+        '"foo\\@bar"@example.com',
+        '"  foo  bar  "@example.com',
+    ];
+    const invalidUTF8 = [
+        'invalidemail@',
+        'invalid.com',
+        '@invalid.com',
+        'foo@bar.com.',
+        'foo@bar.co.uk.',
+        'somename@ｇｍａｉｌ.com',
+        'hans.m端ller@test.com',
+        'z@co.c',
+        'tüst@invalid.com',
+    ];
+
+    it('should validate correct E-Mail UTF8 accessors', function() {
+        for (const v of validUTF8) {
+            ee.emailUTF8 = v;
+            assert.equal(v, ee.emailUTF8);
+        }
+    });
+
+    it('should validate correct E-Mail UTF8 parameters', function() {
+        for (const v of validUTF8) {
+            const result = ee.checkEmailUTF8(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid E-Mail UTF8 accessors', function() {
+
+        for (const iv of invalidUTF8) {
+            let failed = false;
+            try {
+                ee.emailUTF8 = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid E-Mail UTF8 parameters', function() {
+
+        for (const iv of invalidUTF8) {
+            let failed = false;
+            try {
+                const result = ee.checkEmailUTF8(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validDN = [
+        'foo@bar.com',
+        'x@x.au',
+        'foo@bar.com.au',
+        'foo+bar@bar.com',
+        'hans.m端ller@test.com',
+        'hans@m端ller.com',
+        'test|123@m端ller.com',
+        'test123+ext@gmail.com',
+        'some.name.midd.leNa.me+extension@GoogleMail.com',
+        'Some Name <foo@bar.com>',
+        'Some Name <x@x.au>',
+        'Some Name <foo@bar.com.au>',
+        'Some Name <foo+bar@bar.com>',
+        'Some Name <hans.m端ller@test.com>',
+        'Some Name <hans@m端ller.com>',
+        'Some Name <test|123@m端ller.com>',
+        'Some Name <test123+ext@gmail.com>',
+        '\'Foo Bar, Esq\'<foo@bar.com>',
+        'Some Name <some.name.midd.leNa.me+extension@GoogleMail.com>',
+        'Some Middle Name <some.name.midd.leNa.me+extension@GoogleMail.com>',
+        'Name <some.name.midd.leNa.me+extension@GoogleMail.com>',
+        'Name<some.name.midd.leNa.me+extension@GoogleMail.com>',
+        'Some Name <foo@gmail.com>',
+        'Name🍓With🍑Emoji🚴‍♀️🏆<test@aftership.com>',
+        '🍇🍗🍑<only_emoji@aftership.com>',
+        '"<displayNameInBrackets>"<jh@gmail.com>',
+        '"\\"quotes\\""<jh@gmail.com>',
+        '"name;"<jh@gmail.com>',
+        '"name;" <jh@gmail.com>',
+    ];
+    const invalidDN = [
+        'invalidemail@',
+        'invalid.com',
+        '@invalid.com',
+        'foo@bar.com.',
+        'foo@bar.co.uk.',
+        'Some Name <invalidemail@>',
+        'Some Name <invalid.com>',
+        'Some Name <@invalid.com>',
+        'Some Name <foo@bar.com.>',
+        'Some Name <foo@bar.co.uk.>',
+        'Some Name foo@bar.co.uk.>',
+        'Some Name <foo@bar.co.uk.',
+        'Some Name < foo@bar.co.uk >',
+        'Name foo@bar.co.uk',
+        'Some Name <some..name@gmail.com>',
+        'Some Name<emoji_in_address🍈@aftership.com>',
+        'invisibleCharacter\u001F<jh@gmail.com>',
+        '<displayNameInBrackets><jh@gmail.com>',
+        '\\"quotes\\"<jh@gmail.com>',
+        '""quotes""<jh@gmail.com>',
+        'name;<jh@gmail.com>',
+        '    <jh@gmail.com>',
+        '"    "<jh@gmail.com>',
+    ];
+
+    it('should validate correct E-Mail display name accessors', function() {
+        for (const v of validDN) {
+            ee.emailDN = v;
+            assert.equal(v, ee.emailDN);
+        }
+    });
+
+    it('should validate correct E-Mail display name parameters', function() {
+        for (const v of validDN) {
+            const result = ee.checkEmailDN(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid E-Mail display name accessors', function() {
+
+        for (const iv of invalidDN) {
+            let failed = false;
+            try {
+                ee.emailDN = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid E-Mail display name parameters', function() {
+
+        for (const iv of invalidDN) {
+            let failed = false;
+            try {
+                const result = ee.checkEmailDN(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+    
+    const validDNReq = [
+      'Some Name <foo@bar.com>',
+      'Some Name <x@x.au>',
+      'Some Name <foo@bar.com.au>',
+      'Some Name <foo+bar@bar.com>',
+      'Some Name <hans.m端ller@test.com>',
+      'Some Name <hans@m端ller.com>',
+      'Some Name <test|123@m端ller.com>',
+      'Some Name <test123+ext@gmail.com>',
+      'Some Name <some.name.midd.leNa.me+extension@GoogleMail.com>',
+      'Some Middle Name <some.name.midd.leNa.me+extension@GoogleMail.com>',
+      'Name <some.name.midd.leNa.me+extension@GoogleMail.com>',
+      'Name<some.name.midd.leNa.me+extension@GoogleMail.com>',
+    ];
+    const invalidDNReq = [
+      'some.name.midd.leNa.me+extension@GoogleMail.com',
+      'foo@bar.com',
+      'x@x.au',
+      'foo@bar.com.au',
+      'foo+bar@bar.com',
+      'hans.m端ller@test.com',
+      'hans@m端ller.com',
+      'test|123@m端ller.com',
+      'test123+ext@gmail.com',
+      'invalidemail@',
+      'invalid.com',
+      '@invalid.com',
+      'foo@bar.com.',
+      'foo@bar.co.uk.',
+      'Some Name <invalidemail@>',
+      'Some Name <invalid.com>',
+      'Some Name <@invalid.com>',
+      'Some Name <foo@bar.com.>',
+      'Some Name <foo@bar.co.uk.>',
+      'Some Name foo@bar.co.uk.>',
+      'Some Name <foo@bar.co.uk.',
+      'Some Name < foo@bar.co.uk >',
+      'Name foo@bar.co.uk',
+    ];
+
+    it('should validate correct E-Mail display name required accessors', function() {
+        for (const v of validDNReq) {
+            ee.emailDNReq = v;
+            assert.equal(v, ee.emailDNReq);
+        }
+    });
+
+    it('should validate correct E-Mail display name rquired parameters', function() {
+        for (const v of validDNReq) {
+            const result = ee.checkEmailDNReq(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid E-Mail display name required accessors', function() {
+
+        for (const iv of invalidDNReq) {
+            let failed = false;
+            try {
+                ee.emailDNReq = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid E-Mail display name required parameters', function() {
+
+        for (const iv of invalidDNReq) {
+            let failed = false;
+            try {
+                const result = ee.checkEmailDNReq(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+    
 });
 
 describe('URL - URI - EAN', function() {
