@@ -4,7 +4,8 @@ import {
     IsIntRange, IsInt, IsFloatRange, IsFloat,
     Contains, Equals, IsAlpha, IsAlphanumeric,
     IsAscii, IsBase32, IsBase58, IsBase64,
-    ValidateParams, ValidateAccessor, IsByteLength
+    ValidateParams, ValidateAccessor, IsByteLength,
+    IsEmpty
 } from 'runtime-data-validation';
 
 describe('Contains', function() {
@@ -458,6 +459,49 @@ describe('String size', function() {
         ) {
             return ns;
         }
+
+        #isempty: string;
+
+        @ValidateAccessor<string>()
+        @IsEmpty()
+        set isempty(ns: string) { this.#isempty = ns; }
+        get isempty() { return this.#isempty; }
+
+        @ValidateAccessor<string>()
+        @IsEmpty({ ignore_whitespace: false })
+        set isemptyIWH(ns: string) { this.#isempty = ns; }
+        get isemptyIWH() { return this.#isempty; }
+
+        @ValidateAccessor<string>()
+        @IsEmpty({ ignore_whitespace: true })
+        set isemptyAWH(ns: string) { this.#isempty = ns; }
+        get isemptyAWH() { return this.#isempty; }
+
+
+
+        @ValidateParams
+        checkIsEmpty(
+            @IsEmpty()
+            ns: string
+        ) {
+            return ns;
+        }
+
+        @ValidateParams
+        checkIsEmptyIWH(
+            @IsEmpty({ ignore_whitespace: false })
+            ns: string
+        ) {
+            return ns;
+        }
+
+        @ValidateParams
+        checkIsEmptyAWH(
+            @IsEmpty({ ignore_whitespace: true })
+            ns: string
+        ) {
+            return ns;
+        }
     }
     
     const sse = new StringSizeExample();
@@ -573,6 +617,142 @@ describe('String size', function() {
             } catch (e) { failed = true; }
             assert(failed, true);
         }
+    });
+
+    it('Should validate empty strings', function() {
+        sse.isempty = '';
+        assert.equal(sse.isempty, '');
+
+        const result = sse.checkIsEmpty('');
+        assert.equal(result, '');
+    });
+
+    it('Should reject non-empty strings', function() {
+        let failed = false;
+        try {
+            sse.isempty = ' ';
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            sse.isempty = 'foo';
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            sse.isempty = '333';
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            const result = sse.checkIsEmpty(' ');
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            const result = sse.checkIsEmpty('foo');
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            const result = sse.checkIsEmpty('333');
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+        
+    });
+
+    it('Should validate empty strings ignore_whitespace: false', function() {
+        sse.isemptyIWH = '';
+        assert.equal(sse.isemptyIWH, '');
+
+        const result = sse.checkIsEmptyIWH('');
+        assert.equal(result, '');
+    });
+
+    it('Should reject non-empty strings ignore_whitespace: false', function() {
+        let failed = false;
+        try {
+            sse.isemptyIWH = ' ';
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            sse.isemptyIWH = 'foo';
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            sse.isemptyIWH = '333';
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            const result = sse.checkIsEmptyIWH(' ');
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            const result = sse.checkIsEmptyIWH('foo');
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            const result = sse.checkIsEmptyIWH('333');
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+        
+    });
+
+
+    it('Should validate empty strings ignore_whitespace: true', function() {
+        sse.isemptyAWH = '';
+        assert.equal(sse.isemptyAWH, '');
+        sse.isemptyAWH = ' ';
+        assert.equal(sse.isemptyAWH, ' ');
+
+        let result = sse.checkIsEmptyAWH('');
+        assert.equal(result, '');
+        result = sse.checkIsEmptyAWH(' ');
+        assert.equal(result, ' ');
+    });
+
+
+    it('Should reject non-empty strings ignore_whitespace: true', function() {
+
+        let failed = false;
+        try {
+            sse.isemptyAWH = 'foo';
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            sse.isemptyAWH = '333';
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            const result = sse.checkIsEmptyAWH('foo');
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            const result = sse.checkIsEmptyAWH('333');
+        } catch(e) { failed = true; }
+        assert.equal(failed, true);
+        
     });
 
 });

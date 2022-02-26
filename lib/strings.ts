@@ -78,3 +78,13 @@ export function IsByteLength(options?: IsByteLengthOptions) {
         (value) => validator.isByteLength(value, options),
         `Value :value: is not within byte length ${util.inspect(options)}`);
 }
+
+type IsEmptyOptions = {
+    ignore_whitespace?: boolean;
+};
+
+export function IsEmpty(options?: IsEmptyOptions) {
+    return generateValidationDecorator(
+        (value) => validator.isEmpty(value, options),
+        `Value :value: is not empty ${util.inspect(options)}`);
+}
