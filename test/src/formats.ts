@@ -5,8 +5,8 @@ import {
     Contains, Equals, IsAlpha, IsAlphanumeric,
     IsAscii, IsBase32, IsBase58, IsBase64,
     IsBtcAddress, IsCreditCard, IsDataURI,
-    IsEAN,
-    ValidateParams, ValidateAccessor, IsEmail,
+    IsEAN, IsEmail, IsEthereumAddress,
+    ValidateParams, ValidateAccessor,
 } from 'runtime-data-validation';
 
 function repeat(str, count) {
@@ -35,6 +35,23 @@ describe('Crypto', function() {
         ) {
             return nbtc;
         }
+
+        #etheraddress: string;
+
+        @ValidateAccessor<string>()
+        @IsEthereumAddress()
+        set etheraddress(nbtc: string) { this.#btcaddress = nbtc; }
+        get etheraddress() { return this.#btcaddress; }
+
+        @ValidateParams
+        checkEtherAddress(
+            @IsEthereumAddress()
+            nbtc: string
+        ) {
+            return nbtc;
+        }
+
+
     }
 
     const ce = new CryptoExamples();
@@ -93,6 +110,59 @@ describe('Crypto', function() {
             assert.equal(failed, true);
         }
     });
+
+    const validEther = [
+        '0x0000000000000000000000000000000000000001',
+        '0x683E07492fBDfDA84457C16546ac3f433BFaa128',
+        '0x88dA6B6a8D3590e88E0FcadD5CEC56A7C9478319',
+        '0x8a718a84ee7B1621E63E680371e0C03C417cCaF6',
+        '0xFCb5AFB808b5679b4911230Aa41FfCD0cd335b42',
+    ];
+    const invalidEther = [
+        '0xGHIJK05pwm37asdf5555QWERZCXV2345AoEuIdHt',
+        '0xFCb5AFB808b5679b4911230Aa41FfCD0cd335b422222',
+        '0xFCb5AFB808b5679b4911230Aa41FfCD0cd33',
+        '0b0110100001100101011011000110110001101111',
+        '683E07492fBDfDA84457C16546ac3f433BFaa128',
+        '1C6o5CDkLxjsVpnLSuqRs1UBFozXLEwYvU',
+    ];
+
+    it('should validate correct Ethereum addresses accessors', function() {
+        for (const v of validEther) {
+            ce.etheraddress = v;
+            assert.equal(v, ce.etheraddress);
+        }
+    });
+
+    it('should validate correct Ethereum addresses parameters', function() {
+        for (const v of validEther) {
+            const result = ce.checkEtherAddress(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid Ethereum addresses accessors', function() {
+
+        for (const iv of invalidEther) {
+            let failed = false;
+            try {
+                ce.etheraddress = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid Ethereum addresses parameters', function() {
+
+        for (const iv of invalidEther) {
+            let failed = false;
+            try {
+                const result = ce.checkEtherAddress(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
 });
 
 describe('Banking', function() {

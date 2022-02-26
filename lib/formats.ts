@@ -50,3 +50,9 @@ export function IsEmail(options?: IsEmailOptions) {
         (value) => validator.isEmail(value, options),
         `Value :value: is not an E-Mail address`);
 }
+
+export function IsEthereumAddress() {
+    return generateValidationDecorator(
+        (value) => validator.isEthereumAddress(value),
+        `Value :value: is not an Ethereum address`);
+}
