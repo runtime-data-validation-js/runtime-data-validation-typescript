@@ -171,6 +171,20 @@ describe('Floats - IsFloat - IsFloatRange', function() {
         }
         get value() { return this.#value; }
 
+        @ValidateAccessor<number>()
+        @IsFloat({ locale: 'en-AU' })
+        set valueENAU(nv: number | string) {
+            this.#value = ToFloat(nv);
+        }
+        get valueENAU() { return this.#value; }
+
+        @ValidateAccessor<number>()
+        @IsFloat({ locale: 'de-DE' })
+        set valueDEDE(nv: number | string) {
+            this.#value = ToFloat(nv);
+        }
+        get valueDEDE() { return this.#value; }
+
         #range: number;
 
         @ValidateAccessor<number>()
@@ -180,14 +194,76 @@ describe('Floats - IsFloat - IsFloatRange', function() {
         }
         get range() { return this.#range; }
 
+        @ValidateAccessor<number>()
+        @IsFloat({ min: 10.5 })
+        set rangeMIN(nr: number | string) {
+            this.#range = ToFloat(nr);
+        }
+        get rangeMIN() { return this.#range; }
+
+        @ValidateAccessor<number>()
+        @IsFloat({ max: 100.5 })
+        set rangeMAX(nr: number | string) {
+            this.#range = ToFloat(nr);
+        }
+        get rangeMAX() { return this.#range; }
+
+        @ValidateAccessor<number>()
+        @IsFloat({ min: 10.5, max: 100.5 })
+        set rangeMINMAX(nr: number | string) {
+            this.#range = ToFloat(nr);
+        }
+        get rangeMINMAX() { return this.#range; }
+
+
         @ValidateParams
         scale(
-            @IsFloat()
-            value: number | string,
-            @IsFloat()
-            factor: number | string
+            @IsFloat() value: number | string,
+            @IsFloat() factor: number | string
         ) {
             return ToFloat(value) * ToFloat(factor);
+        }
+
+        @ValidateParams
+        checkFloat(
+            @IsFloat() num: number | string
+        ) {
+            return num;
+        }
+
+        @ValidateParams
+        checkFloatENAU(
+            @IsFloat({ locale: 'en-AU' }) num: number | string
+        ) {
+            return num;
+        }
+
+        @ValidateParams
+        checkFloatDEDE(
+            @IsFloat({ locale: 'de-DE' }) num: number | string
+        ) {
+            return num;
+        }
+
+        @ValidateParams
+        checkFloatMIN(
+            @IsFloat({ min: 10.5 }) num: number | string
+        ) {
+            return num;
+        }
+
+        @ValidateParams
+        checkFloatMAX(
+            @IsFloat({ max: 100.5 }) num: number | string
+        ) {
+            return num;
+        }
+
+        @ValidateParams
+        checkFloatMINMAX(
+            @IsFloat({ min: 10.5, max: 100.5 }) num: number | string
+        ) {
+            return num;
         }
     }
 
@@ -219,6 +295,19 @@ describe('Floats - IsFloat - IsFloatRange', function() {
         assert.equal(fe.range, 66);
         fe.range = 100;
         assert.equal(fe.range, 100);
+
+        fe.rangeMIN = 11;
+        assert.equal(fe.rangeMIN, 11);
+        fe.rangeMIN = 10.51;
+        assert.equal(fe.rangeMIN, 10.51);
+
+        fe.rangeMAX = 100;
+        assert.equal(fe.rangeMAX, 100);
+
+        fe.rangeMINMAX = 10.51;
+        assert.equal(fe.rangeMINMAX, 10.51);
+        fe.rangeMINMAX = 100;
+        assert.equal(fe.rangeMINMAX, 100);
     });
 
     it('Should fail with out-of-range', function() {
@@ -241,6 +330,38 @@ describe('Floats - IsFloat - IsFloatRange', function() {
         failed = false;
         try {
             fe.range = 105;
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            fe.rangeMIN = 10;
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            fe.rangeMAX = 120;
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            fe.rangeMINMAX = 10;
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            fe.rangeMINMAX = 120;
         } catch (e) {
             failed = true;
         }
@@ -308,6 +429,170 @@ describe('Floats - IsFloat - IsFloatRange', function() {
         }
         assert.equal(failed, true);
     });
+
+    const validENAU = [
+        '123',
+        '123.',
+        123, 123.123, -123.123,
+        '123.123',
+        '-123.123',
+        0.123, -0.123,
+        '-0.123',
+        '+0.123',
+        '0.123',
+        '.0',
+        '-.123',
+        '+.123',
+        '01.123',
+        '-0.22250738585072011e-307',
+    ];
+    const invalidENAU = [
+        '123٫123',
+        '123,123',
+        '  ',
+        '',
+        '.',
+        'foo',
+    ];
+
+    it('should validate correct float ENAU accessors', function() {
+        for (const v of validENAU) {
+            fe.valueENAU = v;
+            assert.equal(v, fe.valueENAU);
+        }
+    });
+
+    it('should validate correct float ENAU parameters', function() {
+        for (const v of validENAU) {
+            const result = fe.checkFloatENAU(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid float ENAU accessors', function() {
+
+        for (const iv of invalidENAU) {
+            let failed = false;
+            try {
+                fe.valueENAU = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid float ENAU parameters', function() {
+
+        for (const iv of invalidENAU) {
+            let failed = false;
+            try {
+                const result = fe.checkFloatENAU(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validDEDE = [
+        '123',
+        // The following values fail.
+        // The issue is that Number.parseFloat() does not
+        // support parsing these numbers that have commas 
+        // instead of decimal points.
+        //
+        // https://stackoverflow.com/questions/13412204/localization-of-input-type-number
+        //
+        // According to that query, the JavaScript spec only
+        // allows decimal points and not commas in number strings.
+        //
+        // I don't know why validator.js supports number strings
+        // with commas in them when JavaScript doesn't support this.
+        //
+        // '123,',
+        // '123,123',
+        // '-123,123',
+        // '-0,123',
+        // '+0,123',
+        // '0,123',
+        // ',0',
+        // '-,123',
+        // '+,123',
+        // '01,123',
+        // '-0,22250738585072011e-307',
+    ];
+    const invalidDEDE = [
+        '123.123',
+        '123٫123',
+        '  ',
+        '',
+        '.',
+        'foo',
+    ];
+
+
+    it('should validate correct float DEDE accessors', function() {
+        for (const v of validDEDE) {
+            fe.valueDEDE = v;
+            console.log(`float DEDE ${v} => ${fe.valueDEDE}`);
+            assert.equal(v, fe.valueDEDE);
+        }
+    });
+
+    it('should validate correct float DEDE parameters', function() {
+        for (const v of validDEDE) {
+            const result = fe.checkFloatDEDE(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid float DEDE accessors', function() {
+
+        for (const iv of invalidDEDE) {
+            let failed = false;
+            try {
+                fe.valueDEDE = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid float DEDE parameters', function() {
+
+        for (const iv of invalidDEDE) {
+            let failed = false;
+            try {
+                const result = fe.checkFloatDEDE(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    /*
+     * THis will have the same issue as de-DE in that the decimal
+     * separator is not a '.'
+     * 
+    args: [{ locale: 'ar-JO' }],
+      valid: [
+        '123',
+        '123٫',
+        '123٫123',
+        '-123٫123',
+        '-0٫123',
+        '+0٫123',
+        '0٫123',
+        '٫0',
+        '-٫123',
+        '+٫123',
+        '01٫123',
+        '-0٫22250738585072011e-307',
+      ],
+      invalid: [
+        '123,123',
+        '123.123',
+        '  ',
+        '',
+        '.',
+        'foo',
+      ],
+    */
 
 });
 

@@ -74,8 +74,14 @@ export function IsFloatRange(min: number, max: number) {
         `Value :value: not a float between ${min} and ${max}`);
 }
 
-export function IsFloat() {
+export type IsFloatOptions = {
+    min?: number,
+    max?: number,
+    locale?: string
+};
+
+export function IsFloat(options?: IsFloatOptions) {
     return generateValidationDecorator(
-        (value) => numbers.IsFloat(value),
+        (value) => numbers.IsFloat(value, options),
         `Value :value: not a float`);
 }

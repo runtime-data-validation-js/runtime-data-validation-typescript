@@ -1,5 +1,6 @@
 
 import { default as validator } from 'validator';
+import { IsFloatOptions } from '../numerical';
 
 export function IsIntRange(value: number | string,
                 min: number, max: number) {
@@ -39,9 +40,23 @@ export function IsFloatRange(value: number | string,
     return false;
 }
 
-export function IsFloat(value: number | string) {
+export function IsFloat(value: number | string, options) {
     // console.log(`IsFloat ${value}`);
-    if (typeof value === 'number') return true;
-    else if (validator.isFloat(value)) return true;
+    if (typeof value === 'number') {
+        // console.log(`IsFloat number ${value}`);
+        if (options) {
+            if (typeof options.max !== 'undefined'
+             && typeof options.min !== 'undefined') {
+                return (value >= options.min && value <= options.max);
+            } else if (typeof options.max !== 'undefined') {
+                return value <= options.max;
+            } else if (typeof options.min !== 'undefined') {
+                return value >= options.min;
+            } else return true;
+        } else return true;
+    } else {
+        // console.log(`IsFloat string ${value}`);
+        if (validator.isFloat(value, options)) return true;
+    }
     return false;
 }
