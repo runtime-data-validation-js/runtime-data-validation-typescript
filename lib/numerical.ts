@@ -85,3 +85,21 @@ export function IsFloat(options?: IsFloatOptions) {
         (value) => numbers.IsFloat(value, options),
         `Value :value: not a float`);
 }
+
+export function IsHexadecimal() {
+    return generateValidationDecorator(
+        (value) => validator.isHexadecimal(value),
+        `Value :value: not hexadecimal`);
+}
+
+export function IsHexColor() {
+    return generateValidationDecorator(
+        (value) => validator.isHexColor(value),
+        `Value :value: not hex color`);
+}
+
+export function IsHSL() {
+    return generateValidationDecorator(
+        (value) => validator.isHSL(value),
+        `Value :value: not HSL color`);
+}
