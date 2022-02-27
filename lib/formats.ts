@@ -34,7 +34,7 @@ export function IsEAN() {
         `Value :value: is not an EAN`);
 }
 
-type IsEmailOptions = {
+export type IsEmailOptions = {
     allow_display_name?: boolean,
     require_display_name?: boolean,
     allow_utf8_local_part?: boolean,
@@ -56,3 +56,18 @@ export function IsEthereumAddress() {
         (value) => validator.isEthereumAddress(value),
         `Value :value: is not an Ethereum address`);
 }
+
+export type IsFQDNOptions = {
+    require_tld?: boolean,
+    allow_underscores?: boolean,
+    allow_trailing_dot?: boolean,
+    allow_numeric_tld?: boolean,
+    allow_wildcard?: boolean
+};
+
+export function IsFQDN(options?: IsFQDNOptions) {
+    return generateValidationDecorator(
+        (value) => validator.isFQDN(value, options),
+        `Value :value: is not a fully qualified domain name`);
+}
+

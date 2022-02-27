@@ -6,6 +6,7 @@ import {
     IsAscii, IsBase32, IsBase58, IsBase64,
     IsBtcAddress, IsCreditCard, IsDataURI,
     IsEAN, IsEmail, IsEthereumAddress,
+    IsFQDN,
     ValidateParams, ValidateAccessor,
 } from 'runtime-data-validation';
 
@@ -649,7 +650,7 @@ describe('E-Mail', function() {
     
 });
 
-describe('URL - URI - EAN', function() {
+describe('URL - URI - EAN - FQDN', function() {
 
     class URLURIExamples {
         #datauri: string;
@@ -661,8 +662,7 @@ describe('URL - URI - EAN', function() {
 
         @ValidateParams
         checkDataURI(
-            @IsDataURI()
-            nd: string
+            @IsDataURI() nd: string
         ) {
             return nd;
         }
@@ -676,11 +676,77 @@ describe('URL - URI - EAN', function() {
 
         @ValidateParams
         checkEAN(
-            @IsEAN()
-            nd: string
+            @IsEAN() nd: string
         ) {
             return nd;
         }
+
+        #fqdn: string;
+
+        @ValidateAccessor<string>()
+        @IsFQDN()
+        set fqdn(nd: string) { this.#fqdn = nd; }
+        get fqdn() { return this.#fqdn; }
+
+        @ValidateAccessor<string>()
+        @IsFQDN({ allow_trailing_dot: true })
+        set fqdnDOT(nd: string) { this.#fqdn = nd; }
+        get fqdnDOT() { return this.#fqdn; }
+
+        @ValidateAccessor<string>()
+        @IsFQDN({ require_tld: false )
+        set fqdnTLD(nd: string) { this.#fqdn = nd; }
+        get fqdnTLD() { return this.#fqdn; }
+
+        @ValidateAccessor<string>()
+        @IsFQDN({ allow_numeric_tld: true, require_tld: false })
+        set fqdnNUMTLD(nd: string) { this.#fqdn = nd; }
+        get fqdnNUMTLD() { return this.#fqdn; }
+
+        @ValidateAccessor<string>()
+        @IsFQDN({ allow_wildcard: true })
+        set fqdnWILD(nd: string) { this.#fqdn = nd; }
+        get fqdnWILD() { return this.#fqdn; }
+
+
+
+
+
+        @ValidateParams
+        checkFQDN(
+            @IsFQDN() nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateParams
+        checkFQDNDOT(
+            @IsFQDN({ allow_trailing_dot: true }) nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateParams
+        checkFQDNTLD(
+            @IsFQDN({ require_tld: false ) nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateParams
+        checkFQDNNUMTLD(
+            @IsFQDN({ allow_numeric_tld: true, require_tld: false }) nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateParams
+        checkFQDNWILD(
+            @IsFQDN({ allow_wildcard: true }) nd: string
+        ) {
+            return nd;
+        }
+
 
     }
 
@@ -801,5 +867,131 @@ describe('URL - URI - EAN', function() {
             assert.equal(failed, true);
         }
     });
+
+    const validFQDN = [
+        'domain.com',
+        'dom.plato',
+        'a.domain.co',
+        'foo--bar.com',
+        'xn--froschgrn-x9a.com',
+        'rebecca.blackfriday',
+        '1337.com',
+    ];
+    const invalidFQDN = [
+        'abc',
+        '256.0.0.0',
+        '_.com',
+        '*.some.com',
+        's!ome.com',
+        'domain.com/',
+        '/more.com',
+        'domain.com�',
+        'domain.co\u00A0m',
+        'domain.co\u1680m',
+        'domain.co\u2006m',
+        'domain.co\u2028m',
+        'domain.co\u2029m',
+        'domain.co\u202Fm',
+        'domain.co\u205Fm',
+        'domain.co\u3000m',
+        'domain.com\uDC00',
+        'domain.co\uEFFFm',
+        'domain.co\uFDDAm',
+        'domain.co\uFFF4m',
+        'domain.com©',
+        'example.0',
+        '192.168.0.9999',
+        '192.168.0',
+    ];
+
+    it('should validate correct FQDN accessors', function() {
+        for (const v of validFQDN) {
+            uue.fqdn = v;
+            assert.equal(v, uue.fqdn);
+        }
+    });
+
+    it('should validate correct FQDN parameters', function() {
+        for (const v of validFQDN) {
+            const result = uue.checkFQDN(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid FQDN accessors', function() {
+
+        for (const iv of invalidFQDN) {
+            let failed = false;
+            try {
+                uue.fqdn = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid FQDN parameters', function() {
+
+        for (const iv of invalidFQDN) {
+            let failed = false;
+            try {
+                const result = uue.checkFQDN(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('should validate correct FQDN trailing dot', function() {
+        for (const v of [ 'example.com.' ]) {
+            uue.fqdnDOT = v;
+            assert.equal(v, uue.fqdnDOT);
+            const result = uue.checkFQDNDOT(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid FQDN TLD accessors', function() {
+
+        for (const iv of [ 'example.0',
+                            '192.168.0',
+                            '192.168.0.9999' ]) {
+            let failed = false;
+            try {
+                uue.fqdnTLD = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+
+            failed = false;
+            try {
+                const result = uue.checkFQDNTLD(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('should validate correct FQDN numeric TLD', function() {
+        for (const v of [ 'example.0',
+                        '192.168.0',
+                        '192.168.0.9999' ]) {
+            // console.log(`accessor ${v}`);
+            uue.fqdnNUMTLD = v;
+            assert.equal(v, uue.fqdnNUMTLD);
+            // console.log(`parameter ${v}`);
+            const result = uue.checkFQDNNUMTLD(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('should validate correct FQDN wildcards', function() {
+        for (const v of [ '*.example.com',
+                            '*.shop.example.com' ]) {
+            // console.log(`accessor ${v}`);
+            uue.fqdnWILD = v;
+            assert.equal(v, uue.fqdnWILD);
+            // console.log(`parameter ${v}`);
+            const result = uue.checkFQDNWILD(v);
+            assert.equal(v, result);
+        }
+    });
+
 
 });
