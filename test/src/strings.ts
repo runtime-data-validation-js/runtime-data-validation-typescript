@@ -5,7 +5,7 @@ import {
     Contains, Equals, IsAlpha, IsAlphanumeric,
     IsAscii, IsBase32, IsBase58, IsBase64,
     ValidateParams, ValidateAccessor, IsByteLength,
-    IsEmpty
+    IsEmpty, IsFullWidth, IsHalfWidth
 } from 'runtime-data-validation';
 
 describe('Contains', function() {
@@ -111,7 +111,7 @@ describe('Equals', function() {
     });
 });
 
-describe('IsAlpha - IsAlphanumeric - IsAscii', function() {
+describe('IsAlpha - IsAlphanumeric - IsAscii - IsFullWidth IsHalfWidth', function() {
 
     class AlphaExample {
 
@@ -121,6 +121,16 @@ describe('IsAlpha - IsAlphanumeric - IsAscii', function() {
         @IsAlpha()
         set title(nt: string) { this.#title = nt; }
         get title() { return this.#title; }
+
+        @ValidateAccessor<string>()
+        @IsFullWidth()
+        set titleFULL(nt: string) { this.#title = nt; }
+        get titleFULL() { return this.#title; }
+
+        @ValidateAccessor<string>()
+        @IsHalfWidth()
+        set titleHALF(nt: string) { this.#title = nt; }
+        get titleHALF() { return this.#title; }
 
         #license: string;
 
@@ -141,6 +151,20 @@ describe('IsAlpha - IsAlphanumeric - IsAscii', function() {
         @ValidateParams
         checkAscii(
             @IsAscii() checkThis: string
+        ) {
+            return checkThis;
+        }
+
+        @ValidateParams
+        checkFullWidth(
+            @IsFullWidth() checkThis: string
+        ) {
+            return checkThis;
+        }
+
+        @ValidateParams
+        checkHalfWidth(
+            @IsHalfWidth() checkThis: string
         ) {
             return checkThis;
         }
@@ -223,6 +247,88 @@ describe('IsAlpha - IsAlphanumeric - IsAscii', function() {
             assert.equal(failed, true);
         }
     });
+
+    const validFULL = [
+        'ひらがな・カタカナ、．漢字',
+        '３ー０　ａ＠ｃｏｍ',
+        'Ｆｶﾀｶﾅﾞﾬ',
+        'Good＝Parts',
+    ];
+    const invalidFULL = [
+        'abc',
+        'abc123',
+        '!"#$%&()<>/+=-_? ~^|.,@`{}[]',
+    ];
+
+    it('should validate correct FullWidth strings', function() {
+        for (const v of validFULL) {
+            ae.titleFULL = v;
+            assert.equal(ae.titleFULL, v);
+
+            const result = ae.checkFullWidth(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('should reject non-FullWidth strings', function() {
+        for (const iv of invalidFULL) {
+
+            let failed = false;
+            try {
+                ae.titleFULL = iv;
+                assert.equal(ae.titleFULL, iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+
+            failed = false;
+            try {
+                const result = ae.checkFullWidth(iv);
+                assert.equal(iv, result);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validHALF = [
+        '!"#$%&()<>/+=-_? ~^|.,@`{}[]',
+        'l-btn_02--active',
+        'abc123い',
+        'ｶﾀｶﾅﾞﾬ￩',
+    ];
+    const invalidHALF = [
+        'あいうえお',
+        '００１１',
+    ];
+
+    it('should validate correct HalfWidth strings', function() {
+        for (const v of validHALF) {
+            ae.titleHALF = v;
+            assert.equal(ae.titleHALF, v);
+
+            const result = ae.checkHalfWidth(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('should reject non-HalfWidth strings', function() {
+        for (const iv of invalidHALF) {
+
+            let failed = false;
+            try {
+                ae.titleHALF = iv;
+                assert.equal(ae.titleHALF, iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+
+            failed = false;
+            try {
+                const result = ae.checkHalfWidth(iv);
+                assert.equal(iv, result);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
 });
 
 describe('BASE32 - BASE58', function() {

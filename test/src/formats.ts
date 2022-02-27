@@ -6,7 +6,7 @@ import {
     IsAscii, IsBase32, IsBase58, IsBase64,
     IsBtcAddress, IsCreditCard, IsDataURI,
     IsEAN, IsEmail, IsEthereumAddress,
-    IsFQDN,
+    IsFQDN, IsHash,
     ValidateParams, ValidateAccessor,
 } from 'runtime-data-validation';
 
@@ -650,7 +650,7 @@ describe('E-Mail', function() {
     
 });
 
-describe('URL - URI - EAN - FQDN', function() {
+describe('URL - URI - EAN - FQDN - Hash', function() {
 
     class URLURIExamples {
         #datauri: string;
@@ -694,7 +694,7 @@ describe('URL - URI - EAN - FQDN', function() {
         get fqdnDOT() { return this.#fqdn; }
 
         @ValidateAccessor<string>()
-        @IsFQDN({ require_tld: false )
+        @IsFQDN({ require_tld: false })
         set fqdnTLD(nd: string) { this.#fqdn = nd; }
         get fqdnTLD() { return this.#fqdn; }
 
@@ -707,10 +707,6 @@ describe('URL - URI - EAN - FQDN', function() {
         @IsFQDN({ allow_wildcard: true })
         set fqdnWILD(nd: string) { this.#fqdn = nd; }
         get fqdnWILD() { return this.#fqdn; }
-
-
-
-
 
         @ValidateParams
         checkFQDN(
@@ -728,7 +724,7 @@ describe('URL - URI - EAN - FQDN', function() {
 
         @ValidateParams
         checkFQDNTLD(
-            @IsFQDN({ require_tld: false ) nd: string
+            @IsFQDN({ require_tld: false }) nd: string
         ) {
             return nd;
         }
@@ -746,6 +742,169 @@ describe('URL - URI - EAN - FQDN', function() {
         ) {
             return nd;
         }
+
+        #hash: string;
+
+        @ValidateAccessor<string>()
+        @IsHash('md5')
+        set hashMD5(nd: string) { this.#fqdn = nd; }
+        get hashMD5() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashMD5(
+            @IsHash('md5') nd: string
+        ) {
+            return nd;
+        }
+
+        @ValidateAccessor<string>()
+        @IsHash('md4')
+        set hashMD4(nd: string) { this.#fqdn = nd; }
+        get hashMD4() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashMD4(
+            @IsHash('md4') nd: string
+        ) {
+            return nd;
+        }
+
+
+        @ValidateAccessor<string>()
+        @IsHash('ripemd128')
+        set hashRIPEMD128(nd: string) { this.#fqdn = nd; }
+        get hashRIPEMD128() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashRIPEMD128(
+            @IsHash('ripemd128') nd: string
+        ) {
+            return nd;
+        }
+
+
+        @ValidateAccessor<string>()
+        @IsHash('ripemd160')
+        set hashRIPEMD160(nd: string) { this.#fqdn = nd; }
+        get hashRIPEMD160() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashRIPEMD160(
+            @IsHash('ripemd160') nd: string
+        ) {
+            return nd;
+        }
+
+
+
+        @ValidateAccessor<string>()
+        @IsHash('tiger160')
+        set hashTIGER160(nd: string) { this.#fqdn = nd; }
+        get hashTIGER160() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashTIGER160(
+            @IsHash('tiger160') nd: string
+        ) {
+            return nd;
+        }
+
+
+        @ValidateAccessor<string>()
+        @IsHash('tiger192')
+        set hashTIGER192(nd: string) { this.#fqdn = nd; }
+        get hashTIGER192() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashTIGER192(
+            @IsHash('tiger192') nd: string
+        ) {
+            return nd;
+        }
+
+
+
+        @ValidateAccessor<string>()
+        @IsHash('sha1')
+        set hashSHA1(nd: string) { this.#fqdn = nd; }
+        get hashSHA1() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashSHA1(
+            @IsHash('sha1') nd: string
+        ) {
+            return nd;
+        }
+
+
+        @ValidateAccessor<string>()
+        @IsHash('sha256')
+        set hashSHA256(nd: string) { this.#fqdn = nd; }
+        get hashSHA256() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashSHA256(
+            @IsHash('sha256') nd: string
+        ) {
+            return nd;
+        }
+
+
+        @ValidateAccessor<string>()
+        @IsHash('sha384')
+        set hashSHA384(nd: string) { this.#fqdn = nd; }
+        get hashSHA384() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashSHA384(
+            @IsHash('sha384') nd: string
+        ) {
+            return nd;
+        }
+
+
+        @ValidateAccessor<string>()
+        @IsHash('sha512')
+        set hashSHA512(nd: string) { this.#fqdn = nd; }
+        get hashSHA512() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashSHA512(
+            @IsHash('sha512') nd: string
+        ) {
+            return nd;
+        }
+
+
+
+
+
+
+        @ValidateAccessor<string>()
+        @IsHash('crc32')
+        set hashCRC32(nd: string) { this.#fqdn = nd; }
+        get hashCRC32() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashCRC32(
+            @IsHash('crc32') nd: string
+        ) {
+            return nd;
+        }
+
+
+        @ValidateAccessor<string>()
+        @IsHash('crc32b')
+        set hashCRC32B(nd: string) { this.#fqdn = nd; }
+        get hashCRC32B() { return this.#fqdn; }
+
+        @ValidateParams
+        checkHashCRC32B(
+            @IsHash('crc32b') nd: string
+        ) {
+            return nd;
+        }
+
 
 
     }
@@ -994,4 +1153,417 @@ describe('URL - URI - EAN - FQDN', function() {
     });
 
 
+    for (const hash of ['md5', 'md4', 'ripemd128', 'tiger128']) {
+        const valid = [
+            'd94f3f016ae679c3008de268209132f2',
+            '751adbc511ccbe8edf23d486fa4581cd',
+            '88dae00e614d8f24cfd5a8b3f8002e93',
+            '0bf1c35032a71a14c2f719e5a14c1e96',
+            'd94f3F016Ae679C3008de268209132F2',
+            '88DAE00e614d8f24cfd5a8b3f8002E93',
+        ];
+        const invalid = [
+            'q94375dj93458w34',
+            '39485729348',
+            '%&FHKJFvk',
+            'KYT0bf1c35032a71a14c2f719e5a1',
+        ];
+  
+        it(`should validate correct ${hash} algorithm`, function() {
+            for (const v of valid) {
+                // console.log(`accessor ${v}`);
+                if (hash === 'md5') {
+                    uue.hashMD5 = v;
+                    assert.equal(v, uue.hashMD5);
+                    const result = uue.checkHashMD5(v);
+                    assert.equal(v, result);
+                } else if (hash === 'md4') {
+                    uue.hashMD4 = v;
+                    assert.equal(v, uue.hashMD4);
+                    const result = uue.checkHashMD4(v);
+                    assert.equal(v, result);
+                } else if (hash === 'ripemd128') {
+                    uue.hashRIPEMD128 = v;
+                    assert.equal(v, uue.hashRIPEMD128);
+                    const result = uue.checkHashRIPEMD128(v);
+                    assert.equal(v, result);
+                }
+            }
+        });
+
+        it(`should reject invalid ${hash} algorithm`, function() {
+            for (const iv of invalid) {
+                let failed = false;
+                if (hash === 'md5') {
+                    failed = false;
+                    try {
+                        uue.hashMD5 = iv;
+                        assert.equal(iv, uue.hashMD5);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                    failed = false;
+                    try {
+                        const result = uue.checkHashMD5(iv);
+                        assert.equal(iv, result);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                } else if (hash === 'md4') {
+                    failed = false;
+                    try {
+                        uue.hashMD4 = iv;
+                        assert.equal(iv, uue.hashMD4);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                    failed = false;
+                    try {
+                        const result = uue.checkHashMD4(iv);
+                        assert.equal(iv, result);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                } else if (hash === 'ripemd128') {
+                    failed = false;
+                    try {
+                        uue.hashRIPEMD128 = iv;
+                        assert.equal(iv, uue.hashRIPEMD128);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                    
+                    failed = false;
+                    try {
+                        const result = uue.checkHashRIPEMD128(iv);
+                        assert.equal(iv, result);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                }
+            }
+        });
+    }
+
+    for (const hash of ['crc32', 'crc32b']) {
+        const valid = [
+            'd94f3f01',
+            '751adbc5',
+            '88dae00e',
+            '0bf1c350',
+            '88DAE00e',
+            '751aDBc5',
+        ];
+        const invalid = [
+            'KYT0bf1c35032a71a14c2f719e5a14c1',
+            'q94375dj93458w34',
+            'q943',
+            '39485729348',
+            '%&FHKJFvk',
+        ];
+  
+        it(`should validate correct ${hash} algorithm`, function() {
+            for (const v of valid) {
+                // console.log(`accessor ${v}`);
+                if (hash === 'crc32') {
+                    uue.hashCRC32 = v;
+                    assert.equal(v, uue.hashCRC32);
+                    const result = uue.checkHashCRC32(v);
+                    assert.equal(v, result);
+                } else if (hash === 'crc32b') {
+                    uue.hashCRC32B = v;
+                    assert.equal(v, uue.hashCRC32B);
+                    const result = uue.checkHashCRC32B(v);
+                    assert.equal(v, result);
+                }
+            }
+        });
+
+
+        it(`should reject invalid ${hash} algorithm`, function() {
+            for (const iv of invalid) {
+                let failed = false;
+                if (hash === 'crc32') {
+                    failed = false;
+                    try {
+                        uue.hashCRC32 = iv;
+                        assert.equal(iv, uue.hashCRC32);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                    failed = false;
+                    try {
+                        const result = uue.checkHashCRC32(iv);
+                        assert.equal(iv, result);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                } else if (hash === 'crc32b') {
+                    failed = false;
+                    try {
+                        uue.hashCRC32B = iv;
+                        assert.equal(iv, uue.hashCRC32B);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                    failed = false;
+                    try {
+                        const result = uue.checkHashCRC32B(iv);
+                        assert.equal(iv, result);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                }
+            }
+        });
+    }
+
+    for (const hash of ['sha1', 'tiger160', 'ripemd160']) {
+        const valid = [
+            '3ca25ae354e192b26879f651a51d92aa8a34d8d3',
+            'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d',
+            'beb8c3f30da46be179b8df5f5ecb5e4b10508230',
+            'efd5d3b190e893ed317f38da2420d63b7ae0d5ed',
+            'AAF4c61ddCC5e8a2dabede0f3b482cd9AEA9434D',
+            '3ca25AE354e192b26879f651A51d92aa8a34d8D3',
+        ];
+        const invalid = [
+            'KYT0bf1c35032a71a14c2f719e5a14c1',
+            'KYT0bf1c35032a71a14c2f719e5a14c1dsjkjkjkjkkjk',
+            'q94375dj93458w34',
+            '39485729348',
+            '%&FHKJFvk',
+        ];
+  
+        it(`should validate correct ${hash} algorithm`, function() {
+            for (const v of valid) {
+                // console.log(`accessor ${v}`);
+                if (hash === 'sha1') {
+                    uue.hashSHA1 = v;
+                    assert.equal(v, uue.hashSHA1);
+                    const result = uue.checkHashSHA1(v);
+                    assert.equal(v, result);
+                } else if (hash === 'tiger160') {
+                    uue.hashTIGER160 = v;
+                    assert.equal(v, uue.hashTIGER160);
+                    const result = uue.checkHashTIGER160(v);
+                    assert.equal(v, result);
+                } else if (hash === 'ripemd160') {
+                    uue.hashRIPEMD160 = v;
+                    assert.equal(v, uue.hashRIPEMD160);
+                    const result = uue.checkHashRIPEMD160(v);
+                    assert.equal(v, result);
+                }
+            }
+        });
+
+        it(`should reject invalid ${hash} algorithm`, function() {
+            for (const iv of invalid) {
+                let failed = false;
+                if (hash === 'sha1') {
+                    failed = false;
+                    try {
+                        uue.hashSHA1 = iv;
+                        assert.equal(iv, uue.hashSHA1);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                    failed = false;
+                    try {
+                        const result = uue.checkHashSHA1(iv);
+                        assert.equal(iv, result);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                } else if (hash === 'tiger160') {
+                    failed = false;
+                    try {
+                        uue.hashTIGER160 = iv;
+                        assert.equal(iv, uue.hashTIGER160);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                    failed = false;
+                    try {
+                        const result = uue.checkHashTIGER160(iv);
+                        assert.equal(iv, result);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                } else if (hash === 'ripemd160') {
+                    failed = false;
+                    try {
+                        uue.hashRIPEMD160 = iv;
+                        assert.equal(iv, uue.hashRIPEMD160);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                    failed = false;
+                    try {
+                        const result = uue.checkHashRIPEMD160(iv);
+                        assert.equal(iv, result);
+                    } catch (e) { failed = true; }
+                    assert.equal(failed, true);
+                }
+            }
+        });
+    }
+
+    const validSHA256 = [
+        '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824',
+        '1d996e033d612d9af2b44b70061ee0e868bfd14c2dd90b129e1edeb7953e7985',
+        '80f70bfeaed5886e33536bcfa8c05c60afef5a0e48f699a7912d5e399cdcc441',
+        '579282cfb65ca1f109b78536effaf621b853c9f7079664a3fbe2b519f435898c',
+        '2CF24dba5FB0a30e26E83b2AC5b9E29E1b161e5C1fa7425E73043362938b9824',
+        '80F70bFEAed5886e33536bcfa8c05c60aFEF5a0e48f699a7912d5e399cdCC441',
+    ];
+    const invalidSHA256 = [
+        'KYT0bf1c35032a71a14c2f719e5a14c1',
+        'KYT0bf1c35032a71a14c2f719e5a14c1dsjkjkjkjkkjk',
+        'q94375dj93458w34',
+        '39485729348',
+        '%&FHKJFvk',
+    ];
+
+    it(`should validate correct SHA256 algorithm`, function() {
+        for (const v of validSHA256) {
+            // console.log(`accessor ${v}`);
+            uue.hashSHA256 = v;
+            assert.equal(v, uue.hashSHA256);
+            const result = uue.checkHashSHA256(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it(`should reject invalid SHA256 algorithm`, function() {
+        for (const iv of invalidSHA256) {
+            let failed = false;
+            try {
+                uue.hashSHA256 = iv;
+                assert.equal(iv, uue.hashSHA256);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+            failed = false;
+            try {
+                const result = uue.checkHashSHA256(iv);
+                assert.equal(iv, result);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+    
+    const validSHA348 = [
+        '3fed1f814d28dc5d63e313f8a601ecc4836d1662a19365cbdcf6870f6b56388850b58043f7ebf2418abb8f39c3a42e31',
+        'b330f4e575db6e73500bd3b805db1a84b5a034e5d21f0041d91eec85af1dfcb13e40bb1c4d36a72487e048ac6af74b58',
+        'bf547c3fc5841a377eb1519c2890344dbab15c40ae4150b4b34443d2212e5b04aa9d58865bf03d8ae27840fef430b891',
+        'fc09a3d11368386530f985dacddd026ae1e44e0e297c805c3429d50744e6237eb4417c20ffca8807b071823af13a3f65',
+        '3fed1f814d28dc5d63e313f8A601ecc4836d1662a19365CBDCf6870f6b56388850b58043f7ebf2418abb8f39c3a42e31',
+        'b330f4E575db6e73500bd3b805db1a84b5a034e5d21f0041d91EEC85af1dfcb13e40bb1c4d36a72487e048ac6af74b58',
+    ];
+    const invalidSHA348 = [
+        'KYT0bf1c35032a71a14c2f719e5a14c1',
+        'KYT0bf1c35032a71a14c2f719e5a14c1dsjkjkjkjkkjk',
+        'q94375dj93458w34',
+        '39485729348',
+        '%&FHKJFvk',
+    ];
+
+    it(`should validate correct SHA348 algorithm`, function() {
+        for (const v of validSHA348) {
+            // console.log(`accessor ${v}`);
+            uue.hashSHA384 = v;
+            assert.equal(v, uue.hashSHA384);
+            const result = uue.checkHashSHA384(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it(`should reject invalid SHA348 algorithm`, function() {
+        for (const iv of invalidSHA348) {
+            let failed = false;
+            try {
+                uue.hashSHA384 = iv;
+                assert.equal(iv, uue.hashSHA384);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+            failed = false;
+            try {
+                const result = uue.checkHashSHA384(iv);
+                assert.equal(iv, result);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validSHA512 = [
+        '9b71d224bd62f3785d96d46ad3ea3d73319bfbc2890caadae2dff72519673ca72323c3d99ba5c11d7c7acc6e14b8c5da0c4663475c2e5c3adef46f73bcdec043',
+        '83c586381bf5ba94c8d9ba8b6b92beb0997d76c257708742a6c26d1b7cbb9269af92d527419d5b8475f2bb6686d2f92a6649b7f174c1d8306eb335e585ab5049',
+        '45bc5fa8cb45ee408c04b6269e9f1e1c17090c5ce26ffeeda2af097735b29953ce547e40ff3ad0d120e5361cc5f9cee35ea91ecd4077f3f589b4d439168f91b9',
+        '432ac3d29e4f18c7f604f7c3c96369a6c5c61fc09bf77880548239baffd61636d42ed374f41c261e424d20d98e320e812a6d52865be059745fdb2cb20acff0ab',
+        '9B71D224bd62f3785D96d46ad3ea3d73319bFBC2890CAAdae2dff72519673CA72323C3d99ba5c11d7c7ACC6e14b8c5DA0c4663475c2E5c3adef46f73bcDEC043',
+        '432AC3d29E4f18c7F604f7c3c96369A6C5c61fC09Bf77880548239baffd61636d42ed374f41c261e424d20d98e320e812a6d52865be059745fdb2cb20acff0ab',
+    ];
+    const invalidSHA512 = [
+        'KYT0bf1c35032a71a14c2f719e5a14c1',
+        'KYT0bf1c35032a71a14c2f719e5a14c1dsjkjkjkjkkjk',
+        'q94375dj93458w34',
+        '39485729348',
+        '%&FHKJFvk',
+    ];
+    
+    it(`should validate correct SHA512 algorithm`, function() {
+        for (const v of validSHA512) {
+            // console.log(`accessor ${v}`);
+            uue.hashSHA512 = v;
+            assert.equal(v, uue.hashSHA512);
+            const result = uue.checkHashSHA512(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it(`should reject invalid SHA512 algorithm`, function() {
+        for (const iv of invalidSHA512) {
+            let failed = false;
+            try {
+                uue.hashSHA512 = iv;
+                assert.equal(iv, uue.hashSHA512);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+            failed = false;
+            try {
+                const result = uue.checkHashSHA512(iv);
+                assert.equal(iv, result);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+    
+    const validTIGER192 = [
+        '6281a1f098c5e7290927ed09150d43ff3990a0fe1a48267c',
+        '56268f7bc269cf1bc83d3ce42e07a85632394737918f4760',
+        '46fc0125a148788a3ac1d649566fc04eb84a746f1a6e4fa7',
+        '7731ea1621ae99ea3197b94583d034fdbaa4dce31a67404a',
+        '6281A1f098c5e7290927ed09150d43ff3990a0fe1a48267C',
+        '46FC0125a148788a3AC1d649566fc04eb84A746f1a6E4fa7',
+    ];
+    const invalidTIGER192 = [
+        'KYT0bf1c35032a71a14c2f719e5a14c1',
+        'KYT0bf1c35032a71a14c2f719e5a14c1dsjkjkjkjkkjk',
+        'q94375dj93458w34',
+        '39485729348',
+        '%&FHKJFvk',
+    ];
+
+    it(`should validate correct TIGER192 algorithm`, function() {
+        for (const v of validTIGER192) {
+            // console.log(`accessor ${v}`);
+            uue.hashTIGER192 = v;
+            assert.equal(v, uue.hashTIGER192);
+            const result = uue.checkHashTIGER192(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it(`should reject invalid TIGER192 algorithm`, function() {
+        for (const iv of invalidTIGER192) {
+            let failed = false;
+            try {
+                uue.hashTIGER192 = iv;
+                assert.equal(iv, uue.hashTIGER192);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+            failed = false;
+            try {
+                const result = uue.checkHashTIGER192(iv);
+                assert.equal(iv, result);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+    
 });

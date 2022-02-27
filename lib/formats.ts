@@ -71,3 +71,15 @@ export function IsFQDN(options?: IsFQDNOptions) {
         `Value :value: is not a fully qualified domain name`);
 }
 
+export const IsHashAlgorithms = ['md4', 'md5', 'sha1', 'sha256', 'sha384',
+            'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160',
+            'tiger192', 'crc32', 'crc32b'];
+
+export function IsHash(algorithm: string) {
+    if (!IsHashAlgorithms.includes(algorithm)) {
+        throw new Error(`IsHash algorithm ${algorithm} not supported`);
+    }
+    return generateValidationDecorator(
+        (value) => validator.isHash(value, algorithm),
+        `Value :value: is not a string of hash algorithm`);
+}

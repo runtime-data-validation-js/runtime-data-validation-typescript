@@ -88,3 +88,15 @@ export function IsEmpty(options?: IsEmptyOptions) {
         (value) => validator.isEmpty(value, options),
         `Value :value: is not empty ${util.inspect(options)}`);
 }
+
+export function IsFullWidth() {
+    return generateValidationDecorator(
+        (value) => validator.isFullWidth(value),
+        `Value :value: does not have full-width characters`);
+}
+
+export function IsHalfWidth() {
+    return generateValidationDecorator(
+        (value) => validator.isHalfWidth(value),
+        `Value :value: does not have half-width characters`);
+}
