@@ -83,3 +83,10 @@ export function IsHash(algorithm: string) {
         (value) => validator.isHash(value, algorithm),
         `Value :value: is not a string of hash algorithm`);
 }
+
+
+export function IsIBAN() {
+    return generateValidationDecorator(
+        (value) => validator.isIBAN(value),
+        `Value :value: is not an IBAN number`);
+}

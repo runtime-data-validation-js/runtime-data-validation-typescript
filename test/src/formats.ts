@@ -6,7 +6,7 @@ import {
     IsAscii, IsBase32, IsBase58, IsBase64,
     IsBtcAddress, IsCreditCard, IsDataURI,
     IsEAN, IsEmail, IsEthereumAddress,
-    IsFQDN, IsHash,
+    IsFQDN, IsHash, IsIBAN,
     ValidateParams, ValidateAccessor,
 } from 'runtime-data-validation';
 
@@ -184,6 +184,22 @@ describe('Banking', function() {
         ) {
             return ncc;
         }
+
+        #iban: string;
+
+        @ValidateAccessor<string>()
+        @IsIBAN()
+        set iban(ncc: string) { this.#iban = ncc; }
+        get iban() { return this.#iban; }
+
+        @ValidateParams
+        checkIBAN(
+            @IsIBAN()
+            iban: string
+        ) {
+            return iban;
+        }
+
     }
 
     const be = new BankingExample();
@@ -261,6 +277,75 @@ describe('Banking', function() {
             assert.equal(failed, true);
         }
     });
+
+    const validIBAN = [
+        'SC52BAHL01031234567890123456USD',
+        'LC14BOSL123456789012345678901234',
+        'MT31MALT01100000000000000000123',
+        'SV43ACAT00000000000000123123',
+        'EG800002000156789012345180002',
+        'BE71 0961 2345 6769',
+        'FR76 3000 6000 0112 3456 7890 189',
+        'DE91 1000 0000 0123 4567 89',
+        'GR96 0810 0010 0000 0123 4567 890',
+        'RO09 BCYP 0000 0012 3456 7890',
+        'SA44 2000 0001 2345 6789 1234',
+        'ES79 2100 0813 6101 2345 6789',
+        'CH56 0483 5012 3456 7800 9',
+        'GB98 MIDL 0700 9312 3456 78',
+        'IL170108000000012612345',
+        'IT60X0542811101000000123456',
+        'JO71CBJO0000000000001234567890',
+        'TR320010009999901234567890',
+        'BR1500000000000010932840814P2',
+        'LB92000700000000123123456123',
+        'IR200170000000339545727003',
+        'MZ97123412341234123412341',
+    ];
+    const invalidIBAN = [
+        'XX22YYY1234567890123',
+        'FR14 2004 1010 0505 0001 3',
+        'FR7630006000011234567890189@',
+        'FR7630006000011234567890189😅',
+        'FR763000600001123456!!🤨7890189@',
+    ];
+
+    it('should validate correct IBAN numbers accessors', function() {
+        for (const v of validIBAN) {
+            be.iban = v;
+            assert.equal(v, be.iban);
+        }
+    });
+
+    it('should validate correct IBAN numbers parameters', function() {
+        for (const v of validIBAN) {
+            const result = be.checkIBAN(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid IBAN numbers accessors', function() {
+
+        for (const iv of invalidIBAN) {
+            let failed = false;
+            try {
+                be.iban = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid IBAN numbers parameters', function() {
+
+        for (const iv of invalidIBAN) {
+            let failed = false;
+            try {
+                const result = be.checkIBAN(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
 });
 
 describe('E-Mail', function() {
