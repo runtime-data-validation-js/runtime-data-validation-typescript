@@ -24,6 +24,34 @@ describe('Integers - IsInt - IsIntRange', function() {
         }
         get value() { return this.#value; }
 
+        @ValidateAccessor<number>()
+        @IsInt({ allow_leading_zeros: true })
+        set valueZEROS(nv: number | string) {
+            this.#value = ToInt(nv);
+        }
+        get valueZEROS() { return this.#value; }
+
+        @ValidateAccessor<number>()
+        @IsInt({ min: 10 })
+        set valueMIN(nv: number | string) {
+            this.#value = ToInt(nv);
+        }
+        get valueMIN() { return this.#value; }
+
+        @ValidateAccessor<number>()
+        @IsInt({ max: 100 })
+        set valueMAX(nv: number | string) {
+            this.#value = ToInt(nv);
+        }
+        get valueMAX() { return this.#value; }
+
+        @ValidateAccessor<number>()
+        @IsInt({ min: 10, max: 100 })
+        set valueMINMAX(nv: number | string) {
+            this.#value = ToInt(nv);
+        }
+        get valueMINMAX() { return this.#value; }
+
         #range: number;
 
         @ValidateAccessor<number>()
@@ -33,12 +61,38 @@ describe('Integers - IsInt - IsIntRange', function() {
 
         @ValidateParams
         scale(
-            @IsInt()
-            value: number | string,
-            @IsFloat()
-            factor: number | string
+            @IsInt()   value: number | string,
+            @IsFloat() factor: number | string
         ) {
             return ToInt(value) * ToFloat(factor);
+        }
+
+        @ValidateParams
+        checkZEROS(
+            @IsInt({ allow_leading_zeros: true }) value: number | string,
+        ) {
+            return ToInt(value);
+        }
+
+        @ValidateParams
+        checkMIN(
+            @IsInt({ min: 10 }) value: number | string,
+        ) {
+            return ToInt(value);
+        }
+
+        @ValidateParams
+        checkMAX(
+            @IsInt({ max: 100 }) value: number | string,
+        ) {
+            return ToInt(value);
+        }
+
+        @ValidateParams
+        checkMINMAX(
+            @IsInt({ min: 10, max: 100 }) value: number | string,
+        ) {
+            return ToInt(value);
         }
     }
 
@@ -47,7 +101,18 @@ describe('Integers - IsInt - IsIntRange', function() {
     it('Should set integer value', function() {
         ie.value = 33;
         assert.equal(ie.value, 33);
+        ie.value = '33';
+        assert.equal(ie.value, 33);
+        ie.value = '-33';
+        assert.equal(ie.value, -33);
     });
+
+    it('Should set integer leading zeros', function() {
+        ie.valueZEROS = '0003';
+        assert.equal(ie.valueZEROS, 3);
+        ie.valueZEROS = '-0003';
+        assert.equal(ie.valueZEROS, -3);
+    })
 
     it('Should fail to set floating value', function() {
         let failed = false;
@@ -68,6 +133,16 @@ describe('Integers - IsInt - IsIntRange', function() {
         assert.equal(ie.range, 66);
         ie.range = 100;
         assert.equal(ie.range, 100);
+
+        ie.valueMIN = 11;
+        assert.equal(ie.valueMIN, 11);
+        ie.valueMAX = 99;
+        assert.equal(ie.valueMAX, 99);
+
+        ie.valueMINMAX = 11;
+        assert.equal(ie.valueMINMAX, 11);
+        ie.valueMINMAX = 99;
+        assert.equal(ie.valueMINMAX, 99);
     });
 
     it('Should fail with out-of-range', function() {
@@ -94,6 +169,38 @@ describe('Integers - IsInt - IsIntRange', function() {
             failed = true;
         }
         assert.equal(failed, true);
+
+        failed = false;
+        try {
+            ie.valueMAX = 105;
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            ie.valueMIN = 5;
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            ie.valueMINMAX = 5;
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            ie.valueMINMAX = 115;
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
     });
 
     it('Should work with string number', function() {
@@ -112,7 +219,28 @@ describe('Integers - IsInt - IsIntRange', function() {
     });
 
     it('Should handle method params', function() {
-        let result = ie.scale(5, 0.5);
+        let result = ie.checkMIN(11);
+        assert.equal(result, 11);
+        result = ie.checkMIN('11');
+        assert.equal(result, 11);
+
+        result = ie.checkMAX(91);
+        assert.equal(result, 91);
+        result = ie.checkMAX('91');
+        assert.equal(result, 91);
+        result = ie.checkMAX('-91');
+        assert.equal(result, -91);
+
+        result = ie.checkMINMAX(11);
+        assert.equal(result, 11);
+        result = ie.checkMINMAX('11');
+        assert.equal(result, 11);
+        result = ie.checkMINMAX(91);
+        assert.equal(result, 91);
+        result = ie.checkMINMAX('91');
+        assert.equal(result, 91);
+
+        result = ie.scale(5, 0.5);
         assert.equal(result, 2.5);
 
         result = ie.scale(5, 2);
@@ -127,8 +255,53 @@ describe('Integers - IsInt - IsIntRange', function() {
         assert.equal(result, 10);
     });
 
-    it('Should fail bad scale', function() {
+    it('Should fail bad method parameters', function() {
         let failed = false;
+
+        try {
+            assert.equal(ie.checkMIN(-11), -11);
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        try {
+            assert.equal(ie.checkMAX(111), 111);
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+
+        try {
+            assert.equal(ie.checkMINMAX(-11), -11);
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        try {
+            assert.equal(ie.checkMINMAX('-11'), '-11');
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        try {
+            assert.equal(ie.checkMINMAX(111), 111);
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        try {
+            assert.equal(ie.checkMINMAX('111'), '111');
+        } catch (e) {
+            failed = true;
+        }
+        assert.equal(failed, true);
+
+        failed = false;
         try {
             let result = ie.scale(5.5, 2);
             assert.equal(result, 11);

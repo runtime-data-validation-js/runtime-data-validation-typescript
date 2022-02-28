@@ -4,8 +4,7 @@ import * as numbers from './funcs/numbers';
 import { generateValidationDecorator } from './validators';
 import { default as validator } from 'validator';
 
-
-type IsBooleanOptions = {
+export type IsBooleanOptions = {
     loose?: boolean
 };
 
@@ -30,7 +29,7 @@ export function ToBoolean(bool: boolean | string): boolean {
     throw new Error(`ToBoolean received unknown value ${util.inspect(bool)}`);
 }
 
-type IsDecimalOptions = {
+export type IsDecimalOptions = {
     force_decimal?: boolean; 
     decimal_digits?: string;
     locale?: string;
@@ -55,10 +54,15 @@ export function IsIntRange(min: number, max: number) {
         `Value :value: not an integer between ${min} and ${max}`);
 }
 
-export function IsInt() {
+export type IsIntOptions = {
+    min?: number, max?: number,
+    allow_leading_zeros?: boolean
+}
+
+export function IsInt(options?: IsIntOptions) {
     // console.log(`params.IsInt`);
     return generateValidationDecorator(
-        (value) => numbers.IsInt(value),
+        (value) => numbers.IsInt(value, options),
         `Value :value: not an integer`);
 }
 
