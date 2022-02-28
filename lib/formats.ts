@@ -84,9 +84,22 @@ export function IsHash(algorithm: string) {
         `Value :value: is not a string of hash algorithm`);
 }
 
-
 export function IsIBAN() {
     return generateValidationDecorator(
         (value) => validator.isIBAN(value),
         `Value :value: is not an IBAN number`);
+}
+
+export const IsIdentityCardLocales = ['LK', 'PL', 'ES', 'FI', 'IN',
+        'IT', 'IR', 'MZ', 'NO', 'TH', 'zh-TW', 'he-IL', 'ar-LY',
+        'ar-TN', 'zh-CN'];
+
+export function IsIdentityCard(locale?: string) {
+    if (typeof locale !== 'undefined'
+     && !IsIdentityCardLocales.includes(locale)) {
+        throw new Error(`IsIdentityCard incorrect locale ${locale}`);
+    }
+    return generateValidationDecorator(
+        (value) => validator.isIdentityCard(value, locale),
+        `Value :value: is not an identity card number`);
 }
