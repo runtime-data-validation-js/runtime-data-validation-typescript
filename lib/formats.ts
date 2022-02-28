@@ -103,3 +103,14 @@ export function IsIdentityCard(locale?: string) {
         (value) => validator.isIdentityCard(value, locale),
         `Value :value: is not an identity card number`);
 }
+
+export type IsIMEIOptions = {
+    allow_hyphens?: boolean
+};
+
+export function IsIMEI(options?: IsIMEIOptions) {
+    return generateValidationDecorator(
+        (value) => validator.isIMEI(value, options),
+        `Value :value: is not an IMEI number`);
+}
+
