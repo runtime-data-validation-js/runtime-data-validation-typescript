@@ -148,3 +148,9 @@ export function IsISBN(version?: number) {
         (value) => validator.isISBN(value, version),
         `Value :value: is not an ISBN ${version} number`);
 }
+
+export function IsISIN() {
+    return generateValidationDecorator(
+        (value) => validator.isISIN(value),
+        `Value :value: is not an ISIN number`);
+}
