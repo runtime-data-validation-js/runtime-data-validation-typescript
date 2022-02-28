@@ -114,3 +114,26 @@ export function IsIMEI(options?: IsIMEIOptions) {
         `Value :value: is not an IMEI number`);
 }
 
+export function IsIP(version?: number) {
+    if (typeof version !== 'undefined') {
+        if (typeof version !== 'number') {
+            throw new Error(`Incorrect type for IP ${version}, must be number`);
+        }
+    }
+    return generateValidationDecorator(
+        (value) => validator.isIP(value, version),
+        `Value :value: is not an IP ${version} address`);
+}
+
+
+export function IsIPRange(version?: number) {
+    if (typeof version !== 'undefined') {
+        if (typeof version !== 'number') {
+            throw new Error(`Incorrect type for IP Range ${version}, must be number`);
+        }
+    }
+    return generateValidationDecorator(
+        (value) => validator.isIPRange(value, version),
+        `Value :value: is not an IP Range ${version} address`);
+}
+
