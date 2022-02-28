@@ -137,3 +137,14 @@ export function IsIPRange(version?: number) {
         `Value :value: is not an IP Range ${version} address`);
 }
 
+
+export function IsISBN(version?: number) {
+    if (typeof version !== 'undefined') {
+        if (typeof version !== 'number') {
+            throw new Error(`Incorrect type for ISBN ${version}, must be number`);
+        }
+    }
+    return generateValidationDecorator(
+        (value) => validator.isISBN(value, version),
+        `Value :value: is not an ISBN ${version} number`);
+}
