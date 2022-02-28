@@ -5,7 +5,7 @@ import {
     Contains, Equals, IsAlpha, IsAlphanumeric,
     IsAscii, IsBase32, IsBase58, IsBase64,
     ValidateParams, ValidateAccessor, IsByteLength,
-    IsEmpty, IsFullWidth, IsHalfWidth
+    IsEmpty, IsFullWidth, IsHalfWidth, IsIn
 } from 'runtime-data-validation';
 
 describe('Contains', function() {
@@ -861,4 +861,56 @@ describe('String size', function() {
         
     });
 
+});
+
+describe('IsIn', function() {
+
+    class IsInExample {
+
+        #value: string;
+
+        @ValidateAccessor<string>()
+        @IsIn([ 'valid', 'values', 'allowed', 'in', 'this', 'example' ])
+        set value(nv: string) { this.#value = nv; }
+        get value() { return this.#value; }
+
+        @ValidateParams
+        checkValue(
+            @IsIn([ 'valid', 'values', 'allowed', 'in', 'this', 'example' ])
+            val: string
+        ) {
+            return val;
+        }
+    }
+
+    const iie = new IsInExample();
+
+    it('Should recognize values in allowed', function() {
+        for (const v of [ 'valid', 'values', 'allowed', 'in', 'this', 'example' ]) {
+
+            iie.value = v;
+            assert.equal(v, iie.value);
+
+            const result = iie.checkValue(v);
+            assert.equal(result, v);
+        }
+    });
+
+    it('Should reject non-allowed values', function() {
+        for (const iv of [ 'notallowed', 'notvalid', 'valueless' ]) {
+            let failed = false;
+            try {
+                iie.value = iv;
+                assert.equal(iv, iie.value);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+
+            failed = false;
+            try {
+                const result = iie.checkValue(iv);
+                assert.equal(result, iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
 });

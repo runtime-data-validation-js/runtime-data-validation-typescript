@@ -100,3 +100,9 @@ export function IsHalfWidth() {
         (value) => validator.isHalfWidth(value),
         `Value :value: does not have half-width characters`);
 }
+
+export function IsIn(values: Array<string>) {
+    return generateValidationDecorator(
+        (value) => validator.isIn(value, values),
+        `Value :value: is not an allowed value`);
+}
