@@ -1,0 +1,33 @@
+<div class="blog-river list-group list-group-flush" role="group" aria-label="Project News">
+    <%
+    for (var docno = 0; docno < documents.length; docno++) {
+        var doc = documents[docno];
+        %>
+        <div class="blog-item list-group-item">
+            <!-- add teaser thumbnail -->
+            <a href="/<%= doc.renderpath %>">
+            <h3><%= doc.metadata.title %></h3>
+            </a>
+            <span class="mb-1">
+            Published Date: <%= doc.metadata.publicationDate %>
+            </span>
+            <%
+            if (doc.metadata.teaser) {
+                %><span class="mb-1"><%- doc.metadata.teaser %><span class="mb-1"><%
+            }
+            %>
+            <%
+            // if (doc.metadata.videoUrls) {
+            //     % ><a href="/< %= doc.renderpath % >">
+            //         <h3>< %= doc.metadata.title % ></h3>
+            //         <youtube-thumbnail href="< %= doc.metadata.videoUrls[0].url % >" title="< %= doc.metadata.title % >"></youtube-thumbnail>
+            //     </a>< %
+            // } else {
+            //     % ><a href="/< %= doc.renderpath % >"><h3>< %= doc.metadata.title % ></h3></a>< %
+            // }
+            %>
+        </div>
+        <%
+    }
+    %>
+</div>

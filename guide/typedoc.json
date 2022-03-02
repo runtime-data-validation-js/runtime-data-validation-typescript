@@ -1,0 +1,11 @@
+{
+    "customTitle": "HOME",
+    "customTitleLink": "/index.html",
+    "name": "Runtime data validation for TypeScript",
+    "includeVersion": true,
+    "hideGenerator": true,
+    "categorizeByGroup": false,
+    "categoryOrder": ["Validation Decorator", "Options", "Conversion"],
+    "readme": "README-api.md",
+    "out": "api"
+}

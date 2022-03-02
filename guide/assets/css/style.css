@@ -1,0 +1,15 @@
+
+tt, code {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+
+body {
+	padding-top: 70px;
+}
+
+img {
+	max-width: 100%;
+}
