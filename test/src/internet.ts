@@ -8,6 +8,7 @@ import {
     IsBtcAddress, IsCreditCard, IsDataURI,
     IsEAN, IsEmail, IsEthereumAddress,
     IsFQDN, IsHash, IsIBAN, IsIP, IsIPRange,
+    IsISO31661Alpha2, IsISO31661Alpha3,
     ValidateParams, ValidateAccessor,
 } from 'runtime-data-validation';
 
@@ -1801,4 +1802,156 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
         }
     });
     
+});
+
+describe('IsISO31661Alpha2 - IsISO31661Alpha3', function() {
+
+    class ISOCCExample {
+        #isoalpha2: string;
+        #isoalpha3: string;
+
+        @ValidateAccessor<string>()
+        @IsISO31661Alpha2()
+        set isoalpha2(nd: string) { this.#isoalpha2 = nd; }
+        get isoalpha2() { return this.#isoalpha2; }
+
+        @ValidateAccessor<string>()
+        @IsISO31661Alpha3()
+        set isoalpha3(nd: string) { this.#isoalpha3 = nd; }
+        get isoalpha3() { return this.#isoalpha3; }
+
+        @ValidateParams
+        checkISOAlpha2(
+            @IsISO31661Alpha2() addr: string
+        ) {
+            return addr;
+        }
+
+        @ValidateParams
+        checkISOAlpha3(
+            @IsISO31661Alpha3() addr: string
+        ) {
+            return addr;
+        }
+
+    }
+
+    const icce = new ISOCCExample();
+
+    const validA2 = [
+        'FR',
+        'fR',
+        'GB',
+        'PT',
+        'CM',
+        'JP',
+        'PM',
+        'ZW',
+        'MM',
+        'cc',
+        'GG',
+    ];
+    const invalidA2 = [
+        '',
+        'FRA',
+        'AA',
+        'PI',
+        'RP',
+        'WV',
+        'WL',
+        'UK',
+        'ZZ',
+    ];
+
+    it('should validate correct ISO31661 alpha-2 accessors', function() {
+        for (const v of validA2) {
+            icce.isoalpha2 = v;
+            assert.equal(v, icce.isoalpha2);
+        }
+    });
+
+    it('should validate correct ISO31661 alpha-2 parameters', function() {
+        for (const v of validA2) {
+            const result = icce.checkISOAlpha2(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid ISO31661 alpha-2 accessors', function() {
+
+        for (const iv of invalidA2) {
+            let failed = false;
+            try {
+                icce.isoalpha2 = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid ISO31661 alpha-2 parameters', function() {
+
+        for (const iv of invalidA2) {
+            let failed = false;
+            try {
+                const result = icce.checkISOAlpha2(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validA3 = [
+        'ABW',
+        'HND',
+        'KHM',
+        'RWA',
+    ];
+    const invalidA3 = [
+        '',
+        'FR',
+        'fR',
+        'GB',
+        'PT',
+        'CM',
+        'JP',
+        'PM',
+        'ZW',
+    ];
+
+
+    it('should validate correct ISO31661 alpha-3 accessors', function() {
+        for (const v of validA3) {
+            icce.isoalpha3 = v;
+            assert.equal(v, icce.isoalpha3);
+        }
+    });
+
+    it('should validate correct ISO31661 alpha-3 parameters', function() {
+        for (const v of validA3) {
+            const result = icce.checkISOAlpha3(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid ISO31661 alpha-3 accessors', function() {
+
+        for (const iv of invalidA3) {
+            let failed = false;
+            try {
+                icce.isoalpha3 = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid ISO31661 alpha-3 parameters', function() {
+
+        for (const iv of invalidA3) {
+            let failed = false;
+            try {
+                const result = icce.checkISOAlpha3(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
 });

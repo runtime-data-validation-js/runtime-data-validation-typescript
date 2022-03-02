@@ -84,3 +84,29 @@ export function IsIPRange(version?: number) {
         `Value :value: is not an IP Range ${version} address`);
 }
 
+
+/**
+ * Check if the string is a valid ISO 3166-1 alpha-2 officially
+ * assigned country code.
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsISO31661Alpha2() {
+    return generateValidationDecorator(
+        (value) => validators.isISO31661Alpha2(value),
+        `Value :value: is not an ISO31661 alpha-2 country code`);
+}
+
+ /**
+  * Check if the string is a valid ISO 3166-1 alpha-3 officially
+  * assigned country code.
+  * 
+  * @returns 
+  * @category Validation Decorator
+  */
+export function IsISO31661Alpha3() {
+    return generateValidationDecorator(
+        (value) => validators.isISO31661Alpha3(value),
+        `Value :value: is not an ISO31661 alpha-3 country code`);
+}

@@ -105,3 +105,23 @@ export const isHash = (value: string, algorithm: string) => {
     }
     return validator.isIPRange(value, version);
 };
+
+/**
+ * Check if the string is a valid ISO 3166-1 alpha-2 officially
+ * assigned country code.
+ * 
+ * @param value The string to validate
+ * @returns 
+ * @category Validator
+ */
+export const isISO31661Alpha2 = validator.isISO31661Alpha2;
+
+/**
+ * Check if the string is a valid ISO 3166-1 alpha-3 officially
+ * assigned country code.
+ * 
+ * @param value The string to validate
+ * @returns 
+ * @category Validator
+ */
+export const isISO31661Alpha3 = validator.isISO31661Alpha3;
