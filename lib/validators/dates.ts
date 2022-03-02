@@ -19,7 +19,7 @@ import { default as validator } from 'validator';
  * @returns 
  * @category Validator
  */
-export const IsDate = (value: string, options?: IsDateOptions): boolean => {
+export const isDate = (value: string, options?: IsDateOptions): boolean => {
     // console.log(`IsDate ${value}`, options);
     const ret = validator.isDate(value, options);
     // console.log(`IsDate ${value} ${util.inspect(options)} ==> ${ret}`);
@@ -42,7 +42,7 @@ export const IsDate = (value: string, options?: IsDateOptions): boolean => {
  * @returns 
  * @category Validator
  */
-export const IsISO8601 = (value: string, options?: IsISO8601Options): boolean => {
+export const isISO8601 = (value: string, options?: IsISO8601Options): boolean => {
     // console.log(`IsDate ${value}`, options);
     return validator.isISO8601(value, options)
 }

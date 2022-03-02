@@ -10,9 +10,6 @@ export * as validators from './validators/index';
 export * from './decorators/index';
 export * from './conversions';
 
-// export * from './dates.js';
-export * from './formats.js';
-export * from './numerical.js';
 export * from './strings.js';
 
 // TBD: isAfter 
