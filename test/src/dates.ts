@@ -1,7 +1,7 @@
 
 import { assert } from 'chai';
 import {
-    IsDate, ToDate, IsISO8601, IsISO8601Options,
+    IsDate, ToDate, IsISO8601, 
     ValidateParams, ValidateAccessor
 } from 'runtime-data-validation';
 
@@ -43,12 +43,15 @@ describe('Dates', function(){
         }
         get dateFull() { return this.#date; }        
 
+        #dateDDMMYYYY: Date;
+
+
         @ValidateAccessor<Date | string>()
         @IsDate({ format: 'DD/MM/YYYY' })
         set dateDDMMYYYY(nd: Date | string) {
-            this.#date = ToDate(nd);
+            this.#dateDDMMYYYY = ToDate(nd);
         }
-        get dateDDMMYYYY() { return this.#date; }
+        get dateDDMMYYYY() { return this.#dateDDMMYYYY; }
 
         @ValidateAccessor<Date | string>()
         @IsDate({
@@ -153,7 +156,7 @@ describe('Dates', function(){
 
     const valid = [
         new Date(),
-        new Date([2014, 2, 15]),
+        // new Date([2014, 2, 15]),
         new Date('2014-03-15'),
         '2020/02/29',
     ];
@@ -503,7 +506,7 @@ describe('Dates', function(){
         '2020-02-29',
         '15-07/2002',
         new Date(),
-        new Date([2014, 2, 15]),
+        // new Date([2014, 2, 15]),
         new Date('2014-03-15'),
     ];
 
@@ -555,7 +558,7 @@ describe('Dates', function(){
 
     const validDelimiters = [
         new Date(),
-        new Date([2014, 2, 15]),
+        // new Date([2014, 2, 15]),
         new Date('2014-03-15'),
         '2020/02/29',
         '2020 02 29',
@@ -632,7 +635,7 @@ describe('Dates', function(){
           '2020-02-29',
           '15-07/2002',
           new Date(),
-          new Date([2014, 2, 15]),
+          // new Date([2014, 2, 15]),
           new Date('2014-03-15'),
           '29.02.2020',
     ];

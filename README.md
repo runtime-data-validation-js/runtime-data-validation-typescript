@@ -1,7 +1,7 @@
-# runtime-data-validation-typescript
-Runtime data validation for JavaScript classes using TypeScript decorators
 
-This is a collection of TypeScript decorators that intercept `set` operations on accessors, or method calls, to inspect incoming data, and automatically perform data validation.
+Automatic runtime data validation for JavaScript classes using TypeScript decorators.  With these decorators, one can instrument both `set` accessor functions, and method calls, to automatically intercept every call, inspect incoming data, and automatically validate the data.
+
+Therefore, an instance of a class that has these validation decorators will always have correct data.  The validation prevents incorrect data from being assigned into protected object fields or methods.
 
 For an example of what this means:
 
@@ -25,23 +25,53 @@ class ValidateExample {
 
         @IsFloatRange(0, 1000)
         height: number | string
-    ) {
+    ): number {
         return ToFloat(width) * ToFloat(height);
     }
 
 }
 ```
 
-The first part are decorators attached to an accessor.  The `IsInt` decorator says any value assigned to this accessor must be an integer, and the `IsIntRange` decorator says the value must be between 1990 and 2050.
+There are two decorators, `@ValidateAccessor` and `@ValidateParams`, which drive the data validation process.  These are how the methods are instrumented, with validation code executed for every method or accessor invocation.  The other directors that are attached describe the validations to perform.
 
-The second part is a method, `area`, with two parameters.  Each have an `IsFloatRange` decorator saying that any value assigned to these parameters must be between 0 and 1000.
+For example:
 
-Two decorators are required in addition.  `@ValidateAccessor` and `@ValidateParams` both ensure that the validations are performed.  The first intercepts attempts to assign a value to the accessor.  The second intercepts calls to the method.  Both perform the validations on the values received by the intercepted function invocation.
+* The `IsInt` decorator says any value must be an integer, and the `IsIntRange` decorator says the value must be between 1990 and 2050.
+* Similarly, `IsFloatRange` says the value must be floating point (or integer), between `0` and `1000`.
+* For accessors - the supplied parameter is validated
+* For method calls - the value for each parameter can have different validation decorators suitable to the needs of that parameter
 
-The coder does not explicitly request that validation is performed.  Instead, this pattern of decorators ensures that validation is performed on every assignment to the accessor, or to every method call.
+In each case, the validation is performed before the method is executed.  Therefore you can be certain that data arriving to the method is valid and correct.
 
-Essentially every other data validation package requires that the coder explicitly invoke data validation.  Doesn't this raise the risk that the coder will forget to do validation on a critical code path?  With this package, data validation is performed on every assignment and every method call which carries the decorators.
+The developer does not explicitly request that validation is performed.  Instead, this pattern of decorators ensures that validation is performed on every assignment to the accessor, or to every method call.
 
-
+Most (or all?) data validation packages require the developer to explicitly invoke data validation.  Doesn't this create a risk of forgetting to code validation on a critical code path?
 
 The package includes a very long list of validation decorators.  The implementation uses [validator.js](https://www.npmjs.com/package/validator) in the background.  Development was inspired by [class-validator](https://www.npmjs.com/package/class-validator).
+
+For detailed documentation see:
+
+* https://robogeek.github.io/runtime-data-validation-typescript/
+* https://robogeek.github.io/runtime-data-validation-typescript/api/index.html
+
+# Installation
+
+```
+$ npm install runtime-data-validation --save
+```
+
+To use the decorators, add this to your code:
+
+```js
+import {
+    IsIntRange, IsInt, IsFloatRange, IsFloat,
+    ...
+    ValidateParams, ValidateAccessor,
+} from 'runtime-data-validation';
+```
+
+That is, `import` any needed decorator function.  Then structure your code similarly to the example shown above.
+
+# About
+
+I became inspired to develop this package after updating my book [_Quick Start to using Typescript and TypeORM on Node.js for CLI and web applications_](https://amzn.to/35bSWMA) (sponsored)
