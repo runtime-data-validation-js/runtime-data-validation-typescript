@@ -1,9 +1,11 @@
 
 import { assert } from 'chai';
 import {
-    IsDate, ToDate, IsHexadecimal, IsHexColor, IsHSL,
-    ValidateParams, ValidateAccessor
+    IsDate, IsHexadecimal, IsHexColor, IsHSL,
+    conversions, ValidateParams, ValidateAccessor
 } from 'runtime-data-validation';
+
+const ToDate = conversions.ToDate;
 
 describe('Hexadecimal - Hex Color', function() {
 

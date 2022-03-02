@@ -2,12 +2,14 @@
 import { assert } from 'chai';
 import {
     IsIntRange, IsInt, IsFloatRange, IsFloat,
-    ToInt, ToFloat,
-    IsBoolean, ToBoolean,
-    Contains,
-    ValidateParams, ValidateAccessor, IsDecimal, 
+    IsBoolean, IsDecimal, conversions,
+    ValidateParams, ValidateAccessor, 
 } from 'runtime-data-validation';
 import { default as validator } from 'validator';
+
+const ToInt = conversions.ToInt;
+const ToFloat = conversions.ToFloat;
+const ToBoolean = conversions.ToBoolean;
 
 import * as url from 'url';
 // const __filename = url.fileURLToPath(import.meta.url);

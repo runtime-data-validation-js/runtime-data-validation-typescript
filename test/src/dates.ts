@@ -1,9 +1,11 @@
 
 import { assert } from 'chai';
 import {
-    IsDate, ToDate, IsISO8601, 
+    IsDate, conversions, IsISO8601, 
     ValidateParams, ValidateAccessor
 } from 'runtime-data-validation';
+
+const ToDate = conversions.ToDate;
 
 describe('Dates', function(){
 
