@@ -10,8 +10,6 @@ export * as validators from './validators/index';
 export * from './decorators/index';
 export * from './conversions';
 
-export * from './strings.js';
-
 // TBD: isAfter 
 // isAfter(str [, date]) 	check if the string is a date that's after the specified date (defaults to now).
 
