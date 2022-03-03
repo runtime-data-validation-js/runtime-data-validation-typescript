@@ -296,6 +296,48 @@ describe('International Standard Serial Number', function() {
             return ni;
         }
 
+        #issnCase: string;
+
+        @ValidateAccessor<string>()
+        @IsISSN({ case_sensitive: true })
+        set issnCase(ni: string) { this.#issnCase = ni; }
+        get issnCase() { return this.#issnCase; }
+
+        @ValidateParams
+        checkISSNCase(
+            @IsISSN({ case_sensitive: true }) ni: string
+        ) {
+            return ni;
+        }
+
+        #issnHyphen: string;
+
+        @ValidateAccessor<string>()
+        @IsISSN({ require_hyphen: true })
+        set issnHyphen(ni: string) { this.#issnHyphen = ni; }
+        get issnHyphen() { return this.#issnHyphen; }
+
+        @ValidateParams
+        checkISSNHyphen(
+            @IsISSN({ require_hyphen: true }) ni: string
+        ) {
+            return ni;
+        }
+
+        #issnCaseHyphen: string;
+
+        @ValidateAccessor<string>()
+        @IsISSN({ case_sensitive: true, require_hyphen: true })
+        set issnCaseHyphen(ni: string) { this.#issnCaseHyphen = ni; }
+        get issnCaseHyphen() { return this.#issnCaseHyphen; }
+
+        @ValidateParams
+        checkISSNCaseHyphen(
+            @IsISSN({ case_sensitive: true, require_hyphen: true }) ni: string
+        ) {
+            return ni;
+        }
+
     }
 
     const issn = new ISSNExample();
@@ -355,5 +397,147 @@ describe('International Standard Serial Number', function() {
             assert.equal(failed, true);
         }
     });
+
+    const validCase = [
+        '2434-561X',
+        '2434561X',
+        '0378-5955',
+        '03785955',
+    ];
+    const invalidCase = [
+        '2434-561x',
+        '2434561x',
+    ];
+
+    it('should validate correct ISSN numbers case sensitive accessors', function() {
+        for (const v of validCase) {
+            issn.issnCase = v;
+            assert.equal(v, issn.issnCase);
+        }
+    });
+
+    it('should validate correct ISSN numbers case sensitive parameters', function() {
+        for (const v of validCase) {
+            const result = issn.checkISSNCase(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid ISSN numbers case sensitive accessors', function() {
+
+        for (const iv of invalidCase) {
+            let failed = false;
+            try {
+                issn.issnCase = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid ISSN numbers case sensitive parameters', function() {
+
+        for (const iv of invalidCase) {
+            let failed = false;
+            try {
+                const result = issn.checkISSNCase(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+    
+    const validHyphen = [
+        '2434-561X',
+        '2434-561x',
+        '0378-5955',
+    ];
+    const invalidHyphen = [
+        '2434561X',
+        '2434561x',
+        '03785955',
+    ];
+
+    it('should validate correct ISSN numbers hyphens accessors', function() {
+        for (const v of validHyphen) {
+            issn.issnHyphen = v;
+            assert.equal(v, issn.issnHyphen);
+        }
+    });
+
+    it('should validate correct ISSN numbers hyphens parameters', function() {
+        for (const v of validHyphen) {
+            const result = issn.checkISSNHyphen(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid ISSN numbers hyphens accessors', function() {
+
+        for (const iv of invalidHyphen) {
+            let failed = false;
+            try {
+                issn.issnHyphen = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid ISSN numbers hyphens parameters', function() {
+
+        for (const iv of invalidHyphen) {
+            let failed = false;
+            try {
+                const result = issn.checkISSNHyphen(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+    
+    const validCaseHyphen = [
+        '2434-561X',
+        '0378-5955',
+    ];
+    const invalidCaseHyphen = [
+        '2434-561x',
+        '2434561X',
+        '2434561x',
+        '03785955',
+    ];
+
+    it('should validate correct ISSN numbers case sensitive hyphens accessors', function() {
+        for (const v of validCaseHyphen) {
+            issn.issnCaseHyphen = v;
+            assert.equal(v, issn.issnCaseHyphen);
+        }
+    });
+
+    it('should validate correct ISSN numbers case sensitive hyphens parameters', function() {
+        for (const v of validCaseHyphen) {
+            const result = issn.checkISSNCaseHyphen(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid ISSN numbers case sensitive hyphens accessors', function() {
+
+        for (const iv of invalidCaseHyphen) {
+            let failed = false;
+            try {
+                issn.issnCaseHyphen = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid ISSN numbers case sensitive hyphens parameters', function() {
+
+        for (const iv of invalidCaseHyphen) {
+            let failed = false;
+            try {
+                const result = issn.checkISSNCaseHyphen(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+    
 
 });
