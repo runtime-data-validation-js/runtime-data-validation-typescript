@@ -122,3 +122,15 @@ export function IsISRC() {
         (value) => validators.isISRC(value),
         `Value :value: is not an International Standard Recording Code (ISRC)`);
 }
+
+/**
+ * Check if the string is valid JWT token.
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsJWT() {
+    return generateValidationDecorator(
+        (value) => validators.isJWT(value),
+        `Value :value: is not a JWT Token`);
+}

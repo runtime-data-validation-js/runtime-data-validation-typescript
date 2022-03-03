@@ -10,6 +10,7 @@ import {
     IsFQDN, IsHash, IsIBAN, IsIP, IsIPRange,
     IsISO31661Alpha2, IsISO31661Alpha3,
     ValidateParams, ValidateAccessor, IsISRC,
+    IsJWT
 } from 'runtime-data-validation';
 
 function repeat(str, count) {
@@ -2020,6 +2021,78 @@ describe('ISO3901 International Standard Recording Code', function() {
             let failed = false;
             try {
                 const result = ie.checkISRC(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+});
+
+describe('JWT', function() {
+
+    class JWTExample {
+
+        #jwt: string;
+
+        @ValidateAccessor<string>()
+        @IsJWT()
+        set jwt(nd: string) { this.#jwt = nd; }
+        get jwt() { return this.#jwt; }
+
+        @ValidateParams
+        checkJWT(
+            @IsJWT() addr: string
+        ) {
+            return addr;
+        }
+    }
+
+    const jwt = new JWTExample();
+    
+    const valid = [
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dnZWRJbkFzIjoiYWRtaW4iLCJpYXQiOjE0MjI3Nzk2Mzh9.gzSraSYS8EXBxLN_oWnFSRgCzcmJmMjLiuyu5CSpyHI',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb3JlbSI6Imlwc3VtIn0.ymiJSsMJXR6tMSr8G9usjQ15_8hKPDv_CArLhxw28MI',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkb2xvciI6InNpdCIsImFtZXQiOlsibG9yZW0iLCJpcHN1bSJdfQ.rRpe04zbWbbJjwM43VnHzAboDzszJtGrNsUxaqQ-GQ8',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqb2huIjp7ImFnZSI6MjUsImhlaWdodCI6MTg1fSwiamFrZSI6eyJhZ2UiOjMwLCJoZWlnaHQiOjI3MH19.YRLPARDmhGMC3BBk_OhtwwK21PIkVCqQe8ncIRPKo-E',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ', // No signature
+    ];
+    const invalid = [
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+        '$Zs.ewu.su84',
+        'ks64$S/9.dy$§kz.3sd73b',
+    ];
+
+    it('should validate correct JWT accessors', function() {
+        for (const v of valid) {
+            jwt.jwt = v;
+            assert.equal(v, jwt.jwt);
+        }
+    });
+
+    it('should validate correct JWT parameters', function() {
+        for (const v of valid) {
+            const result = jwt.checkJWT(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid JWT accessors', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                jwt.jwt = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid JWT parameters', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                const result = jwt.checkJWT(iv);
             } catch (e) { failed = true; }
             assert.equal(failed, true);
         }

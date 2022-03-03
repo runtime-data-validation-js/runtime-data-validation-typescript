@@ -80,7 +80,7 @@ export const isHash = (value: string, algorithm: string) => {
  * @returns 
  * @category Internet Validator
  */
- export const isIP = (value: string, version?: number) => {
+export const isIP = (value: string, version?: number) => {
     if (typeof version !== 'undefined') {
         if (typeof version !== 'number') {
             throw new Error(`Incorrect type for IP ${version}, must be number`);
@@ -89,7 +89,6 @@ export const isHash = (value: string, algorithm: string) => {
     return validator.isIP(value, version);
 };
 
-
 /**
  * 
  * @param value 
@@ -97,7 +96,7 @@ export const isHash = (value: string, algorithm: string) => {
  * @returns 
  * @category Internet Validator
  */
- export const isIPRange = (value: string, version?: number) => {
+export const isIPRange = (value: string, version?: number) => {
     if (typeof version !== 'undefined') {
         if (typeof version !== 'number') {
             throw new Error(`Incorrect type for IP Range ${version}, must be number`);
@@ -133,4 +132,13 @@ export const isISO31661Alpha3 = validator.isISO31661Alpha3;
  * @returns 
  * @category Internet Validator
  */
- export const isISRC = validator.isISRC;
+export const isISRC = validator.isISRC;
+
+/**
+ * Check if the string is valid JWT token.
+ * 
+ * @param value The string to validate
+ * @returns 
+ * @category Internet Validator
+ */
+export const isJWT = validator.isJWT;
