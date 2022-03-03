@@ -10,7 +10,7 @@ import {
     IsFQDN, IsHash, IsIBAN, IsIP, IsIPRange,
     IsISO31661Alpha2, IsISO31661Alpha3,
     ValidateParams, ValidateAccessor, IsISRC,
-    IsJWT, IsMACAddress
+    IsJWT, IsMACAddress, IsMagnetURI
 } from 'runtime-data-validation';
 
 function repeat(str, count) {
@@ -2093,6 +2093,87 @@ describe('JWT', function() {
             let failed = false;
             try {
                 const result = jwt.checkJWT(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+});
+
+describe('Magnet URI', function() {
+    class MagnetURIExample {
+
+        #magnet: string;
+
+        @ValidateAccessor<string>()
+        @IsMagnetURI()
+        set magnet(nd: string) { this.#magnet = nd; }
+        get magnet() { return this.#magnet; }
+
+        @ValidateParams
+        checkURI(
+            @IsMagnetURI() addr: string
+        ) {
+            return addr;
+        }
+
+    }
+
+    const mue = new MagnetURIExample();
+    
+    const valid = [
+        'magnet:?xt.1=urn:sha1:ABCDEFGHIJKLMNOPQRSTUVWXYZ123456&xt.2=urn:sha1:ABCDEFGHIJKLMNOPQRSTUVWXYZ123456',
+        'magnet:?xt=urn:btih:ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234&dn=helloword2000&tr=udp://helloworld:1337/announce',
+        'magnet:?xt=urn:btih:ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234&dn=foo',
+        'magnet:?xt=urn:btih:ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234&dn=&tr=&nonexisting=hello world',
+        'magnet:?xt=urn:md5:ABCDEFGHIJKLMNOPQRSTUVWXYZ123456',
+        'magnet:?xt=urn:tree:tiger:ABCDEFGHIJKLMNOPQRSTUVWXYZ123456',
+        'magnet:?xt=urn:ed2k:ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234',
+    ];
+    const invalid = [
+        ':?xt=urn:btih:ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234',
+        'xt=urn:btih:ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234',
+        'magneta:?xt=urn:btih:ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234',
+        'magnet:?xt=uarn:btih:ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234',
+        'magnet:?xt=urn:btihz',
+        'magnet::?xt=urn:btih:UHWY2892JNEJ2GTEYOMDNU67E8ICGICYE92JDUGH',
+        'magnet:?xt:btih:ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+        'magnet:?xt:urn:nonexisting:ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234',
+        'magnet:?xt.2=urn:btih:ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234',
+        'magnet:?xt=urn:ed2k:ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678901234567890123456789ABCD',
+    ];
+
+    it('should validate correct Magnet URI accessors', function() {
+        for (const v of valid) {
+            mue.magnet = v;
+            assert.equal(v, mue.magnet);
+        }
+    });
+
+    it('should validate correct Magnet URI parameters', function() {
+        for (const v of valid) {
+            const result = mue.checkURI(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid Magnet URI accessors', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                mue.magnet = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid Magnet URI parameters', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                const result = mue.checkURI(iv);
             } catch (e) { failed = true; }
             assert.equal(failed, true);
         }

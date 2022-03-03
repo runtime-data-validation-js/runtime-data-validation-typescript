@@ -147,3 +147,15 @@ export function IsJWT() {
         `Value :value: is not a MAC Address`);
 }
 
+
+/**
+ * Check if the string is valid JWT token.
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+ export function IsMagnetURI() {
+    return generateValidationDecorator(
+        (value) => validators.isMagnetURI(value),
+        `Value :value: is not a Magnet URI`);
+}

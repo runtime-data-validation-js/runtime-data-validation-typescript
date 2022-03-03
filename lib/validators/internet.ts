@@ -161,3 +161,12 @@ export const isMACAddress = (value: string, options?: isMACAddressOptions): bool
     return validator.isMACAddress(value, options);
 };
 
+
+/**
+ * check if the string is a magnet uri format. {@link https://en.wikipedia.org/wiki/Magnet_URI_scheme}
+ * 
+ * @param value The string to validate
+ * @returns 
+ * @category Internet Validator
+ */
+ export const isMagnetURI = validator.isMagnetURI;
