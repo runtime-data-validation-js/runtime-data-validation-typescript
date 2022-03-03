@@ -111,4 +111,3 @@ export function IsHSL() {
         (value) => validators.isHSL(value),
         `Value :value: not HSL color`);
 }
-

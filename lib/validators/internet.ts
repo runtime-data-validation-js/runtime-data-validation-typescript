@@ -142,3 +142,22 @@ export const isISRC = validator.isISRC;
  * @category Internet Validator
  */
 export const isJWT = validator.isJWT;
+
+export type isMACAddressOptions = {
+    no_separators?: boolean,
+    eui?: string
+};
+
+/**
+ * check if the string is a MAC address.
+ * 
+ * @param value The string to validate
+ * @param options
+ * @returns 
+ * @category Internet Validator
+ */
+export const isMACAddress = (value: string, options?: isMACAddressOptions): boolean => {
+    console.log(`isMACAddress ${value}`, options);
+    return validator.isMACAddress(value, options);
+};
+

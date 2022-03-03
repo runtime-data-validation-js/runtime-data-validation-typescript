@@ -134,3 +134,16 @@ export function IsJWT() {
         (value) => validators.isJWT(value),
         `Value :value: is not a JWT Token`);
 }
+
+/**
+ * 
+ * @param options 
+ * @returns 
+ * @category Validation Decorator
+ */
+ export function IsMACAddress(options?: validators.isMACAddressOptions) {
+    return generateValidationDecorator(
+        (value) => validators.isMACAddress(value, options),
+        `Value :value: is not a MAC Address`);
+}
+

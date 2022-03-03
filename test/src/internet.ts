@@ -10,7 +10,7 @@ import {
     IsFQDN, IsHash, IsIBAN, IsIP, IsIPRange,
     IsISO31661Alpha2, IsISO31661Alpha3,
     ValidateParams, ValidateAccessor, IsISRC,
-    IsJWT
+    IsJWT, IsMACAddress
 } from 'runtime-data-validation';
 
 function repeat(str, count) {
@@ -2097,5 +2097,470 @@ describe('JWT', function() {
             assert.equal(failed, true);
         }
     });
+
+});
+
+describe('MAC Address', function() {
+
+    // NOTE - the released version of validator.js does not support
+    // isMACAddress with { eui: '64' }
+    //
+    // Instead, support for that feature is seemingly in development.
+    // The test data shown here is from the main branch, not from
+    // their releases branch.
+
+    class MACAddressExample {
+
+        #mac: string;
+
+        @ValidateAccessor<string>()
+        @IsMACAddress()
+        set mac(nd: string) { this.#mac = nd; }
+        get mac() { return this.#mac; }
+
+        @ValidateParams
+        checkMAC(
+            @IsMACAddress() addr: string
+        ) {
+            return addr;
+        }
+
+        #mac48: string;
+
+        @ValidateAccessor<string>()
+        @IsMACAddress({ eui: '48' })
+        set mac48(nd: string) { this.#mac48 = nd; }
+        get mac48() { return this.#mac48; }
+
+        @ValidateParams
+        checkMAC48(
+            @IsMACAddress({ eui: '48' }) addr: string
+        ) {
+            return addr;
+        }
+
+        /* #mac64: string;
+
+        @ValidateAccessor<string>()
+        @IsMACAddress({ eui: '64' })
+        set mac64(nd: string) { this.#mac64 = nd; }
+        get mac64() { return this.#mac64; }
+
+        @ValidateParams
+        checkMAC64(
+            @IsMACAddress({ eui: '64' }) addr: string
+        ) {
+            return addr;
+        } */
+
+        #macsep: string;
+
+        @ValidateAccessor<string>()
+        @IsMACAddress({ no_separators: true })
+        set macsep(nd: string) { this.#macsep = nd; }
+        get macsep() { return this.#macsep; }
+
+        @ValidateParams
+        checkMACSEP(
+            @IsMACAddress({ no_separators: true }) addr: string
+        ) {
+            return addr;
+        }
+
+        #macsep48: string;
+
+        @ValidateAccessor<string>()
+        @IsMACAddress({ no_separators: true, eui: '48' })
+        set macsep48(nd: string) { this.#macsep48 = nd; }
+        get macsep48() { return this.#macsep48; }
+
+        @ValidateParams
+        checkMACSEP48(
+            @IsMACAddress({ no_separators: true, eui: '48' }) addr: string
+        ) {
+            return addr;
+        }
+
+        /* #macsep64: string;
+
+        @ValidateAccessor<string>()
+        @IsMACAddress({ no_separators: true, eui: '64' })
+        set macsep64(nd: string) { this.#macsep64 = nd; }
+        get macsep64() { return this.#macsep64; }
+
+        @ValidateParams
+        checkMACSEP64(
+            @IsMACAddress({ no_separators: true, eui: '64' }) addr: string
+        ) {
+            return addr;
+        } */
+
+    }
+
+    const mae = new MACAddressExample();
+
+    const valid = [
+        'ab:ab:ab:ab:ab:ab',
+        'FF:FF:FF:FF:FF:FF',
+        '01:02:03:04:05:ab',
+        '01:AB:03:04:05:06',
+        'A9 C5 D4 9F EB D3',
+        '01 02 03 04 05 ab',
+        '01-02-03-04-05-ab',
+        '0102.0304.05ab',
+        // These caused failures
+        // 'ab:ab:ab:ab:ab:ab:ab:ab',
+        // 'FF:FF:FF:FF:FF:FF:FF:FF',
+        // '01:02:03:04:05:06:07:ab',
+        // '01:AB:03:04:05:06:07:08',
+        // 'A9 C5 D4 9F EB D3 B6 65',
+        // '01 02 03 04 05 06 07 ab',
+        // '01-02-03-04-05-06-07-ab',
+        // '0102.0304.0506.07ab',
+    ];
+    const invalid = [
+        'abc',
+        '01:02:03:04:05',
+        '01:02:03:04:05:z0',
+        '01:02:03:04::ab',
+        '1:2:3:4:5:6',
+        'AB:CD:EF:GH:01:02',
+        'A9C5 D4 9F EB D3',
+        '01-02 03:04 05 ab',
+        '0102.03:04.05ab',
+        '900f/dffs/sdea',
+        '01:02:03:04:05:06:07',
+        '01:02:03:04:05:06:07:z0',
+        '01:02:03:04:05:06::ab',
+        '1:2:3:4:5:6:7:8',
+        'AB:CD:EF:GH:01:02:03:04',
+        'A9C5 D4 9F EB D3 B6 65',
+        '01-02 03:04 05 06 07 ab',
+        '0102.03:04.0506.07ab',
+        '900f/dffs/sdea/54gh',
+    ];
+
+    it('should validate correct MAC accessors', function() {
+        for (const v of valid) {
+            mae.mac = v;
+            assert.equal(v, mae.mac);
+        }
+    });
+
+    it('should validate correct MAC parameters', function() {
+        for (const v of valid) {
+            const result = mae.checkMAC(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid MAC accessors', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                mae.mac = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid MAC parameters', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                const result = mae.checkMAC(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const valid48 = [
+        'ab:ab:ab:ab:ab:ab',
+        'FF:FF:FF:FF:FF:FF',
+        '01:02:03:04:05:ab',
+        '01:AB:03:04:05:06',
+        'A9 C5 D4 9F EB D3',
+        '01 02 03 04 05 ab',
+        '01-02-03-04-05-ab',
+        '0102.0304.05ab',
+    ];
+    const invalid48 = [
+        'ab:ab:ab:ab:ab:ab:ab:ab',
+        'FF:FF:FF:FF:FF:FF:FF:FF',
+        '01:02:03:04:05:06:07:ab',
+        '01:AB:03:04:05:06:07:08',
+        'A9 C5 D4 9F EB D3 B6 65',
+        '01 02 03 04 05 06 07 ab',
+        '01-02-03-04-05-06-07-ab',
+        '0102.0304.0506.07ab',
+    ];
+
+    it('should validate correct MAC 48 accessors', function() {
+        for (const v of valid48) {
+            mae.mac48 = v;
+            assert.equal(v, mae.mac48);
+        }
+    });
+
+    it('should validate correct MAC 48 parameters', function() {
+        for (const v of valid48) {
+            const result = mae.checkMAC48(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid MAC 48 accessors', function() {
+
+        for (const iv of invalid48) {
+            let failed = false;
+            try {
+                mae.mac48 = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid MAC 48 parameters', function() {
+
+        for (const iv of invalid48) {
+            let failed = false;
+            try {
+                const result = mae.checkMAC48(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    /* const valid64 = [
+        'ab:ab:ab:ab:ab:ab:ab:ab',
+        'FF:FF:FF:FF:FF:FF:FF:FF',
+        '01:02:03:04:05:06:07:ab',
+        '01:AB:03:04:05:06:07:08',
+        'A9 C5 D4 9F EB D3 B6 65',
+        '01 02 03 04 05 06 07 ab',
+        '01-02-03-04-05-06-07-ab',
+        '0102.0304.0506.07ab',
+    ];
+    const invalid64 = [
+        'ab:ab:ab:ab:ab:ab',
+        'FF:FF:FF:FF:FF:FF',
+        '01:02:03:04:05:ab',
+        '01:AB:03:04:05:06',
+        'A9 C5 D4 9F EB D3',
+        '01 02 03 04 05 ab',
+        '01-02-03-04-05-ab',
+        '0102.0304.05ab',
+    ];
+
+
+    it('should validate correct MAC 64 accessors', function() {
+        for (const v of valid64) {
+            mae.mac64 = v;
+            assert.equal(v, mae.mac64);
+        }
+    });
+
+    it('should validate correct MAC 64 parameters', function() {
+        for (const v of valid64) {
+            const result = mae.checkMAC64(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid MAC 64 accessors', function() {
+
+        for (const iv of invalid64) {
+            let failed = false;
+            try {
+                mae.mac64 = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid MAC 64 parameters', function() {
+
+        for (const iv of invalid64) {
+            let failed = false;
+            try {
+                const result = mae.checkMAC64(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    }); */
+
+    const validSEP = [
+        'abababababab',
+        'FFFFFFFFFFFF',
+        '0102030405ab',
+        '01AB03040506',
+        // 'abababababababab',
+        // 'FFFFFFFFFFFFFFFF',
+        // '01020304050607ab',
+        // '01AB030405060708',
+    ];
+    const invalidSEP = [
+        'abc',
+        '01:02:03:04:05',
+        '01:02:03:04::ab',
+        '1:2:3:4:5:6',
+        'AB:CD:EF:GH:01:02',
+        'ab:ab:ab:ab:ab:ab',
+        'FF:FF:FF:FF:FF:FF',
+        '01:02:03:04:05:ab',
+        '01:AB:03:04:05:06',
+        '0102030405',
+        '01020304ab',
+        '123456',
+        'ABCDEFGH0102',
+        '01:02:03:04:05:06:07',
+        '01:02:03:04:05:06::ab',
+        '1:2:3:4:5:6:7:8',
+        'AB:CD:EF:GH:01:02:03:04',
+        'ab:ab:ab:ab:ab:ab:ab:ab',
+        'FF:FF:FF:FF:FF:FF:FF:FF',
+        '01:02:03:04:05:06:07:ab',
+        '01:AB:03:04:05:06:07:08',
+        '01020304050607',
+        '010203040506ab',
+        '12345678',
+        'ABCDEFGH01020304',
+    ];
+
+    it('should validate correct MAC SEP accessors', function() {
+        for (const v of validSEP) {
+            mae.macsep = v;
+            assert.equal(v, mae.macsep);
+        }
+    });
+
+    it('should validate correct MAC SEP parameters', function() {
+        for (const v of validSEP) {
+            const result = mae.checkMACSEP(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid MAC SEP accessors', function() {
+
+        for (const iv of invalidSEP) {
+            let failed = false;
+            try {
+                mae.macsep = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid MAC SEP parameters', function() {
+
+        for (const iv of invalidSEP) {
+            let failed = false;
+            try {
+                const result = mae.checkMACSEP(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validSEP48 = [
+        'abababababab',
+        'FFFFFFFFFFFF',
+        '0102030405ab',
+        '01AB03040506',
+    ];
+    const invalidSEP48 = [
+        'abababababababab',
+        'FFFFFFFFFFFFFFFF',
+        '01020304050607ab',
+        '01AB030405060708',
+    ];
+
+    it('should validate correct MAC SEP 48 accessors', function() {
+        for (const v of validSEP48) {
+            mae.macsep48 = v;
+            assert.equal(v, mae.macsep48);
+        }
+    });
+
+    it('should validate correct MAC SEP 48 parameters', function() {
+        for (const v of validSEP48) {
+            const result = mae.checkMACSEP48(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid MAC SEP 48 accessors', function() {
+
+        for (const iv of invalidSEP48) {
+            let failed = false;
+            try {
+                mae.macsep48 = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid MAC SEP 48 parameters', function() {
+
+        for (const iv of invalidSEP48) {
+            let failed = false;
+            try {
+                const result = mae.checkMACSEP48(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    /* const validSEP64 = [
+        'abababababababab',
+        'FFFFFFFFFFFFFFFF',
+        '01020304050607ab',
+        '01AB030405060708',
+    ];
+    const invalidSEP64 = [
+        'abababababab',
+        'FFFFFFFFFFFF',
+        '0102030405ab',
+        '01AB03040506',
+    ];
+
+    it('should validate correct MAC SEP 64 accessors', function() {
+        for (const v of validSEP64) {
+            mae.macsep64 = v;
+            assert.equal(v, mae.macsep64);
+        }
+    });
+
+    it('should validate correct MAC SEP 64 parameters', function() {
+        for (const v of validSEP64) {
+            const result = mae.checkMACSEP64(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid MAC SEP 64 accessors', function() {
+
+        for (const iv of invalidSEP64) {
+            let failed = false;
+            try {
+                mae.macsep64 = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid MAC SEP 64 parameters', function() {
+
+        for (const iv of invalidSEP64) {
+            let failed = false;
+            try {
+                const result = mae.checkMACSEP64(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    }); */
 
 });
