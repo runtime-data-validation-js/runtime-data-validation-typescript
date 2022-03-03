@@ -9,7 +9,7 @@ import {
     IsEAN, IsEmail, IsEthereumAddress,
     IsFQDN, IsHash, IsIBAN, IsIP, IsIPRange,
     IsISO31661Alpha2, IsISO31661Alpha3,
-    ValidateParams, ValidateAccessor,
+    ValidateParams, ValidateAccessor, IsISRC,
 } from 'runtime-data-validation';
 
 function repeat(str, count) {
@@ -1948,6 +1948,78 @@ describe('IsISO31661Alpha2 - IsISO31661Alpha3', function() {
             let failed = false;
             try {
                 const result = icce.checkISOAlpha3(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+});
+
+describe('ISO3901 International Standard Recording Code', function() {
+
+    class ISRCExample {
+
+        #isrc: string;
+
+        @ValidateAccessor<string>()
+        @IsISRC()
+        set isrc(nd: string) { this.#isrc = nd; }
+        get isrc() { return this.#isrc; }
+
+        @ValidateParams
+        checkISRC(
+            @IsISRC() addr: string
+        ) {
+            return addr;
+        }
+    }
+
+    const ie = new ISRCExample();
+    
+    const valid = [
+        'USAT29900609',
+        'GBAYE6800011',
+        'USRC15705223',
+        'USCA29500702',
+    ];
+    const invalid = [
+        'USAT2990060',
+        'SRC15705223',
+        'US-CA29500702',
+        'USARC15705223',
+    ];
+
+    it('should validate correct ISRC accessors', function() {
+        for (const v of valid) {
+            ie.isrc = v;
+            assert.equal(v, ie.isrc);
+        }
+    });
+
+    it('should validate correct ISRC parameters', function() {
+        for (const v of valid) {
+            const result = ie.checkISRC(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid ISRC accessors', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                ie.isrc = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid ISRC parameters', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                const result = ie.checkISRC(iv);
             } catch (e) { failed = true; }
             assert.equal(failed, true);
         }

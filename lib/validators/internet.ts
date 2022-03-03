@@ -6,7 +6,7 @@ import { default as validator } from 'validator';
  * 
  * @param value The string to validate
  * @returns 
- * @category Validator
+ * @category Internet Validator
  */
 export const isDataURI = validator.isDataURI;
 
@@ -29,7 +29,7 @@ export type IsEmailOptions = {
  * @param value 
  * @param options 
  * @returns 
- * @category Validator
+ * @category Internet Validator
  */
 export const isEmail = (value: string, options?: IsEmailOptions) => {
     return validator.isEmail(value, options);
@@ -50,7 +50,7 @@ export type IsFQDNOptions = {
  * 
  * @param options 
  * @returns 
- * @category Validator
+ * @category Internet Validator
  */
 export const isFQDN = (value: string, options?: IsFQDNOptions) => {
     return validator.isFQDN(value, options);
@@ -64,7 +64,7 @@ const IsHashAlgorithms = ['md4', 'md5', 'sha1', 'sha256', 'sha384',
  * 
  * @param algorithm 
  * @returns 
- * @category Validator
+ * @category Internet Validator
  */
 export const isHash = (value: string, algorithm: string) => {
     if (!IsHashAlgorithms.includes(algorithm)) {
@@ -78,7 +78,7 @@ export const isHash = (value: string, algorithm: string) => {
  * @param value 
  * @param version 
  * @returns 
- * @category Validator
+ * @category Internet Validator
  */
  export const isIP = (value: string, version?: number) => {
     if (typeof version !== 'undefined') {
@@ -95,7 +95,7 @@ export const isHash = (value: string, algorithm: string) => {
  * @param value 
  * @param version 
  * @returns 
- * @category Validator
+ * @category Internet Validator
  */
  export const isIPRange = (value: string, version?: number) => {
     if (typeof version !== 'undefined') {
@@ -112,7 +112,7 @@ export const isHash = (value: string, algorithm: string) => {
  * 
  * @param value The string to validate
  * @returns 
- * @category Validator
+ * @category Internet Validator
  */
 export const isISO31661Alpha2 = validator.isISO31661Alpha2;
 
@@ -122,6 +122,15 @@ export const isISO31661Alpha2 = validator.isISO31661Alpha2;
  * 
  * @param value The string to validate
  * @returns 
- * @category Validator
+ * @category Internet Validator
  */
 export const isISO31661Alpha3 = validator.isISO31661Alpha3;
+
+/**
+ * Check if the string is an International Standard Recording Code (ISRC).  {@link https://en.wikipedia.org/wiki/International_Standard_Recording_Code}
+ * 
+ * @param value The string to validate
+ * @returns 
+ * @category Internet Validator
+ */
+ export const isISRC = validator.isISRC;

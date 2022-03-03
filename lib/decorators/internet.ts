@@ -84,7 +84,6 @@ export function IsIPRange(version?: number) {
         `Value :value: is not an IP Range ${version} address`);
 }
 
-
 /**
  * Check if the string is a valid ISO 3166-1 alpha-2 officially
  * assigned country code.
@@ -98,7 +97,7 @@ export function IsISO31661Alpha2() {
         `Value :value: is not an ISO31661 alpha-2 country code`);
 }
 
- /**
+/**
   * Check if the string is a valid ISO 3166-1 alpha-3 officially
   * assigned country code.
   * 
@@ -109,4 +108,17 @@ export function IsISO31661Alpha3() {
     return generateValidationDecorator(
         (value) => validators.isISO31661Alpha3(value),
         `Value :value: is not an ISO31661 alpha-3 country code`);
+}
+
+/**
+ * Check if the string is an International Standard Recording Code (ISRC).  {@link https://en.wikipedia.org/wiki/International_Standard_Recording_Code}
+ * 
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsISRC() {
+    return generateValidationDecorator(
+        (value) => validators.isISRC(value),
+        `Value :value: is not an International Standard Recording Code (ISRC)`);
 }
