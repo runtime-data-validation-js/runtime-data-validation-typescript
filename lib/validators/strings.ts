@@ -195,3 +195,17 @@ export type isJSONOptions = { allow_primitives: boolean };
     return validator.isJSON(value, options);
 };
 
+export type isLengthOptions = {min?: number, max?: number};
+
+/**
+ * check if the string's length falls in a range.
+ * 
+ * @param value
+ * @param options
+ * @returns 
+ * @category String Validator
+ */
+ export const isLength = (value: string, options?: isLengthOptions): boolean => {
+    return validator.isLength(value, options);
+};
+

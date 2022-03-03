@@ -171,3 +171,16 @@ export function IsIn(values: Array<string>) {
         (value) => validators.isJSON(value, options),
         `Value :value: is not JSON`);
 }
+
+/**
+ * check if the string's length falls in a range.
+ * 
+ * @param options 
+ * @returns 
+ * @category Validation Decorator
+ */
+ export function IsLength(options?: validators.isLengthOptions) {
+    return generateValidationDecorator(
+        (value) => validators.isLength(value, options),
+        `Value :value: string length is not in correct range ${util.inspect(options)}`);
+}

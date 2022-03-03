@@ -5,7 +5,8 @@ import {
     Contains, Equals, IsAlpha, IsAlphanumeric,
     IsAscii, IsBase32, IsBase58, IsBase64,
     ValidateParams, ValidateAccessor, IsByteLength,
-    IsEmpty, IsFullWidth, IsHalfWidth, IsIn, IsJSON
+    IsEmpty, IsFullWidth, IsHalfWidth, IsIn, IsJSON,
+    IsLength
 } from 'runtime-data-validation';
 
 describe('Contains', function() {
@@ -583,12 +584,9 @@ describe('String size', function() {
         set isemptyAWH(ns: string) { this.#isempty = ns; }
         get isemptyAWH() { return this.#isempty; }
 
-
-
         @ValidateParams
         checkIsEmpty(
-            @IsEmpty()
-            ns: string
+            @IsEmpty() ns: string
         ) {
             return ns;
         }
@@ -608,9 +606,189 @@ describe('String size', function() {
         ) {
             return ns;
         }
+
+        #length: string;
+        #length2: string;
+        #length2_3: string;
+        #length_3: string;
+        #length_0: string;
+
+        @ValidateAccessor<string>()
+        @IsLength()
+        set length(ns: string) { this.#length = ns; }
+        get length() { return this.#length; }
+
+        @ValidateParams
+        checkLength(
+            @IsLength() ns: string
+        ) {
+            return ns;
+        }
+
+        @ValidateAccessor<string>()
+        @IsLength({ min: 2 })
+        set length2(ns: string) { this.#length2 = ns; }
+        get length2() { return this.#length2; }
+
+        @ValidateParams
+        checkLength_2(
+            @IsLength({ min: 2 }) ns: string
+        ) {
+            return ns;
+        }
+
+        @ValidateAccessor<string>()
+        @IsLength({ min: 2, max: 3 })
+        set length2_3(ns: string) { this.#length2_3 = ns; }
+        get length2_3() { return this.#length2_3; }
+
+        @ValidateParams
+        checkLength_2_3(
+            @IsLength({ min: 2, max: 3 }) ns: string
+        ) {
+            return ns;
+        }
+
+        @ValidateAccessor<string>()
+        @IsLength({ max: 3 })
+        set length_3(ns: string) { this.#length_3 = ns; }
+        get length_3() { return this.#length_3; }
+
+        @ValidateParams
+        checkLength__3(
+            @IsLength({ max: 3 }) ns: string
+        ) {
+            return ns;
+        }
+
+        @ValidateAccessor<string>()
+        @IsLength({ max: 0 })
+        set length_0(ns: string) { this.#length_0 = ns; }
+        get length_0() { return this.#length_0; }
+
+        @ValidateParams
+        checkLength__0(
+            @IsLength({ max: 0 }) ns: string
+        ) {
+            return ns;
+        }
+
     }
     
     const sse = new StringSizeExample();
+
+    it('Should validate length ANY', function() {
+        for (const v of [ 'a', '', 'asds' ]) {
+            sse.length = v;
+            assert.equal(v, sse.length);
+            const result = sse.checkLength(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should validate length min 2', function() {
+        for (const v of ['abc', 'de', 'abcd']) {
+            sse.length2 = v;
+            assert.equal(v, sse.length2);
+            const result = sse.checkLength_2(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid length min 2', function() {
+        for (const iv of ['', 'a']) {
+
+            let failed = false;
+            try {
+                sse.length2 = iv;
+            } catch (e) { failed = true; }
+            assert(failed, true);
+
+            failed = false;
+            try {
+                const result = sse.checkLength_2(iv);
+            } catch (e) { failed = true; }
+            assert(failed, true);
+        }
+    });
+
+    it('Should validate length min 2 max 3', function() {
+        for (const v of ['abc', 'de']) {
+            sse.length2_3 = v;
+            assert.equal(v, sse.length2_3);
+            const result = sse.checkLength_2_3(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid length min 2 max 3', function() {
+        for (const iv of ['', 'a', 'abcd']) {
+
+            let failed = false;
+            try {
+                sse.length2_3 = iv;
+            } catch (e) { failed = true; }
+            assert(failed, true);
+
+            failed = false;
+            try {
+                const result = sse.checkLength_2_3(iv);
+            } catch (e) { failed = true; }
+            assert(failed, true);
+        }
+    });
+
+    it('Should validate length max 3', function() {
+        for (const v of ['abc', 'de', 'a', '']) {
+            sse.length_3 = v;
+            assert.equal(v, sse.length_3);
+            const result = sse.checkLength__3(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid length max 3', function() {
+        for (const iv of ['abcd']) {
+
+            let failed = false;
+            try {
+                sse.length_3 = iv;
+            } catch (e) { failed = true; }
+            assert(failed, true);
+
+            failed = false;
+            try {
+                const result = sse.checkLength__3(iv);
+            } catch (e) { failed = true; }
+            assert(failed, true);
+        }
+    });
+
+    it('Should validate length max 0', function() {
+        for (const v of ['']) {
+            sse.length_0 = v;
+            assert.equal(v, sse.length_0);
+            const result = sse.checkLength__0(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid length max 0', function() {
+        for (const iv of ['a', 'ab']) {
+
+            let failed = false;
+            try {
+                sse.length_0 = iv;
+            } catch (e) { failed = true; }
+            assert(failed, true);
+
+            failed = false;
+            try {
+                const result = sse.checkLength__0(iv);
+            } catch (e) { failed = true; }
+            assert(failed, true);
+        }
+    });
 
     const validMin2   = ['abc', 'de', 'abcd', 'ｇｍａｉｌ'];
     const invalidMin2 = ['', 'a'];

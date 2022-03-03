@@ -40,6 +40,8 @@ import { generateValidationDecorator } from '../validators';
 
 
 /**
+ * check if the string is a valid latitude-longitude coordinate 
+ * in the format `lat,long` or `lat, long`.
  * 
  * @returns 
  * @category Validation Decorator
