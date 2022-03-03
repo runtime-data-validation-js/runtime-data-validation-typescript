@@ -3,46 +3,12 @@ import * as util from 'util';
 import { default as validator } from 'validator';
 
 /**
- * Check if the string is a valid BTC address.
- * 
- * @param value The string to validate
- * @returns 
- * @category Validator
- */
-export const isBtcAddress = validator.isBtcAddress;
-
-/**
- * 
- * @param value The string to validate
- * @returns 
- * @category Validator
- */
-export const isCreditCard = validator.isCreditCard;
-
-/**
  * 
  * @param value 
  * @returns 
  * @category Validation
  */
 export const isEAN = validator.isEAN;
-
-/**
- * 
- * @param value 
- * @returns 
- * @category Validator
- */
-export const isEthereumAddress = validator.isEthereumAddress;
-
-
-/**
- * 
- * @param value 
- * @returns 
- * @category Validator
- */
-export const isIBAN = validator.isIBAN;
 
 const IsIdentityCardLocales = ['LK', 'PL', 'ES', 'FI', 'IN',
         'IT', 'IR', 'MZ', 'NO', 'TH', 'zh-TW', 'he-IL', 'ar-LY',

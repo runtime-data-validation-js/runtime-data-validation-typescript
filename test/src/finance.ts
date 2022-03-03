@@ -7,6 +7,7 @@ import {
     IsBtcAddress, IsCreditCard, IsDataURI,
     IsEAN, IsEmail, IsEthereumAddress,
     IsFQDN, IsHash, IsIBAN, IsIMEI, IsISBN,
+    IsISO4217,
     ValidateParams, ValidateAccessor,
 } from 'runtime-data-validation';
 
@@ -341,3 +342,86 @@ describe('Banking', function() {
 
 });
 
+describe('Currency', function() {
+    class CurrencyExamples {
+
+        #iso4217: string;
+
+        @ValidateAccessor<string>()
+        @IsISO4217()
+        set iso4217(nbtc: string) { this.#iso4217 = nbtc; }
+        get iso4217() { return this.#iso4217; }
+
+        @ValidateParams
+        checkISO4217(
+            @IsISO4217()
+            nbtc: string
+        ) {
+            return nbtc;
+        }
+
+    }
+
+    const ce = new CurrencyExamples();
+    
+    const valid4217 = [
+        'AED',
+        'aed',
+        'AUD',
+        'CUC',
+        'EUR',
+        'GBP',
+        'LYD',
+        'MYR',
+        'SGD',
+        'USD',
+    ];
+    const invalid4217 = [
+        '',
+        '$',
+        'US',
+        'us',
+        'AAA',
+        'aaa',
+        'RWA',
+        'EURO',
+        'euro',
+    ];
+
+    it('should validate correct ISO4217 currency code accessors', function() {
+        for (const v of valid4217) {
+            ce.iso4217 = v;
+            assert.equal(v, ce.iso4217);
+        }
+    });
+
+    it('should validate correct ISO4217 currency code parameters', function() {
+        for (const v of valid4217) {
+            const result = ce.checkISO4217(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid ISO4217 currency code accessors', function() {
+
+        for (const iv of invalid4217) {
+            let failed = false;
+            try {
+                ce.iso4217 = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid ISO4217 currency code parameters', function() {
+
+        for (const iv of invalid4217) {
+            let failed = false;
+            try {
+                const result = ce.checkISO4217(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+});

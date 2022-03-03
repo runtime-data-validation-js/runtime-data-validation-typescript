@@ -1917,7 +1917,6 @@ describe('IsISO31661Alpha2 - IsISO31661Alpha3', function() {
         'ZW',
     ];
 
-
     it('should validate correct ISO31661 alpha-3 accessors', function() {
         for (const v of validA3) {
             icce.isoalpha3 = v;

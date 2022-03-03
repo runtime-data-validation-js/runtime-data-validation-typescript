@@ -4,29 +4,6 @@ import { generateValidationDecorator } from '../validators';
 
 
 /**
- * Check if the string is a valid BTC address.
- * 
- * @returns 
- * @category Validation Decorator
- */
- export function IsBtcAddress() {
-    return generateValidationDecorator(
-        (value) => validators.isBtcAddress(value),
-        `Value :value: is not a BTC address`);
-}
-
-/**
- * 
- * @returns 
- * @category Validation Decorator
- */
- export function IsCreditCard() {
-    return generateValidationDecorator(
-        (value) => validators.isCreditCard(value),
-        `Value :value: is not a Credit Card Number`);
-}
-
-/**
  * 
  * @returns 
  * @category Validation Decorator
@@ -35,17 +12,6 @@ import { generateValidationDecorator } from '../validators';
     return generateValidationDecorator(
         (value) => validators.isEAN(value),
         `Value :value: is not an EAN`);
-}
-
-/**
- * 
- * @returns 
- * @category Validation Decorator
- */
- export function IsEthereumAddress() {
-    return generateValidationDecorator(
-        (value) => validators.isEthereumAddress(value),
-        `Value :value: is not an Ethereum address`);
 }
 
 /**
