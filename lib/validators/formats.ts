@@ -64,3 +64,19 @@ export type isLatLongOptions = { checkDMS: boolean };
 export const isLatLong = (value: string, options?: isLatLongOptions) => {
     return validator.isLatLong(value, options);
 };
+
+const isLicensePlateLocales = ['cs-CZ', 'de-DE', 'de-LI', 'fi-FI',
+                                'pt-PT', 'sq-AL', 'pt-BR'];
+
+/**
+ * check if string matches the format of a country's license plate.
+ * 
+ * @param value 
+ * @param options 
+ * @returns 
+ * @category Validator
+ */
+export const isLicensePlate = (value: string, locale?: string) => {
+    if (typeof locale === 'undefined') locale = 'any';
+    return validator.isLicensePlate(value, locale);
+};

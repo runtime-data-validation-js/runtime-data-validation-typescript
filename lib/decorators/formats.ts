@@ -43,6 +43,7 @@ import { generateValidationDecorator } from '../validators';
  * check if the string is a valid latitude-longitude coordinate 
  * in the format `lat,long` or `lat, long`.
  * 
+ * @param options 
  * @returns 
  * @category Validation Decorator
  */
@@ -50,4 +51,17 @@ import { generateValidationDecorator } from '../validators';
     return generateValidationDecorator(
         (value) => validators.isLatLong(value),
         `Value :value: is not an latitude/longitude`);
+}
+
+/**
+ * check if string matches the format of a country's license plate.
+ * 
+ * @param options 
+ * @returns 
+ * @category Validation Decorator
+ */
+ export function IsLicensePlate(locale?: string) {
+    return generateValidationDecorator(
+        (value) => validators.isLicensePlate(value, locale),
+        `Value :value: is not a car license plate for ${locale}`);
 }

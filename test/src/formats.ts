@@ -7,7 +7,7 @@ import {
     IsBtcAddress, IsCreditCard, IsDataURI,
     IsEAN, IsEmail, IsEthereumAddress,
     IsFQDN, IsHash, IsIBAN, IsIMEI, IsISBN, IsISIN,
-    IsLatLong,
+    IsLatLong, IsLicensePlate,
     ValidateParams, ValidateAccessor,
 } from 'runtime-data-validation';
 
@@ -325,6 +325,564 @@ describe('LatLong', function() {
             let failed = false;
             try {
                 const result = lle.checkLatLongDMS(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+});
+
+describe('Car license plates', function() {
+
+    class LicensePlateExample {
+
+        #plate: string;
+
+        @ValidateAccessor<string>()
+        @IsLicensePlate()
+        set plate(ni: string) { this.#plate = ni; }
+        get plate() { return this.#plate; }
+
+        @ValidateParams
+        checkLicPlate(
+            @IsLicensePlate() ni: string
+        ) {
+            return ni;
+        }
+
+        #platePTPT: string;
+
+        @ValidateAccessor<string>()
+        @IsLicensePlate('pt-PT')
+        set platePTPT(ni: string) { this.#platePTPT = ni; }
+        get platePTPT() { return this.#platePTPT; }
+
+        @ValidateParams
+        checkLicPlatePTPT(
+            @IsLicensePlate('pt-PT') ni: string
+        ) {
+            return ni;
+        }
+
+        #plateDELI: string;
+
+        @ValidateAccessor<string>()
+        @IsLicensePlate('de-LI')
+        set plateDELI(ni: string) { this.#plateDELI = ni; }
+        get plateDELI() { return this.#plateDELI; }
+
+        @ValidateParams
+        checkLicPlateDELI(
+            @IsLicensePlate('de-LI') ni: string
+        ) {
+            return ni;
+        }
+
+        #plateDEDE: string;
+
+        @ValidateAccessor<string>()
+        @IsLicensePlate('de-DE')
+        set plateDEDE(ni: string) { this.#plateDEDE = ni; }
+        get plateDEDE() { return this.#plateDEDE; }
+
+        @ValidateParams
+        checkLicPlateDEDE(
+            @IsLicensePlate('de-DE') ni: string
+        ) {
+            return ni;
+        }
+
+        #plateFIFI: string;
+
+        @ValidateAccessor<string>()
+        @IsLicensePlate('fi-FI')
+        set plateFIFI(ni: string) { this.#plateFIFI = ni; }
+        get plateFIFI() { return this.#plateFIFI; }
+
+        @ValidateParams
+        checkLicPlateFIFI(
+            @IsLicensePlate('fi-FI') ni: string
+        ) {
+            return ni;
+        }
+
+        #plateSQAL: string;
+
+        @ValidateAccessor<string>()
+        @IsLicensePlate('sq-AL')
+        set plateSQAL(ni: string) { this.#plateSQAL = ni; }
+        get plateSQAL() { return this.#plateSQAL; }
+
+        @ValidateParams
+        checkLicPlateSQAL(
+            @IsLicensePlate('sq-AL') ni: string
+        ) {
+            return ni;
+        }
+
+        #plateCSCZ: string;
+
+        @ValidateAccessor<string>()
+        @IsLicensePlate('cs-CZ')
+        set plateCSCZ(ni: string) { this.#plateCSCZ = ni; }
+        get plateCSCZ() { return this.#plateCSCZ; }
+
+        @ValidateParams
+        checkLicPlateCSCZ(
+            @IsLicensePlate('cs-CZ') ni: string
+        ) {
+            return ni;
+        }
+
+        #platePTBR: string;
+
+        @ValidateAccessor<string>()
+        @IsLicensePlate('pt-BR')
+        set platePTBR(ni: string) { this.#platePTBR = ni; }
+        get platePTBR() { return this.#platePTBR; }
+
+        @ValidateParams
+        checkLicPlatePTBR(
+            @IsLicensePlate('pt-BR') ni: string
+        ) {
+            return ni;
+        }
+
+    }
+
+    const lpe = new LicensePlateExample();
+
+    const validPTPT = [
+        'AA-12-34',
+        '12·34·AB',
+        '12·AB·34',
+        'AB 12 CD',
+        'AB12CD',
+    ];
+    const invalidPTPT = [
+        '',
+        'notalicenseplate',
+        'A1-B2-C3',
+        'ABC-1-EF',
+    ];
+
+    it('should validate correct Car License Plate pt-PT accessors', function() {
+        for (const v of validPTPT) {
+            lpe.platePTPT = v;
+            assert.equal(v, lpe.platePTPT);
+        }
+    });
+
+    it('should validate correct Car License Plate pt-PT parameters', function() {
+        for (const v of validPTPT) {
+            const result = lpe.checkLicPlatePTPT(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid Car License Plate pt-PT accessors', function() {
+
+        for (const iv of invalidPTPT) {
+            let failed = false;
+            try {
+                lpe.platePTPT = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid Car License Plate pt-PT parameters', function() {
+
+        for (const iv of invalidPTPT) {
+            let failed = false;
+            try {
+                const result = lpe.checkLicPlatePTPT(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validDELI = [
+        'FL 1',
+        'FL 99999',
+        'FL 1337',
+    ];
+    const invalidDELI = [
+        '',
+        'FL 999999',
+        'AB 12345',
+        'FL -1',
+    ];
+
+    it('should validate correct Car License Plate de-LI accessors', function() {
+        for (const v of validDELI) {
+            lpe.plateDELI = v;
+            assert.equal(v, lpe.plateDELI);
+        }
+    });
+
+    it('should validate correct Car License Plate de-LI parameters', function() {
+        for (const v of validDELI) {
+            const result = lpe.checkLicPlateDELI(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid Car License Plate de-LI accessors', function() {
+
+        for (const iv of invalidDELI) {
+            let failed = false;
+            try {
+                lpe.plateDELI = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid Car License Plate de-LI parameters', function() {
+
+        for (const iv of invalidDELI) {
+            let failed = false;
+            try {
+                const result = lpe.checkLicPlateDELI(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validDEDE = [
+        'M A 1',
+        'M A 12',
+        'M A 123',
+        'M A 1234',
+        'M AB 1',
+        'M AB 12',
+        'M AB 123',
+        'M AB 1234',
+        'FS A 1',
+        'FS A 12',
+        'FS A 123',
+        'FS A 1234',
+        'FS AB 1',
+        'FS AB 12',
+        'FS AB 123',
+        'FS AB 1234',
+        'FSAB1234',
+        'FS-AB-1234',
+        'FS AB 1234 H',
+        'FS AB 1234 E',
+        'FSAB1234E',
+        'FS-AB-1234-E',
+    ];
+    const invalidDEDE = [
+        'YY AB 123',
+        'PAF AB 1234',
+        'M ABC 123',
+        'M AB 12345',
+        'FS AB 1234 A',
+    ];
+
+    it('should validate correct Car License Plate de-DE accessors', function() {
+        for (const v of validDEDE) {
+            lpe.plateDEDE = v;
+            assert.equal(v, lpe.plateDEDE);
+        }
+    });
+
+    it('should validate correct Car License Plate de-DE parameters', function() {
+        for (const v of validDEDE) {
+            const result = lpe.checkLicPlateDEDE(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid Car License Plate de-DE accessors', function() {
+
+        for (const iv of invalidDEDE) {
+            let failed = false;
+            try {
+                lpe.plateDEDE = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid Car License Plate de-DE parameters', function() {
+
+        for (const iv of invalidDEDE) {
+            let failed = false;
+            try {
+                const result = lpe.checkLicPlateDEDE(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validFIFI = [
+        'ABC-123',
+        'ABC 123',
+        'ABC123',
+        'A100',
+        'A 100',
+        'A-100',
+        'C10001',
+        'C 10001',
+        'C-10001',
+        '123-ABC',
+        '123 ABC',
+        '123ABC',
+        '123-A',
+        '123 A',
+        '123A',
+        '199AA',
+        '199 AA',
+        '199-AA',
+    ];
+    const invalidFIFI = [
+        ' ',
+        'A-1',
+        'A1A-100',
+        '1-A-2',
+        'C1234567',
+        'A B C 1 2 3',
+        'abc-123',
+    ];
+
+    it('should validate correct Car License Plate fi-FI accessors', function() {
+        for (const v of validFIFI) {
+            lpe.plateFIFI = v;
+            assert.equal(v, lpe.plateFIFI);
+        }
+    });
+
+    it('should validate correct Car License Plate fi-FI parameters', function() {
+        for (const v of validFIFI) {
+            const result = lpe.checkLicPlateFIFI(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid Car License Plate fi-FI accessors', function() {
+
+        for (const iv of invalidFIFI) {
+            let failed = false;
+            try {
+                lpe.plateFIFI = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid Car License Plate fi-FI parameters', function() {
+
+        for (const iv of invalidFIFI) {
+            let failed = false;
+            try {
+                const result = lpe.checkLicPlateFIFI(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validSQAL = [
+        'AA 000 AA',
+        'ZZ 999 ZZ',
+    ];
+    const invalidSQAL = [
+        '',
+        'AA 0 A',
+        'AAA 00 AAA',
+    ];
+
+    it('should validate correct Car License Plate sq-AL accessors', function() {
+        for (const v of validSQAL) {
+            lpe.plateSQAL = v;
+            assert.equal(v, lpe.plateSQAL);
+        }
+    });
+
+    it('should validate correct Car License Plate sq-AL parameters', function() {
+        for (const v of validSQAL) {
+            const result = lpe.checkLicPlateSQAL(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid Car License Plate sq-AL accessors', function() {
+
+        for (const iv of invalidSQAL) {
+            let failed = false;
+            try {
+                lpe.plateSQAL = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid Car License Plate sq-AL parameters', function() {
+
+        for (const iv of invalidSQAL) {
+            let failed = false;
+            try {
+                const result = lpe.checkLicPlateSQAL(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validCSCZ = [
+        'ALA4011',
+        '4A23000',
+        'DICTAT0R',
+        'VETERAN',
+        'AZKVIZ8',
+        '2A45876',
+        'DIC-TAT0R',
+    ];
+    const invalidCSCZ = [
+        '',
+        'invalidlicenseplate',
+        'LN5758898',
+        'X-|$|-X',
+        'AE0F-OP4',
+        'GO0MER',
+        '2AAAAAAAA',
+        'FS AB 1234 E',
+        'GB999 9999 00',
+    ];
+    
+    it('should validate correct Car License Plate cs-CZ accessors', function() {
+        for (const v of validCSCZ) {
+            lpe.plateCSCZ = v;
+            assert.equal(v, lpe.plateCSCZ);
+        }
+    });
+
+    it('should validate correct Car License Plate cs-CZ parameters', function() {
+        for (const v of validCSCZ) {
+            const result = lpe.checkLicPlateCSCZ(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid Car License Plate cs-CZ accessors', function() {
+
+        for (const iv of invalidCSCZ) {
+            let failed = false;
+            try {
+                lpe.plateCSCZ = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid Car License Plate cs-CZ parameters', function() {
+
+        for (const iv of invalidCSCZ) {
+            let failed = false;
+            try {
+                const result = lpe.checkLicPlateCSCZ(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validPTBR = [
+      'ABC1234',
+      'ABC 1234',
+      'ABC-1234',
+      'ABC1D23',
+      'ABC1K23',
+      'ABC1Z23',
+      'ABC 1D23',
+      'ABC-1D23',
+    ];
+    const invalidPTBR = [
+      '',
+      'AA 0 A',
+      'AAA 00 AAA',
+      'ABCD123',
+      'AB12345',
+      'AB123DC',
+    ];
+
+    it('should validate correct Car License Plate pt-BR accessors', function() {
+        for (const v of validPTBR) {
+            lpe.platePTBR = v;
+            assert.equal(v, lpe.platePTBR);
+        }
+    });
+
+    it('should validate correct Car License Plate pt-BR parameters', function() {
+        for (const v of validPTBR) {
+            const result = lpe.checkLicPlatePTBR(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid Car License Plate pt-BR accessors', function() {
+
+        for (const iv of invalidPTBR) {
+            let failed = false;
+            try {
+                lpe.platePTBR = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid Car License Plate pt-BR parameters', function() {
+
+        for (const iv of invalidPTBR) {
+            let failed = false;
+            try {
+                const result = lpe.checkLicPlatePTBR(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validANY = [
+        'FL 1',
+        'FS AB 123',
+    ];
+    const invalidANY = [
+        '',
+        'FL 999999',
+        'FS AB 1234 A',
+    ];
+
+    it('should validate correct Car License Plate ANY accessors', function() {
+        for (const v of validANY) {
+            lpe.plate = v;
+            assert.equal(v, lpe.plate);
+        }
+    });
+
+    it('should validate correct Car License Plate ANY parameters', function() {
+        for (const v of validANY) {
+            const result = lpe.checkLicPlate(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid Car License Plate ANY accessors', function() {
+
+        for (const iv of invalidANY) {
+            let failed = false;
+            try {
+                lpe.plate = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid Car License Plate ANY parameters', function() {
+
+        for (const iv of invalidANY) {
+            let failed = false;
+            try {
+                const result = lpe.checkLicPlate(iv);
             } catch (e) { failed = true; }
             assert.equal(failed, true);
         }
