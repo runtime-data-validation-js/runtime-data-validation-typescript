@@ -36,7 +36,7 @@ export const isBoolean = (value: string | boolean, options?: IsBooleanOptions) =
  * @param value 
  * @param options 
  * @returns 
- * @category Validator
+ * @category Numerical Validator
  */
 export const isDecimal = (value: string, options?: IsDecimalOptions) => {
     return validator.isDecimal(value, options);
@@ -49,7 +49,7 @@ export const isDecimal = (value: string, options?: IsDecimalOptions) => {
  * @param min 
  * @param max 
  * @returns 
- * @category Validator
+ * @category Numerical Validator
  */
  export const isIntRange = (value: string | number, min: number, max: number) => {
     if (typeof value === 'number') {
@@ -77,7 +77,7 @@ export const isDecimal = (value: string, options?: IsDecimalOptions) => {
  * @param value 
  * @param options 
  * @returns 
- * @category Validator
+ * @category Numerical Validator
  */
 export const isInt = (value: string | number, options?: IsIntOptions) => {
     // console.log(`params.IsInt`);
@@ -106,7 +106,7 @@ export const isInt = (value: string | number, options?: IsIntOptions) => {
  * @param min 
  * @param max 
  * @returns 
- * @category Validator
+ * @category Numerical Validator
  */
  export const isFloatRange = (value: string | number, min: number, max: number): boolean => {
     if (typeof value === 'number') {
@@ -133,7 +133,7 @@ export const isInt = (value: string | number, options?: IsIntOptions) => {
  * @param value 
  * @param options 
  * @returns 
- * @category Validator
+ * @category Numerical Validator
  */
 export const isFloat = (value: string | number, options?: IsFloatOptions): boolean => {
 
@@ -161,7 +161,7 @@ export const isFloat = (value: string | number, options?: IsFloatOptions): boole
  * 
  * @param value 
  * @returns 
- * @category Validator
+ * @category Numerical Validator
  */
 export const isHexadecimal = validator.isHexadecimal;
 

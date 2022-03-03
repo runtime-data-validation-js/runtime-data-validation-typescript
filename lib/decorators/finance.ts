@@ -3,6 +3,17 @@ import * as validators from '../validators/index';
 import { generateValidationDecorator } from '../validators';
 
 /**
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+ export function IsIBAN() {
+    return generateValidationDecorator(
+        (value) => validators.isIBAN(value),
+        `Value :value: is not an IBAN number`);
+}
+
+/**
  * Check if the string is a valid BTC address.
  * 
  * @returns 
