@@ -155,7 +155,7 @@ export function IsJWT() {
  * @returns 
  * @category Validation Decorator
  */
- export function IsMACAddress(options?: validators.isMACAddressOptions) {
+export function IsMACAddress(options?: validators.isMACAddressOptions) {
     return generateValidationDecorator(
         (value) => validators.isMACAddress(value, options),
         `Value :value: is not a MAC Address`);
@@ -168,8 +168,20 @@ export function IsJWT() {
  * @returns 
  * @category Validation Decorator
  */
- export function IsMagnetURI() {
+export function IsMagnetURI() {
     return generateValidationDecorator(
         (value) => validators.isMagnetURI(value),
         `Value :value: is not a Magnet URI`);
+}
+
+/**
+ * check if the string matches to a valid MIME type format {@link https://en.wikipedia.org/wiki/Media_type}
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsMimeType() {
+    return generateValidationDecorator(
+        (value) => validators.isMimeType(value),
+        `Value :value: is not a MIME Type`);
 }

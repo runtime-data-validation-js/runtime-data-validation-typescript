@@ -180,3 +180,12 @@ export const isMACAddress = (value: string, options?: isMACAddressOptions): bool
  * @category Internet Validator
  */
  export const isMagnetURI = validator.isMagnetURI;
+
+/**
+ * check if the string matches to a valid MIME type format {@link https://en.wikipedia.org/wiki/Media_type}
+ * 
+ * @param value The string to validate
+ * @returns 
+ * @category Internet Validator
+ */
+export const isMimeType = validator.isMimeType;

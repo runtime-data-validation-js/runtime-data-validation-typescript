@@ -10,7 +10,7 @@ import {
     IsFQDN, IsHash, IsMD5, IsIP, IsIPRange,
     IsISO31661Alpha2, IsISO31661Alpha3,
     ValidateParams, ValidateAccessor, IsISRC,
-    IsJWT, IsMACAddress, IsMagnetURI
+    IsJWT, IsMACAddress, IsMagnetURI, IsMimeType
 } from 'runtime-data-validation';
 
 function repeat(str, count) {
@@ -2232,6 +2232,106 @@ describe('Magnet URI', function() {
         }
     });
 
+});
+
+describe('MIME Type', function() {
+    class MIMETypeExample {
+
+        #mime: string;
+
+        @ValidateAccessor<string>()
+        @IsMimeType()
+        set mime(nd: string) { this.#mime = nd; }
+        get mime() { return this.#mime; }
+
+        @ValidateParams
+        checkMIME(
+            @IsMimeType() addr: string
+        ) {
+            return addr;
+        }
+
+    }
+
+    const mime = new MIMETypeExample();
+    
+    const valid = [
+        'application/json',
+        'application/xhtml+xml',
+        'audio/mp4',
+        'image/bmp',
+        'font/woff2',
+        'message/http',
+        'model/vnd.gtw',
+        'multipart/form-data',
+        'multipart/form-data; boundary=something',
+        'multipart/form-data; charset=utf-8; boundary=something',
+        'multipart/form-data; boundary=something; charset=utf-8',
+        'multipart/form-data; boundary=something; charset="utf-8"',
+        'multipart/form-data; boundary="something"; charset=utf-8',
+        'multipart/form-data; boundary="something"; charset="utf-8"',
+        'text/css',
+        'text/plain; charset=utf8',
+        'Text/HTML;Charset="utf-8"',
+        'text/html;charset=UTF-8',
+        'Text/html;charset=UTF-8',
+        'text/html; charset=us-ascii',
+        'text/html; charset=us-ascii (Plain text)',
+        'text/html; charset="us-ascii"',
+        'video/mp4'
+    ];
+    const invalid = [
+        '',
+        ' ',
+        '/',
+        'f/b',
+        'application',
+        'application\\json',
+        'application/json/text',
+        'application/json; charset=utf-8',
+        'audio/mp4; charset=utf-8',
+        'image/bmp; charset=utf-8',
+        'font/woff2; charset=utf-8',
+        'message/http; charset=utf-8',
+        'model/vnd.gtw; charset=utf-8',
+        'video/mp4; charset=utf-8',
+    ];
+
+    it('should validate correct MIME Type accessors', function() {
+        for (const v of valid) {
+            mime.mime = v;
+            assert.equal(v, mime.mime);
+        }
+    });
+
+    it('should validate correct MIME Type parameters', function() {
+        for (const v of valid) {
+            const result = mime.checkMIME(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid MIME Type accessors', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                mime.mime = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid MIME Type parameters', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                const result = mime.checkMIME(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
 });
 
 describe('MAC Address', function() {
