@@ -39,6 +39,7 @@ export function IsFQDN(options?: validators.IsFQDNOptions) {
 }
 
 /**
+ * check if the string is a hash of type algorithm.
  * 
  * @param algorithm 
  * @returns 
@@ -48,6 +49,19 @@ export function IsHash(algorithm: string) {
     return generateValidationDecorator(
         (value) => validators.isHash(value, algorithm),
         `Value :value: is not a string of hash algorithm`);
+}
+
+/**
+ * check if the string is a hash of type algorithm.
+ * 
+ * @param algorithm 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsMD5() {
+    return generateValidationDecorator(
+        (value) => validators.isMD5(value),
+        `Value :value: is not a MD5 hash string`);
 }
 
 /**

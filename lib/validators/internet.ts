@@ -61,6 +61,7 @@ const IsHashAlgorithms = ['md4', 'md5', 'sha1', 'sha256', 'sha384',
             'tiger192', 'crc32', 'crc32b'];
 
 /**
+ * check if the string is a hash of type algorithm.
  * 
  * @param algorithm 
  * @returns 
@@ -72,6 +73,15 @@ export const isHash = (value: string, algorithm: string) => {
     }
     return validator.isHash(value, algorithm);
 };
+
+/**
+ * check if the string is a MD5 hash.  Equivalent to `isHash(value, 'md5')`.
+ * 
+ * @param value The string to validate
+ * @returns 
+ * @category Internet Validator
+ */
+ export const isMD5 = validator.isMD5;
 
 /**
  * 
@@ -157,7 +167,7 @@ export type isMACAddressOptions = {
  * @category Internet Validator
  */
 export const isMACAddress = (value: string, options?: isMACAddressOptions): boolean => {
-    console.log(`isMACAddress ${value}`, options);
+    // console.log(`isMACAddress ${value}`, options);
     return validator.isMACAddress(value, options);
 };
 

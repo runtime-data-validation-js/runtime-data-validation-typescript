@@ -6,8 +6,8 @@ import {
     Contains, Equals, IsAlpha, IsAlphanumeric,
     IsAscii, IsBase32, IsBase58, IsBase64,
     IsBtcAddress, IsCreditCard, IsDataURI,
-    IsEAN, IsEmail, IsEthereumAddress,
-    IsFQDN, IsHash, IsIBAN, IsIP, IsIPRange,
+    IsEAN, IsEmail, 
+    IsFQDN, IsHash, IsMD5, IsIP, IsIPRange,
     IsISO31661Alpha2, IsISO31661Alpha3,
     ValidateParams, ValidateAccessor, IsISRC,
     IsJWT, IsMACAddress, IsMagnetURI
@@ -984,8 +984,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('md5')
-        set hashMD5(nd: string) { this.#fqdn = nd; }
-        get hashMD5() { return this.#fqdn; }
+        set hashMD5(nd: string) { this.#hash = nd; }
+        get hashMD5() { return this.#hash; }
 
         @ValidateParams
         checkHashMD5(
@@ -996,8 +996,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('md4')
-        set hashMD4(nd: string) { this.#fqdn = nd; }
-        get hashMD4() { return this.#fqdn; }
+        set hashMD4(nd: string) { this.#hash = nd; }
+        get hashMD4() { return this.#hash; }
 
         @ValidateParams
         checkHashMD4(
@@ -1009,8 +1009,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('ripemd128')
-        set hashRIPEMD128(nd: string) { this.#fqdn = nd; }
-        get hashRIPEMD128() { return this.#fqdn; }
+        set hashRIPEMD128(nd: string) { this.#hash = nd; }
+        get hashRIPEMD128() { return this.#hash; }
 
         @ValidateParams
         checkHashRIPEMD128(
@@ -1022,8 +1022,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('ripemd160')
-        set hashRIPEMD160(nd: string) { this.#fqdn = nd; }
-        get hashRIPEMD160() { return this.#fqdn; }
+        set hashRIPEMD160(nd: string) { this.#hash = nd; }
+        get hashRIPEMD160() { return this.#hash; }
 
         @ValidateParams
         checkHashRIPEMD160(
@@ -1036,8 +1036,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('tiger160')
-        set hashTIGER160(nd: string) { this.#fqdn = nd; }
-        get hashTIGER160() { return this.#fqdn; }
+        set hashTIGER160(nd: string) { this.#hash = nd; }
+        get hashTIGER160() { return this.#hash; }
 
         @ValidateParams
         checkHashTIGER160(
@@ -1049,8 +1049,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('tiger192')
-        set hashTIGER192(nd: string) { this.#fqdn = nd; }
-        get hashTIGER192() { return this.#fqdn; }
+        set hashTIGER192(nd: string) { this.#hash = nd; }
+        get hashTIGER192() { return this.#hash; }
 
         @ValidateParams
         checkHashTIGER192(
@@ -1063,8 +1063,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('sha1')
-        set hashSHA1(nd: string) { this.#fqdn = nd; }
-        get hashSHA1() { return this.#fqdn; }
+        set hashSHA1(nd: string) { this.#hash = nd; }
+        get hashSHA1() { return this.#hash; }
 
         @ValidateParams
         checkHashSHA1(
@@ -1076,8 +1076,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('sha256')
-        set hashSHA256(nd: string) { this.#fqdn = nd; }
-        get hashSHA256() { return this.#fqdn; }
+        set hashSHA256(nd: string) { this.#hash = nd; }
+        get hashSHA256() { return this.#hash; }
 
         @ValidateParams
         checkHashSHA256(
@@ -1089,8 +1089,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('sha384')
-        set hashSHA384(nd: string) { this.#fqdn = nd; }
-        get hashSHA384() { return this.#fqdn; }
+        set hashSHA384(nd: string) { this.#hash = nd; }
+        get hashSHA384() { return this.#hash; }
 
         @ValidateParams
         checkHashSHA384(
@@ -1102,8 +1102,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('sha512')
-        set hashSHA512(nd: string) { this.#fqdn = nd; }
-        get hashSHA512() { return this.#fqdn; }
+        set hashSHA512(nd: string) { this.#hash = nd; }
+        get hashSHA512() { return this.#hash; }
 
         @ValidateParams
         checkHashSHA512(
@@ -1119,8 +1119,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('crc32')
-        set hashCRC32(nd: string) { this.#fqdn = nd; }
-        get hashCRC32() { return this.#fqdn; }
+        set hashCRC32(nd: string) { this.#hash = nd; }
+        get hashCRC32() { return this.#hash; }
 
         @ValidateParams
         checkHashCRC32(
@@ -1132,8 +1132,8 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
 
         @ValidateAccessor<string>()
         @IsHash('crc32b')
-        set hashCRC32B(nd: string) { this.#fqdn = nd; }
-        get hashCRC32B() { return this.#fqdn; }
+        set hashCRC32B(nd: string) { this.#hash = nd; }
+        get hashCRC32B() { return this.#hash; }
 
         @ValidateParams
         checkHashCRC32B(
@@ -1143,6 +1143,19 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
         }
 
 
+        #md5hash: string;
+
+        @ValidateAccessor<string>()
+        @IsMD5()
+        set md5hash(nd: string) { this.#md5hash = nd; }
+        get md5hash() { return this.#md5hash; }
+
+        @ValidateParams
+        checkMD5Hash(
+            @IsMD5() nd: string
+        ) {
+            return nd;
+        }
 
     }
 
@@ -1797,6 +1810,46 @@ describe('URL - URI - EAN - FQDN - Hash', function() {
             failed = false;
             try {
                 const result = uue.checkHashTIGER192(iv);
+                assert.equal(iv, result);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+    
+    const validmd5hash = [
+        'd94f3f016ae679c3008de268209132f2',
+        '751adbc511ccbe8edf23d486fa4581cd',
+        '88dae00e614d8f24cfd5a8b3f8002e93',
+        '0bf1c35032a71a14c2f719e5a14c1e96',
+    ];
+    const invalidmd5hash = [
+        'KYT0bf1c35032a71a14c2f719e5a14c1',
+        'q94375dj93458w34',
+        '39485729348',
+        '%&FHKJFvk',
+    ];
+
+    it(`should validate correct isMD5 hash`, function() {
+        for (const v of validmd5hash) {
+            // console.log(`accessor ${v}`);
+            uue.md5hash = v;
+            assert.equal(v, uue.md5hash);
+            const result = uue.checkMD5Hash(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it(`should reject invalid isMD5 hash`, function() {
+        for (const iv of invalidmd5hash) {
+            let failed = false;
+            try {
+                uue.md5hash = iv;
+                assert.equal(iv, uue.hashTIGER192);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+            failed = false;
+            try {
+                const result = uue.checkMD5Hash(iv);
                 assert.equal(iv, result);
             } catch (e) { failed = true; }
             assert.equal(failed, true);
