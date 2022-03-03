@@ -65,3 +65,15 @@ import { generateValidationDecorator } from '../validators';
         (value) => validators.isLicensePlate(value, locale),
         `Value :value: is not a car license plate for ${locale}`);
 }
+
+/**
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+ export function IsLocale() {
+    return generateValidationDecorator(
+        (value) => validators.isLocale(value),
+        `Value :value: is not a locale`);
+}
+

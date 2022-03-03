@@ -7,7 +7,7 @@ import {
     IsBtcAddress, IsCreditCard, IsDataURI,
     IsEAN, IsEmail, IsEthereumAddress,
     IsFQDN, IsHash, IsIBAN, IsIMEI, IsISBN, IsISIN,
-    IsLatLong, IsLicensePlate,
+    IsLatLong, IsLicensePlate, IsLocale,
     ValidateParams, ValidateAccessor,
 } from 'runtime-data-validation';
 
@@ -883,6 +883,82 @@ describe('Car license plates', function() {
             let failed = false;
             try {
                 const result = lpe.checkLicPlate(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+});
+
+describe('Locales', function() {
+
+    class LocaleExample {
+
+        #locale: string;
+
+        @ValidateAccessor<string>()
+        @IsLocale()
+        set locale(ni: string) { this.#locale = ni; }
+        get locale() { return this.#locale; }
+
+        @ValidateParams
+        checkLocale(
+            @IsLocale() ni: string
+        ) {
+            return ni;
+        }
+
+    }
+
+    const locale = new LocaleExample();
+
+    const valid = [
+        'uz_Latn_UZ',
+        'en',
+        'gsw',
+        'es_ES',
+        'sw_KE',
+        'am_ET',
+        'ca_ES_VALENCIA',
+        'en_US_POSIX',
+    ];
+    const invalid = [
+        'lo_POP',
+        '12',
+        '12_DD',
+    ];
+
+    it('should validate correct Locale accessors', function() {
+        for (const v of valid) {
+            locale.locale = v;
+            assert.equal(v, locale.locale);
+        }
+    });
+
+    it('should validate correct Locale parameters', function() {
+        for (const v of valid) {
+            const result = locale.checkLocale(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid Car Locale accessors', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                locale.locale = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid Car Locale parameters', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                const result = locale.checkLocale(iv);
             } catch (e) { failed = true; }
             assert.equal(failed, true);
         }

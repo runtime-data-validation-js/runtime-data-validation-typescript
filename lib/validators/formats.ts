@@ -80,3 +80,12 @@ export const isLicensePlate = (value: string, locale?: string) => {
     if (typeof locale === 'undefined') locale = 'any';
     return validator.isLicensePlate(value, locale);
 };
+
+/**
+ * check if the string is a locale
+ * 
+ * @param value 
+ * @returns 
+ * @category Validator
+ */
+ export const isLocale = validator.isLocale;
