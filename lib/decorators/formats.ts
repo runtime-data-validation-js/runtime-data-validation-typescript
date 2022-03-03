@@ -67,6 +67,7 @@ import { generateValidationDecorator } from '../validators';
 }
 
 /**
+ * check if the string is a locale
  * 
  * @returns 
  * @category Validation Decorator

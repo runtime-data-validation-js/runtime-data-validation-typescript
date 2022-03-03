@@ -184,3 +184,15 @@ export function IsIn(values: Array<string>) {
         (value) => validators.isLength(value, options),
         `Value :value: string length is not in correct range ${util.inspect(options)}`);
 }
+
+/**
+ * check if the string is lowercase.
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsLowercase() {
+    return generateValidationDecorator(
+        (value) => validators.isLowercase(value),
+        `Value :value: string length is lower case`);
+}

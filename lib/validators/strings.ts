@@ -191,7 +191,7 @@ export type isJSONOptions = { allow_primitives: boolean };
  * @returns 
  * @category String Validator
  */
- export const isJSON = (value: string, options?: isJSONOptions): boolean => {
+export const isJSON = (value: string, options?: isJSONOptions): boolean => {
     return validator.isJSON(value, options);
 };
 
@@ -205,7 +205,15 @@ export type isLengthOptions = {min?: number, max?: number};
  * @returns 
  * @category String Validator
  */
- export const isLength = (value: string, options?: isLengthOptions): boolean => {
+export const isLength = (value: string, options?: isLengthOptions): boolean => {
     return validator.isLength(value, options);
 };
 
+/**
+ * check if the string is lowercase.
+ * 
+ * @param value
+ * @returns 
+ * @category String Validator
+ */
+export const isLowercase = validator.isLowercase;

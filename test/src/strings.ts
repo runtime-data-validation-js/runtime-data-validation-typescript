@@ -6,7 +6,7 @@ import {
     IsAscii, IsBase32, IsBase58, IsBase64,
     ValidateParams, ValidateAccessor, IsByteLength,
     IsEmpty, IsFullWidth, IsHalfWidth, IsIn, IsJSON,
-    IsLength
+    IsLength, IsLowercase
 } from 'runtime-data-validation';
 
 describe('Contains', function() {
@@ -112,7 +112,7 @@ describe('Equals', function() {
     });
 });
 
-describe('IsAlpha - IsAlphanumeric - IsAscii - IsFullWidth IsHalfWidth', function() {
+describe('IsAlpha - IsAlphanumeric - IsAscii - IsFullWidth - IsHalfWidth - IsLowercase', function() {
 
     class AlphaExample {
 
@@ -169,9 +169,66 @@ describe('IsAlpha - IsAlphanumeric - IsAscii - IsFullWidth IsHalfWidth', functio
         ) {
             return checkThis;
         }
+
+        #lower: string;
+
+        @ValidateAccessor<string>()
+        @IsLowercase()
+        set lower(nt: string) { this.#lower = nt; }
+        get lower() { return this.#lower; }
+
+        @ValidateParams
+        checkLowerCase(
+            @IsLowercase() checkThis: string
+        ) {
+            return checkThis;
+        }
+
     }
 
     const ae = new AlphaExample();
+
+    it('Should validate lower case', function() {
+        ae.lower = 'abc';
+        assert.equal(ae.lower, 'abc');
+        ae.lower = 'abc123';
+        assert.equal(ae.lower, 'abc123');
+        ae.lower = 'tr竪s 端ber';
+        assert.equal(ae.lower, 'tr竪s 端ber');
+
+        assert.equal(ae.checkLowerCase('abc'), 'abc');
+        assert.equal(ae.checkLowerCase('abc123'), 'abc123');
+        assert.equal(ae.checkLowerCase('tr竪s 端ber'), 'tr竪s 端ber');
+    });
+
+    it('Should reject non-lower case', function() {
+        let failed = false;
+        try {
+            ae.lower = 'fooBar';
+            assert.equal(ae.lower, 'fooBar');
+        } catch (e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            assert.equal(ae.checkLowerCase('fooBar'), 'fooBar');
+        } catch (e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            ae.lower = '123A';
+            assert.equal(ae.lower, '123A');
+        } catch (e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            assert.equal(ae.checkLowerCase('123A'), '123A');
+        } catch (e) { failed = true; }
+        assert.equal(failed, true);
+
+    });
 
     it('Should set values', function() {
         ae.title = 'GilligansWake';
