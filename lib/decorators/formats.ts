@@ -56,7 +56,7 @@ import { generateValidationDecorator } from '../validators';
 /**
  * check if string matches the format of a country's license plate.
  * 
- * @param options 
+ * @param locale 
  * @returns 
  * @category Validation Decorator
  */
@@ -72,9 +72,49 @@ import { generateValidationDecorator } from '../validators';
  * @returns 
  * @category Validation Decorator
  */
- export function IsLocale() {
+export function IsLocale() {
     return generateValidationDecorator(
         (value) => validators.isLocale(value),
         `Value :value: is not a locale`);
+}
+
+/**
+ * check if the string is a mobile phone number,
+ * 
+ * @param locale 
+ * @param options 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsMobilePhone(locale?: string, options?: validators.isMobilePhoneOptions) {
+    return generateValidationDecorator(
+        (value) => validators.isMobilePhone(value, locale, options),
+        `Value :value: is not a mobile phone number`);
+}
+
+
+/**
+ * check if the string is a valid hex-encoded representation of a MongoDB ObjectId. {@link http://docs.mongodb.org/manual/reference/object-id/}
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsMongoId() {
+    return generateValidationDecorator(
+        (value) => validators.isMongoId(value),
+        `Value :value: is not a MongoDB ID`);
+}
+
+/**
+ * check if the string is a valid passport number.
+ * 
+ * @param countryCode 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsPassportNumber(countryCode?: string) {
+    return generateValidationDecorator(
+        (value) => validators.isPassportNumber(value, countryCode),
+        `Value :value: is not a passport number`);
 }
 

@@ -136,22 +136,14 @@ export const isISO31661Alpha2 = validator.isISO31661Alpha2;
 export const isISO31661Alpha3 = validator.isISO31661Alpha3;
 
 /**
- * Check if the string is an International Standard Recording Code (ISRC).  {@link https://en.wikipedia.org/wiki/International_Standard_Recording_Code}
+ * Check if the string is an International Standard Recording Code (ISRC).
+ * {@link https://en.wikipedia.org/wiki/International_Standard_Recording_Code}
  * 
  * @param value The string to validate
  * @returns 
  * @category Internet Validator
  */
 export const isISRC = validator.isISRC;
-
-/**
- * Check if the string is valid JWT token.
- * 
- * @param value The string to validate
- * @returns 
- * @category Internet Validator
- */
-export const isJWT = validator.isJWT;
 
 export type isMACAddressOptions = {
     no_separators?: boolean,
@@ -189,3 +181,12 @@ export const isMACAddress = (value: string, options?: isMACAddressOptions): bool
  * @category Internet Validator
  */
 export const isMimeType = validator.isMimeType;
+
+/**
+ * check if the string is a valid port number.
+ * 
+ * @param value The string to validate
+ * @returns 
+ * @category Internet Validator
+ */
+export const isPort = validator.isPort;

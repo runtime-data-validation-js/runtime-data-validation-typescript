@@ -158,25 +158,30 @@ export const isFloat = (value: string | number, options?: IsFloatOptions): boole
 
 
 /**
+ * @category Options
+ */
+export type isNumericOptions = {
+    no_symbols?: boolean
+};
+
+/**
+ * check if the string contains only numbers.
+ * 
+ * @param value 
+ * @param options 
+ * @returns 
+ * @category Numerical Validator
+ */
+export const isNumeric = (value: string,
+                        options?: isNumericOptions): boolean => {
+    return validator.isNumeric(value, options);
+}
+
+/**
+ * check if the string is a valid octal number.
  * 
  * @param value 
  * @returns 
  * @category Numerical Validator
  */
-export const isHexadecimal = validator.isHexadecimal;
-
-/**
- * 
- * @param value 
- * @returns 
- * @category Validator
- */
-export const isHexColor = validator.isHexColor;
-
-/**
- * 
- * @param value 
- * @returns 
- * @category Validator
- */
-export const isHSL = validator.isHSL;
+export const isOctal = validator.isOctal;

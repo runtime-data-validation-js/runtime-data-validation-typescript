@@ -196,3 +196,15 @@ export function IsLowercase() {
         (value) => validators.isLowercase(value),
         `Value :value: string length is lower case`);
 }
+
+/**
+ * check if the string contains one or more multibyte chars.
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsMultibyte() {
+    return generateValidationDecorator(
+        (value) => validators.isMultibyte(value),
+        `Value :value: does not contain multibyte characters`);
+}

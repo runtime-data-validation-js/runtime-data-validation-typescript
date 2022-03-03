@@ -80,34 +80,25 @@ import { generateValidationDecorator } from '../validators';
 }
 
 /**
+ * check if the string contains only numbers.
  * 
  * @returns 
  * @category Validation Decorator
  */
-export function IsHexadecimal() {
+ export function IsNumeric(options?: validators.isNumericOptions) {
     return generateValidationDecorator(
-        (value) => validators.isHexadecimal(value),
-        `Value :value: not hexadecimal`);
+        (value) => validators.isNumeric(value, options),
+        `Value :value: not numeric`);
 }
 
 /**
+ * check if the string is a valid octal number.
  * 
  * @returns 
  * @category Validation Decorator
  */
-export function IsHexColor() {
+export function IsOctal() {
     return generateValidationDecorator(
-        (value) => validators.isHexColor(value),
-        `Value :value: not hex color`);
-}
-
-/**
- * 
- * @returns 
- * @category Validation Decorator
- */
-export function IsHSL() {
-    return generateValidationDecorator(
-        (value) => validators.isHSL(value),
-        `Value :value: not HSL color`);
+        (value) => validators.isOctal(value),
+        `Value :value: not an octal number`);
 }

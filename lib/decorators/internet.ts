@@ -138,18 +138,6 @@ export function IsISRC() {
 }
 
 /**
- * Check if the string is valid JWT token.
- * 
- * @returns 
- * @category Validation Decorator
- */
-export function IsJWT() {
-    return generateValidationDecorator(
-        (value) => validators.isJWT(value),
-        `Value :value: is not a JWT Token`);
-}
-
-/**
  * 
  * @param options 
  * @returns 
@@ -184,4 +172,16 @@ export function IsMimeType() {
     return generateValidationDecorator(
         (value) => validators.isMimeType(value),
         `Value :value: is not a MIME Type`);
+}
+
+/**
+ * check if the string is a valid port number.
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+ export function IsPort() {
+    return generateValidationDecorator(
+        (value) => validators.isPort(value),
+        `Value :value: is not a port number`);
 }

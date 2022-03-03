@@ -195,6 +195,9 @@ export const isJSON = (value: string, options?: isJSONOptions): boolean => {
     return validator.isJSON(value, options);
 };
 
+/**
+ * @category Options
+ */
 export type isLengthOptions = {min?: number, max?: number};
 
 /**
@@ -217,3 +220,12 @@ export const isLength = (value: string, options?: isLengthOptions): boolean => {
  * @category String Validator
  */
 export const isLowercase = validator.isLowercase;
+
+/**
+ * check if the string contains one or more multibyte chars.
+ * 
+ * @param value
+ * @returns 
+ * @category String Validator
+ */
+export const isMultibyte = validator.isMultibyte;

@@ -6,3 +6,4 @@ export * from './internet';
 export * from './numerical';
 export * from './publications';
 export * from './strings';
+export * from './web';
