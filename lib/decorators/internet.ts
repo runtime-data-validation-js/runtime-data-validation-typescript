@@ -185,3 +185,16 @@ export function IsMimeType() {
         (value) => validators.isPort(value),
         `Value :value: is not a port number`);
 }
+
+/**
+ * check if the string is an URL.
+ * 
+ * @param options
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsURL(options?: validators.isURLOptions) {
+    return generateValidationDecorator(
+        (value) => validators.isURL(value, options),
+        `Value :value: is not an URL`);
+}

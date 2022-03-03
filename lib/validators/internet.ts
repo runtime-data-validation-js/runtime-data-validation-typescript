@@ -145,6 +145,9 @@ export const isISO31661Alpha3 = validator.isISO31661Alpha3;
  */
 export const isISRC = validator.isISRC;
 
+/**
+ * @category Options
+ */
 export type isMACAddressOptions = {
     no_separators?: boolean,
     eui?: string
@@ -190,3 +193,36 @@ export const isMimeType = validator.isMimeType;
  * @category Internet Validator
  */
 export const isPort = validator.isPort;
+
+/**
+ * @category Options
+ */
+export type isURLOptions = {
+    protocols?: Array<string>,
+    require_tld?: boolean,
+    require_protocol?: boolean,
+    require_host?: boolean,
+    require_port?: boolean,
+    require_valid_protocol?: boolean,
+    allow_underscores?: boolean,
+    host_whitelist?: boolean,
+    host_blacklist?: boolean,
+    allow_trailing_dot?: boolean,
+    allow_protocol_relative_urls?: boolean,
+    allow_fragments?: boolean,
+    allow_query_components?: boolean,
+    disallow_auth?: boolean,
+    validate_length?: boolean
+};
+
+/**
+ * check if the string is an URL.
+ * 
+ * @param value The string to validate
+ * @param options
+ * @returns 
+ * @category Internet Validator
+ */
+export const isURL = (value: string, options?: isURLOptions): boolean => {
+    return validator.isURL(value, options);
+};

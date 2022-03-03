@@ -229,3 +229,57 @@ export const isLowercase = validator.isLowercase;
  * @category String Validator
  */
 export const isMultibyte = validator.isMultibyte;
+
+/**
+ * check if the string contains any surrogate pairs chars.
+ * 
+ * @param value
+ * @returns 
+ * @category String Validator
+ */
+export const isSurrogatePair = validator.isSurrogatePair;
+
+/**
+ * check if the string is uppercase.
+ * 
+ * @param value
+ * @returns 
+ * @category String Validator
+ */
+export const isUppercase = validator.isUppercase;
+
+/**
+ * check if the string contains a mixture of full and half-width chars.
+ * 
+ * @param value
+ * @returns 
+ * @category String Validator
+ */
+export const isVariableWidth = validator.isVariableWidth;
+
+/**
+ * checks characters if they appear in the whitelist.
+ * 
+ * @param value
+ * @returns 
+ * @category String Validator
+ */
+export const isWhitelisted = (value: string, chars: string) => {
+    return validator.isWhitelisted(value, chars);
+}
+
+/**
+ * check if string matches the pattern.
+ * 
+ * Either `matches('foo', /foo/i)` or `matches('foo', 'foo', 'i')`.
+ * 
+ * @param value
+ * @param pattern
+ * @param modifiers
+ * @returns 
+ * @category String Validator
+ */
+export const matches = (value: string,
+                pattern: string | RegExp, modifiers?: string) => {
+    return validator.matches(value, pattern, modifiers);
+}

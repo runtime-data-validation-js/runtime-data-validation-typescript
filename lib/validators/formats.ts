@@ -142,7 +142,7 @@ export const isMongoId = validator.isMongoId;
  * @returns 
  * @category Validator
  */
- export const isPassportNumber = (value, countryCode?: string) => {
+export const isPassportNumber = (value, countryCode?: string) => {
     return validator.isPassportNumber(value, countryCode);
 };
 
@@ -160,6 +160,48 @@ export const isPostalCodeLocales = validator.isPostalCodeLocales;
  * @category Validator
  */
  export const isPostalCode = (value, locale?: string) => {
-    if (typeof locale === 'undefined') locale = 'any';
-    return validator.isPostalCode(value, locale);
+    return validator.isPostalCode(value, locale ?? 'any');
 };
+
+/**
+ * check if the string is a Semantic Versioning Specification (SemVer).
+ * 
+ * @param value 
+ * @returns 
+ * @category Validator
+ */
+export const isSemVer = validator.isSemVer;
+
+/**
+ * @category Options
+ */
+export type isStrongPasswordOptions = {
+    minLength?: number,
+    minLowercase?: number,
+    minUppercase?: number,
+    minNumbers?: number,
+    minSymbols?: number,
+    returnScore?: boolean,
+    pointsPerUnique?: number,
+    pointsPerRepeat?: number,
+    pointsForContainingLower?: number,
+    pointsForContainingUpper?: number,
+    pointsForContainingNumber?: number,
+    pointsForContainingSymbol?: number
+};
+
+/**
+ * Check if a password is strong or not. 
+ * Allows for custom requirements or scoring rules. 
+ * If returnScore is true, then the function returns
+ * an integer score for the password rather than a boolean.
+ * 
+ * @param value 
+ * @param options 
+ * @returns 
+ * @category Validator
+ */
+export const isStrongPassword = (value, options?: isStrongPasswordOptions) => {
+    return validator.isStrongPassword(value, options);
+};
+

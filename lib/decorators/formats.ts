@@ -118,3 +118,34 @@ export function IsPassportNumber(countryCode?: string) {
         `Value :value: is not a passport number`);
 }
 
+
+/**
+ * check if the string is a Semantic Versioning Specification (SemVer).
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsSemVer() {
+    return generateValidationDecorator(
+        (value) => validators.isSemVer(value),
+        `Value :value: is not a SemVer`);
+}
+
+/**
+ * Check if a password is strong or not. 
+ * Allows for custom requirements or scoring rules.
+ * The `returnScore` option is silently ignored because it is not
+ * compatible with a validation decorator.
+ * 
+ * @param options 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsStrongPassword(options?: validators.isStrongPasswordOptions) {
+    if (options?.returnScore) {
+        options.returnScore = false;
+    }
+    return generateValidationDecorator(
+        (value) => validators.isStrongPassword(value, options),
+        `Value :value: is not a strong password`);
+}

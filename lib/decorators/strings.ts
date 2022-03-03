@@ -208,3 +208,68 @@ export function IsMultibyte() {
         (value) => validators.isMultibyte(value),
         `Value :value: does not contain multibyte characters`);
 }
+
+/**
+ * check if the string contains any surrogate pairs chars.
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsSurrogatePair() {
+    return generateValidationDecorator(
+        (value) => validators.isSurrogatePair(value),
+        `Value :value: does not contain surrogate pairs characters`);
+}
+
+/**
+ * check if the string is uppercase.
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsUppercase() {
+    return generateValidationDecorator(
+        (value) => validators.isUppercase(value),
+        `Value :value: is not uppercase`);
+}
+
+/**
+ * check if the string contains a mixture of full and half-width chars.
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsVariableWidth() {
+    return generateValidationDecorator(
+        (value) => validators.isVariableWidth(value),
+        `Value :value: does not contain full and half-width characters`);
+}
+
+/**
+ * checks characters if they appear in the whitelist.
+ * 
+ * @param chars
+ * @returns 
+ * @category Validation Decorator
+ */
+ export function IsWhitelisted(chars: string) {
+    return generateValidationDecorator(
+        (value) => validators.isWhitelisted(value, chars),
+        `Value :value: does not contain whitelist characters`);
+}
+
+/**
+ * check if string matches the pattern.
+ * 
+ * Either `matches('foo', /foo/i)` or `matches('foo', 'foo', 'i')`.
+ * 
+ * @param pattern
+ * @param modifiers
+ * @returns 
+ * @category Validation Decorator
+ */
+export function matches(pattern: string | RegExp, modifiers?: string) {
+    return generateValidationDecorator(
+        (value) => validators.matches(value, pattern, modifiers),
+        `Value :value: does not match the regular expression`);
+}

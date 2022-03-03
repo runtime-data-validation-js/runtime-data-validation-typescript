@@ -59,3 +59,28 @@ export function IsRgbColor(includePercentValues?: boolean) {
         (value) => validators.isRgbColor(value, includePercentValues),
         `Value :value: is not a RGB or RGBA color string`);
 }
+
+/**
+ * Check if the string is of type slug. 
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsSlug() {
+    return generateValidationDecorator(
+        (value) => validators.isSlug(value),
+        `Value :value: is not a SLUG string`);
+}
+
+
+/**
+ * check if the string is a UUID (version 1, 2, 3, 4 or 5).
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+export function IsUUID(version?: number) {
+    return generateValidationDecorator(
+        (value) => validators.isUUID(value, version ?? 'any'),
+        `Value :value: is not a UUID string`);
+}
