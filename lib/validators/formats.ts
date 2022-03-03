@@ -42,9 +42,25 @@ export const isIMEI = (value: string, options?: IsIMEIOptions) => {
 
 
 /**
+ * check if the string is an ISIN (stock/security identifier).
  * 
  * @param value 
  * @returns 
  * @category Validator
  */
 export const isISIN = validator.isISIN;
+
+export type isLatLongOptions = { checkDMS: boolean };
+
+/**
+ * check if the string is a valid latitude-longitude coordinate 
+ * in the format `lat,long` or `lat, long`.
+ * 
+ * @param value 
+ * @param options 
+ * @returns 
+ * @category Validator
+ */
+export const isLatLong = (value: string, options?: isLatLongOptions) => {
+    return validator.isLatLong(value, options);
+};

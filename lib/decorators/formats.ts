@@ -37,3 +37,15 @@ import { generateValidationDecorator } from '../validators';
         (value) => validators.isISIN(value),
         `Value :value: is not an ISIN number`);
 }
+
+
+/**
+ * 
+ * @returns 
+ * @category Validation Decorator
+ */
+ export function IsLatLong(options?: validators.isLatLongOptions) {
+    return generateValidationDecorator(
+        (value) => validators.isLatLong(value),
+        `Value :value: is not an latitude/longitude`);
+}
