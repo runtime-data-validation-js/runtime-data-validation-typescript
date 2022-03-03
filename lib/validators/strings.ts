@@ -16,7 +16,7 @@ import { default as validator } from 'validator';
  * @param seed 
  * @param options 
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const contains = (value: string, seed: string, options?: ContainsOptions): boolean => {
     return validator.contains(value, seed, options);
@@ -27,7 +27,7 @@ export const contains = (value: string, seed: string, options?: ContainsOptions)
  * @param value
  * @param comparison 
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const equals = (value: string, comparison: string): boolean => {
     return validator.equals(value, comparison);
@@ -47,7 +47,7 @@ export const equals = (value: string, comparison: string): boolean => {
  * @param locale 
  * @param options 
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const isAlpha = (value: string, locale?: string,
             options?: IsAlphaOptions): boolean => {
@@ -60,7 +60,7 @@ export const isAlpha = (value: string, locale?: string,
  * @param locale 
  * @param options 
  * @returns 
- * @category Validator
+ * @category String Validator
  */
  export const isAlphanumeric = (value: string, locale?: string,
                      options?: IsAlphaOptions): boolean => {
@@ -72,7 +72,7 @@ export const isAlpha = (value: string, locale?: string,
  * 
  * @param value
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const isAscii = validator.isAscii;
 
@@ -80,7 +80,7 @@ export const isAscii = validator.isAscii;
  * 
  * @param value
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const isBase32 = validator.isBase32;
 
@@ -88,7 +88,7 @@ export const isBase32 = validator.isBase32;
  * 
  * @param value
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const isBase58 = validator.isBase58;
 
@@ -105,7 +105,7 @@ export const isBase58 = validator.isBase58;
  * @param value
  * @param options 
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const isBase64 = (value: string, options?: IsBase64Options): boolean => {
     return validator.isBase64(value, options);
@@ -125,7 +125,7 @@ export const isBase64 = (value: string, options?: IsBase64Options): boolean => {
  * @param value
  * @param options 
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const isByteLength = (value: string, options?: IsByteLengthOptions): boolean => {
     return validator.isByteLength(value, options);
@@ -144,7 +144,7 @@ export const isByteLength = (value: string, options?: IsByteLengthOptions): bool
  * @param value
  * @param options 
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const isEmpty = (value: string, options?: IsEmptyOptions): boolean => {
     return validator.isEmpty(value, options);
@@ -155,7 +155,7 @@ export const isEmpty = (value: string, options?: IsEmptyOptions): boolean => {
  * 
  * @param value
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const isFullWidth = validator.isFullWidth;
 
@@ -163,7 +163,7 @@ export const isFullWidth = validator.isFullWidth;
  * 
  * @param value
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const isHalfWidth = validator.isHalfWidth;
 
@@ -172,9 +172,26 @@ export const isHalfWidth = validator.isHalfWidth;
  * @param value
  * @param values 
  * @returns 
- * @category Validator
+ * @category String Validator
  */
 export const isIn = (value: string, values: Array<string>): boolean => {
     return validator.isIn(value, values);
+};
+
+/**
+ * @category Options
+ */
+export type isJSONOptions = { allow_primitives: boolean };
+
+/**
+ * Check if the string is valid JSON (note: uses JSON.parse).
+ * 
+ * @param value
+ * @param options
+ * @returns 
+ * @category String Validator
+ */
+ export const isJSON = (value: string, options?: isJSONOptions): boolean => {
+    return validator.isJSON(value, options);
 };
 

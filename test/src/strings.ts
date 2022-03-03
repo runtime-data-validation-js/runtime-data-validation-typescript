@@ -5,7 +5,7 @@ import {
     Contains, Equals, IsAlpha, IsAlphanumeric,
     IsAscii, IsBase32, IsBase58, IsBase64,
     ValidateParams, ValidateAccessor, IsByteLength,
-    IsEmpty, IsFullWidth, IsHalfWidth, IsIn
+    IsEmpty, IsFullWidth, IsHalfWidth, IsIn, IsJSON
 } from 'runtime-data-validation';
 
 describe('Contains', function() {
@@ -913,4 +913,140 @@ describe('IsIn', function() {
             assert.equal(failed, true);
         }
     });
+});
+
+describe('JSON', function() {
+
+    class JSONExample {
+
+        #json: string;
+
+        @ValidateAccessor<string>()
+        @IsJSON()
+        set json(nv: string) { this.#json = nv; }
+        get json() { return this.#json; }
+
+        @ValidateParams
+        checkJSON(
+            @IsJSON() val: string
+        ) {
+            return val;
+        }
+
+        #jsonPrimitive: string;
+
+        @ValidateAccessor<string>()
+        @IsJSON({ allow_primitives: true })
+        set jsonPrimitive(nv: string) { this.#jsonPrimitive = nv; }
+        get jsonPrimitive() { return this.#jsonPrimitive; }
+
+        @ValidateParams
+        checkJSONPrimitive(
+            @IsJSON({ allow_primitives: true }) val: string
+        ) {
+            return val;
+        }
+    }
+
+    const json = new JSONExample();
+    
+    const valid = [
+        '{ "key": "value" }',
+        '{}',
+    ];
+    const invalid = [
+        '{ key: "value" }',
+        '{ \'key\': \'value\' }',
+        'null',
+        '1234',
+        '"nope"',
+    ];
+
+    it('should validate correct JSON accessors', function() {
+        for (const v of valid) {
+            json.json = v;
+            assert.equal(v, json.json);
+        }
+    });
+
+    it('should validate correct JSON parameters', function() {
+        for (const v of valid) {
+            const result = json.checkJSON(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid JSON accessors', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                json.json = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid JSON parameters', function() {
+
+        for (const iv of invalid) {
+            let failed = false;
+            try {
+                const result = json.checkJSON(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    const validP = [
+        '{ "key": "value" }',
+        '{}',
+        'null',
+        'false',
+        'true',
+    ];
+    const invalidP = [
+        '{ key: "value" }',
+        '{ \'key\': \'value\' }',
+        '{ "key": value }',
+        '1234',
+        '"nope"',
+    ];
+
+    it('should validate correct JSON Primitive accessors', function() {
+        for (const v of validP) {
+            json.jsonPrimitive = v;
+            assert.equal(v, json.jsonPrimitive);
+        }
+    });
+
+    it('should validate correct JSON Primitive parameters', function() {
+        for (const v of validP) {
+            const result = json.checkJSONPrimitive(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid JSON Primitive accessors', function() {
+
+        for (const iv of invalidP) {
+            let failed = false;
+            try {
+                json.jsonPrimitive = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid JSON Primitive parameters', function() {
+
+        for (const iv of invalidP) {
+            let failed = false;
+            try {
+                const result = json.checkJSONPrimitive(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
 });

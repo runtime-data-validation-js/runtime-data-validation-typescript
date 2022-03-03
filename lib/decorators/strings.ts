@@ -158,3 +158,16 @@ export function IsIn(values: Array<string>) {
         (value) => validators.isIn(value, values),
         `Value :value: is not an allowed value`);
 }
+
+
+/**
+ * 
+ * @param options 
+ * @returns 
+ * @category Validation Decorator
+ */
+ export function IsJSON(options?: validators.isJSONOptions) {
+    return generateValidationDecorator(
+        (value) => validators.isJSON(value, options),
+        `Value :value: is not JSON`);
+}
