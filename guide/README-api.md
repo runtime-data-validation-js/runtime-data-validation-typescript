@@ -1,43 +1,20 @@
 This is the detailed API documentation for `runtime-data-validation`.  This package contains a long list of TypeScript decorators for performing automatic data validation.
 
-It does this by instrumenting the `set` accessor and method calls where the developer has added validation decorators.  That is:
+For an overview of the package see [the project home page](../index.html)
 
-```js
-class ValidateExample {
-    #year: number;
+This package contains three major functional units:
 
-    @ValidateAccessor<number>()
-    @IsIntRange(1990, 2050)
-    @IsInt()
-    set year(ny: number | string) {
-        this.#year = ToInt(ny);
-    }
-    get year() { return this.#year; }
+Group                                | Discussion
+-------------------------------------|-----------------
+_Decorators_ and _Validation Decorators_ | Decorator functions for use in data validation
+_Validation functions_ and _Options_ | Regular functions and configuration types for performing validation
+_Conversion functions_               | Functions which assist with converting data from a string format to the native format
 
-    @ValidateParams
-    area(
-        @IsFloatRange(0, 1000)
-        width: number | string,
-
-        @IsFloatRange(0, 1000)
-        height: number | string
-    ) {
-        return ToFloat(width) * ToFloat(height);
-    }
-}
-```
-
-The `ValidateAccessor` and `ValidateParams` decorators trigger execution of the validation decorators.  The other decorators perform the corresponding validations.
-
-Most of the functions exported by this package are decorator functions.  The sidebar is unfortunately not divided into groups, but scroll to the top of [modules.html](modules.html) and you'll see everything divided into these categories:
-
-* _Validation Decorator_ -- Decorator functions for use in data validation
-* _Options_ -- TypeScript types for use with certain decorator functions
-* _Conversion_ -- Functions which assist with converting data from a string format to the native format
+As of this writing the _Validation functions_ are mostly simple wrappers over functions provided by the `validator.js` package.  Likewise, the _Validation decorators_ are simple wrappers over those functions.
 
 # Using the Decorators
 
-Unfortunately, TypeDoc is not presenting the API to be clear how to use the decorators.  Let's take one example:
+Unfortunately, TypeDoc is excellent at documenting API methods, but does not present decorator functions as decorators.  For the functions we've categorized as decorators, the API will be described something like this:
 
 ```js
 IsAlpha(locale?: string, options?: IsAlphaOptions):
@@ -45,7 +22,7 @@ IsAlpha(locale?: string, options?: IsAlphaOptions):
   => void
 ```
 
-This is the `@IsAlpha()` decorator.  The decorator options are the first  parameter list, in this case _locale_ and _options_.  One should ignore the return type, since it is what's required for this to be recognized by TypeScript as a decorator.
+This is the `@IsAlpha()` decorator.  This decorator takes two optional parameters, _locale_ and _options_.  Any parameters shown are where you should focus your attention.  The return type shown here is the decorator function, which you should ignore since it is an implementation detail of TypeScript decorators.
 
 In other words, the usage is:
 
@@ -54,13 +31,19 @@ class Example {
     #title: string;
 
     @ValidateAccessor<string>()
-    @IsAlpha(locale: 'en-US')
+    @IsAlpha('en-US')
     set title(ny: string) { this.#title = ny; }
     get title() { return this.#title; }
 }
 ```
 
 In other words, coding this as a decorator we use `@DecoratorName()` and do not pay attention to the decorator function return value.
+
+# String focused validation and other data types
+
+This needs to be a Guide article
+
+
 
 # Data format for validation
 

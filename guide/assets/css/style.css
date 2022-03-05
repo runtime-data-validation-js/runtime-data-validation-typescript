@@ -13,3 +13,40 @@ body {
 img {
 	max-width: 100%;
 }
+
+/* code */
+
+pre {
+    white-space: pre-wrap;
+    font-family: "Ubuntu Mono", monospace;
+    margin: 10px 0 10px 20px;
+    font-size: 100%;
+    display: block;
+    -epub-hyphens: none;
+    -webkit-hyphens: none;
+    hyphens: none;
+    background-color: rgb(230, 230, 230);
+    color: black;
+}
+  
+code {
+    font-family: "Ubuntu Mono", monospace;
+}
+  
+code strong em, code em strong, pre em strong, pre strong em,
+  strong code em code, em code strong code, span.bolditalic code { /* yes, all of these variations are needed */
+    font-weight: bold;
+    font-style: italic;
+    font-family: "Ubuntu Mono BoldItal", monospace;
+}
+  
+code em, em code, pre em, em.replaceable {
+    font-family: "Ubuntu Mono Ital", monospace;
+    font-style: italic;
+}
+  
+code strong, strong code, pre strong, strong.userinput {
+    font-family: "Ubuntu Mono Bold", monospace;
+    font-weight: bold;
+}
+  

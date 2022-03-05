@@ -2,10 +2,13 @@
   "name": "runtime-data-validation",
   "version": "0.1.1",
   "description": "TypeScript Decorators for automatic runtime data validation in accessors and method parameters",
-  "homepage": "https://github.com/robogeek/runtime-data-validation-typescript",
+  "homepage": "https://github.com/runtime-data-validation-js/runtime-data-validation-typescript",
   "repository": {
     "type": "git",
-    "url": "https://github.com/robogeek/runtime-data-validation-typescript.git"
+    "url": "https://github.com/runtime-data-validation-js/runtime-data-validation-typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/runtime-data-validation-js/runtime-data-validation-typescript/issues"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -32,7 +35,7 @@
     "annotation"
   ],
   "author": "David Herron <david@davidherron.com>",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^17.0.15",
     "ts-node": "^10.4.0",

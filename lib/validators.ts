@@ -97,7 +97,7 @@ export function generateValidationDecorator(
  * @param target 
  * @param propertyKey 
  * @param descriptor 
- * @category Validation Decorator
+ * @category Decorator
  */
 export function ValidateParams(
     target: Object, propertyKey: string | symbol,
@@ -130,7 +130,7 @@ export function ValidateParams(
 /**
  * 
  * @returns 
- * @category Validation Decorator
+ * @category Decorator
  */
 export function ValidateAccessor<T>() {
     return (target: Object, propertyKey: string,

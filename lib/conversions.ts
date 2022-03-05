@@ -59,7 +59,7 @@ import { default as validator } from 'validator';
  * @returns 
  * @category Conversion
  */
- export function ToFloat(value: number | string): number {
+export function ToFloat(value: number | string): number {
     return typeof value === 'string'
                     ? validator.toFloat(value)
                     : value;

@@ -28,27 +28,28 @@
 
 <div class="row">
 
-<div class="col-md-10">
+<div class="col-md-12">
     <div class="row">
-  <section id="breadcrumb" class="col-sm-12">
-    <breadcrumb-trail></breadcrumb-trail>
-  </section>
-  <section id="category-tags" class="col-sm-12">
-    <publication-date></publication-date>
-  </section>
-</div>
-<div class="row">
-  <article class="col-sm-10">
-    <% if (typeof teaser  !== "undefined") { %><p><strong><ak-teaser></ak-teaser></strong></p> <% } %>
-    <%- content %>
-  </article>
-  <section id="right" class="col-sm-2">
-  </section>
-</div>
+      <% if (typeof hidebreadcrumb === 'undefined') { %>
+        <section id="breadcrumb" class="col-sm-12">
+          <breadcrumb-trail></breadcrumb-trail>
+        </section>
+      <% } %>
+      <% if (typeof hidepubldate === 'undefined') { %>
+        <section id="category-tags" class="col-sm-12">
+          <publication-date></publication-date>
+        </section>
+      <% } %>
+    </div>
+  <div class="row">
+    <article class="col-sm-10">
+      <% if (typeof teaser  !== "undefined") { %><p><strong><ak-teaser></ak-teaser></strong></p> <% } %>
+      <%- content %>
+    </article>
+    <section id="right" class="col-sm-2">
+    </section>
+  </div>
 
-</div>
-<div class="col-md-2">
-<partial file-name="sidebar.html"></partial>
 </div>
 
 </div>

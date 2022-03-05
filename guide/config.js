@@ -1,5 +1,6 @@
 
 const akasha  = require('akasharender');
+const hljs    = require('highlight.js'); // https://highlightjs.org/
 
 const config = new akasha.Configuration();
 
@@ -31,6 +32,9 @@ config
     .addAssetsDir({
         src: 'node_modules/popper.js/dist',
         dest: 'vendor/popper.js'
+    })
+    .addAssetsDir({
+        src: 'node_modules/highlight.js', dest: 'vendor/highlight.js'
     })
     .addAssetsDir({
         src: 'node_modules/@fortawesome/fontawesome-free',
@@ -92,9 +96,42 @@ config
     .addFooterJavaScript({ href: "/vendor/popper.js/umd/popper.min.js" })
     .addFooterJavaScript({ href: "/vendor/bootstrap/js/bootstrap.min.js" })
     .addStylesheet({ href: "/vendor/bootstrap/css/bootstrap.min.css" })
+    .addFooterJavaScript({ href: "/vendor/highlight.js/lib/highlight.js" })
+    .addFooterJavaScript({ script: 'hljs.initHighlightingOnLoad();' })
     .addStylesheet({ href: "/css/flatly.min.css" })
     .addStylesheet({ href: "/css/style.css" })
-    .addStylesheet({ href: "/vendor/fontawesome-free/css/all.min.css" });
+    .addStylesheet({ href: "/vendor/fontawesome-free/css/all.min.css" })
+    .addStylesheet({ href: "/vendor/highlight.js/styles/tomorrow-night-blue.css" });
+
+config.findRenderer('.html.md')
+    .configuration({
+        html:         true,         // Enable html tags in source
+        xhtmlOut:     false,         // Use '/' to close single tags (<br />)
+        breaks:       false,        // Convert '\n' in paragraphs into <br>
+        // langPrefix:   'language-',  // CSS language prefix for fenced blocks
+        linkify:      true,         // Autoconvert url-like texts to links
+        typographer:  false,        // Enable smartypants and other sweet transforms
+        /*  highlight: function (str, lang) {
+            if (lang && hljs.getLanguage(lang)) {
+              try {
+                return '<pre class="hljs"><code>' +
+                       hljs.highlight(lang, str, true).value +
+                       '</code></pre>';
+              } catch (__) {}
+            }
+            return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+        } /* */
+        // For syntax highlighting
+        /* highlight: function (str, lang) {
+            if (lang && hljs.getLanguage(lang)) {
+                try {
+                    return hljs.highlight(lang, str).value;
+                } catch (__) {}
+            }
+            return ''; // use external default escaping
+        } */
+    })
+    .use(require('markdown-it-highlightjs'), { auto: true, code: true });
 
 
 config.setMahabhutaConfig({

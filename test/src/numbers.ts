@@ -1,9 +1,10 @@
 
 import { assert } from 'chai';
 import {
-    IsIntRange, IsInt, IsFloatRange, IsFloat,
-    IsBoolean, IsDecimal, conversions,
-    ValidateParams, ValidateAccessor, 
+    IsIntRange, IsInt, /* ToInt, */
+    IsFloatRange, IsFloat, /* ToFloat, */
+    IsBoolean, /* ToBoolean, */ IsDecimal, 
+    ValidateParams, ValidateAccessor, conversions
 } from 'runtime-data-validation';
 import { default as validator } from 'validator';
 
