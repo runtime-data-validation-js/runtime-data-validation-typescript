@@ -13,7 +13,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./conversions/*": "./dist/conversions/index.js"
   },
   "type": "commonjs",
   "scripts": {
