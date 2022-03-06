@@ -1,6 +1,6 @@
 
 import * as validators from '../validators/index';
-import { generateValidationDecorator } from '../validators';
+import { generateValidationDecorator } from '../index';
 
 /**
  * 
