@@ -2,7 +2,7 @@
 import { assert } from 'chai';
 import {
     IsIntRange, IsInt, IsFloatRange, IsFloat,
-    Contains, Equals, IsAlpha, IsAlphanumeric,
+    Contains, Equals, matches, IsAlpha, IsAlphanumeric,
     IsAscii, IsBase32, IsBase58, IsBase64,
     ValidateParams, ValidateAccessor, IsByteLength,
     IsEmpty, IsFullWidth, IsHalfWidth, IsIn, IsJSON,
@@ -110,6 +110,90 @@ describe('Equals', function() {
         } catch (e) { failed = true; }
         assert.equal(failed, true);
     });
+});
+
+
+describe('Matches', function() {
+    class MatchesExample {
+
+        #title: string;
+
+        @ValidateAccessor<string>()
+        @matches(/^[a-zA-Z0-9 ]+$/)
+        set title(nt: string) { this.#title = nt; }
+        get title() { return this.#title; }
+
+        @ValidateParams
+        echo(
+            @matches(/^[a-zA-Z0-9 ]+$/)
+            message: string) {
+            return message;
+        }
+    }
+
+    const ee2 = new MatchesExample();
+
+
+    it('Should match on accessor', function() {
+        ee2.title = 'world';
+        assert.equal(ee2.title, 'world');
+
+        ee2.title = 'Hello world';
+        assert.equal(ee2.title, 'Hello world');
+        
+        ee2.title = '42 is meaning of life';
+        assert.equal(ee2.title, '42 is meaning of life');
+    });
+
+    it('Should match on method params', function() {
+        let msg = 'world';
+        let result = ee2.echo(msg);
+        assert.equal(result, msg);
+
+        msg = 'Hello world';
+        result = ee2.echo(msg);
+        assert.equal(result, msg);
+
+        msg = '42 is meaning of life';
+        result = ee2.echo(msg);
+        assert.equal(result, msg);
+    });
+
+    it('Should reject invalid accessors', function() {
+        let failed = false;
+        try {
+            ee2.title = 'World!';
+            assert.equal(ee2.title, 'World!');
+        } catch (e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            ee2.title = '@World!';
+            assert.equal(ee2.title, '@World!');
+        } catch (e) { failed = true; }
+        assert.equal(failed, true);
+    });
+
+    it('Should reject invalid method parameters', function() {
+        let failed = false;
+        try {
+            const msg = 'Hello World!';
+            const result = ee2.echo(msg);
+            assert.equal(result, msg);
+
+        } catch (e) { failed = true; }
+        assert.equal(failed, true);
+
+        failed = false;
+        try {
+            const msg = 'Hello @World!';
+            const result = ee2.echo(msg);
+            assert.equal(result, msg);
+        } catch (e) { failed = true; }
+        assert.equal(failed, true);
+    });
+
 });
 
 describe('IsAlpha - IsAlphanumeric - IsAscii - IsFullWidth - IsHalfWidth - IsLowercase', function() {

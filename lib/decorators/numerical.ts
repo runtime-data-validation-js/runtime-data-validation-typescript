@@ -21,7 +21,7 @@ import { generateValidationDecorator } from '../index';
  * @returns 
  * @category Validation Decorator
  */
- export function IsDecimal(options?: validators.IsDecimalOptions) {
+export function IsDecimal(options?: validators.IsDecimalOptions) {
     return generateValidationDecorator(
         (value) => validators.isDecimal(value, options),
         `Value :value: not a decimal number`);
@@ -34,7 +34,7 @@ import { generateValidationDecorator } from '../index';
  * @returns 
  * @category Validation Decorator
  */
- export function IsIntRange(min: number, max: number) {
+export function IsIntRange(min: number, max: number) {
     // console.log(`params.IsIntRange ${min} ${max}`);
     return generateValidationDecorator(
         (value) => validators.isIntRange(value, min, max),
@@ -47,7 +47,7 @@ import { generateValidationDecorator } from '../index';
  * @returns 
  * @category Validation Decorator
  */
- export function IsInt(options?: validators.IsIntOptions) {
+export function IsInt(options?: validators.IsIntOptions) {
     // console.log(`params.IsInt`);
     return generateValidationDecorator(
         (value) => validators.isInt(value, options),

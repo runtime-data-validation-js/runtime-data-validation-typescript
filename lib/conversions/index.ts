@@ -1,4 +1,30 @@
-
+/**
+ * These are the data conversion functions provided by
+ * the `runtime-data-validation` package.  These functions
+ * handle converting string values into a native data format.
+ * Since the validation functions all validate string data, and
+ * since we often want to store data in a native format like
+ * the _Date_ object, we need to convert from the string 
+ * representation to the native format.
+ * 
+ * USAGE:
+ * 
+ * ```
+ * import {
+ *      conversions, validations
+ * } from 'runtime-data-validation';
+ * 
+ * function operation(value: string) {
+ *      if (validations.isFloat(value)) {
+ *           let num = conversions.ToFloat(value);
+ *      }
+ * }
+ * ```
+ * 
+ * [Return to home page](/index.html)
+ * 
+ * @module conversion-functions
+ */
 
 import * as util from 'util';
 import { default as validator } from 'validator';

@@ -32,6 +32,10 @@ console.log(ir.url());
 ir.host = 'foo.bar';
 console.log(ir.toString());
 
+// https://xn--diplomatic-qgb.ro/logo.jpg
+ir.host = 'diplomatică.ro';
+console.log(ir.toString());
+
 // Error: Value 'diplomaticăîntrsurpriză' is not a fully qualified domain name
 // ir.host = 'diplomaticăîntrsurpriză';
 // console.log(ir.toString());

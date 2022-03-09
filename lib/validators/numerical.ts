@@ -51,7 +51,7 @@ export const isDecimal = (value: string, options?: IsDecimalOptions) => {
  * @returns 
  * @category Numerical Validator
  */
- export const isIntRange = (value: string | number, min: number, max: number) => {
+export const isIntRange = (value: string | number, min: number, max: number) => {
     if (typeof value === 'number') {
         if (Number.isInteger(value)
          && value >= min && value <= max) {
@@ -67,7 +67,7 @@ export const isDecimal = (value: string, options?: IsDecimalOptions) => {
 /**
  * @category Options
  */
- export type IsIntOptions = {
+export type IsIntOptions = {
     min?: number, max?: number,
     allow_leading_zeros?: boolean
 }

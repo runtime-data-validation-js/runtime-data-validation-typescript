@@ -1,3 +1,44 @@
+/**
+ * These are the validation decorators for the
+ * `runtime-data-validation` package.  The functions in this
+ * module are actually decorators, but the documentation is
+ * unable to present them as decorators.
+ * 
+ * For the functions we've categorized as decorators,
+ * the API will be described something like this:
+ * 
+ * ```js
+ * IsAlpha(locale?: string, options?: IsAlphaOptions):
+ *   (target: Object, propertyKey?: string | symbol, 
+ *       descriptor?: number | PropertyDescriptor) => void
+ * ```
+ * 
+ * This is the `@IsAlpha()` decorator.  This decorator takes two 
+ * ptional parameters, _locale_ and _options_.  Any parameters shown
+ * are where you should focus your attention.  The return type shown
+ * here is the decorator function, which you should ignore since it is
+ * an implementation detail of TypeScript decorators.
+ * 
+ * In other words, the usage is:
+ * 
+ * ```ts
+ * class Example {
+ *     #title: string;
+ * 
+ *     @ValidateAccessor<string>()
+ *     @IsAlpha('en-US')
+ *     set title(ny: string) { this.#title = ny; }
+ *     get title() { return this.#title; }
+ * }
+ * ```
+ * 
+ * In other words, coding this as a decorator we use `@DecoratorName()`
+ * and do not pay attention to the decorator function return value.
+ * 
+ * [Return to home page](/index.html)
+ * 
+ * @module runtime-data-validation
+ */
 
 export * as validators from './validators/index';
 export * from './decorators/index';
@@ -114,6 +155,7 @@ function generateParameterDecorator(
  * @param validator The validation function
  * @param message The error message to use in thrown exceptions
  * @returns 
+ * @category Decorator Generator
  */
 export function generateValidationDecorator(
                 validator: Function, message: string) {
@@ -148,7 +190,7 @@ export function generateValidationDecorator(
  * @param target 
  * @param propertyKey 
  * @param descriptor 
- * @category Decorator
+ * @category Execution Decorator
  */
 export function ValidateParams(
     target: Object, propertyKey: string | symbol,
@@ -183,7 +225,7 @@ export function ValidateParams(
  * according to the validation decorators attached to the accessor.
  * 
  * @returns 
- * @category Decorator
+ * @category Execution Decorator
  */
 export function ValidateAccessor<T>() {
     return (target: Object, propertyKey: string,

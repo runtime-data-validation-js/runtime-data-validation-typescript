@@ -32,16 +32,18 @@ class ValidateExample {
 }
 ```
 
-There are two decorators, `@ValidateAccessor` and `@ValidateParams`, which drive the data validation process.  These decorators instrument the methods or accessors are instrumented.  The instrumentation knows about the other decorators, and these describe what validation steps to perform.  If no validation decorators are attached, no validation occurs.
+There are two decorators, which we call _Execution Decorators_, `@ValidateAccessor` and `@ValidateParams`, which drive the data validation process.  These decorators instrument the methods or accessors are instrumented.  The instrumentation knows about the other decorators, and these describe what validation steps to perform.
+
+The other decorators are called _Validation Decorators_.  If no validation decorators are attached, no validation occurs.
 
 With the decorators shown here:
 
 * The `IsInt` decorator says any value must be an integer, and the `IsIntRange` decorator says the value must be between 1990 and 2050.
 * Similarly, `IsFloatRange` says the value must be floating point (or integer), between `0` and `1000`.
-* For accessors - the supplied parameter is validated
-* For method calls - the value for each parameter can have different validation decorators suitable to the needs of that parameter
+* For accessors - the supplied parameter is validated, using the `@ValidateAccessor` execution decorator to handle the validation process
+* For method calls - the value for each parameter is checked by any attached validation decorators, using the `@ValidateParams` execution decorator to handle the validation process
 
-The validation is performed before the method is executed.  This creates certainty that data arriving to the method is validated.
+The validation is performed before the method is executed, creating certainty that data arriving as accessor or method parameters is validated and correct.
 
 The developer does not explicitly request that validation is performed.  Instead, attaching the decorators ensures that validation is performed on every assignment to the accessor, or to every method call.
 
@@ -49,16 +51,36 @@ Most (or all?) data validation packages, for JavaScript or TypeScript, require t
 
 The package includes a very long list of validation decorators.  The implementation uses [validator.js](https://www.npmjs.com/package/validator) in the background.  Development was inspired by [class-validator](https://www.npmjs.com/package/class-validator).
 
-For detailed documentation see:
+For detailed documentation see: [`runtime-data-validation-js.github.io`](https://runtime-data-validation-js.github.io/)
 
-* https://robogeek.github.io/runtime-data-validation-typescript/
-* https://robogeek.github.io/runtime-data-validation-typescript/api/index.html
+For the API, see: [`runtime-data-validation-js.github.io/api`](https://runtime-data-validation-js.github.io/api/index.html)
 
 # Installation
+
+On TechSparx there is [a complete overview of TypeScript decorators](https://techsparx.com/nodejs/typescript/decorators/introduction.html), that goes over setting up a Node.js project with decorator support.  Included in that article series is [a description of the theory behind this package](https://techsparx.com/nodejs/typescript/decorators/runtime-validation.html).
+
+Install the `runtime-data-validation` package:
 
 ```
 $ npm install runtime-data-validation --save
 ```
+
+In your `tsconfig.json` file make these settings:
+
+```json
+{
+    "compilerOptions": {
+        ...
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        ...
+    }
+}
+```
+
+The first, `experimentalDecorators`, turns on decorator support.
+
+The second, `emitDecoratorMetadata`, emits data required by the `reflect-metadata` package.  This package enables us to do powerful things in decorators by recording metadata about classes, properties, methods, and parameters.
 
 To use the decorators, add this to your code:
 
