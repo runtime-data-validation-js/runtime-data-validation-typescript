@@ -24,7 +24,7 @@
  * }
  * ```
  * 
- * [Return to home page](/index.html)
+ * [Return to home page](../index.html)
  * @module validation-functions
  */
 

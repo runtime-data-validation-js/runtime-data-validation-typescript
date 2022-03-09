@@ -35,7 +35,7 @@
  * In other words, coding this as a decorator we use `@DecoratorName()`
  * and do not pay attention to the decorator function return value.
  * 
- * [Return to home page](/index.html)
+ * [Return to home page](./index.html)
  * 
  * @module runtime-data-validation
  */
