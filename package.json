@@ -1,6 +1,6 @@
 {
   "name": "runtime-data-validation",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "TypeScript Decorators for automatic runtime data validation in accessors and method parameters",
   "homepage": "https://github.com/runtime-data-validation-js/runtime-data-validation-typescript",
   "repository": {

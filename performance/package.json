@@ -1,0 +1,21 @@
+{
+  "name": "performance",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "watch": "npx tsc -w",
+    "setup": "cd .. && npm install && npm run build"
+  },
+  "keywords": [],
+  "author": "David Herron <david@davidherron.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@types/benchmark": "^2.1.1",
+    "@types/node": "^17.0.22",
+    "benny": "^3.7.1",
+    "runtime-data-validation": "file:..",
+    "typescript": "^4.6.2"
+  }
+}

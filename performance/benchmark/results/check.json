@@ -1,0 +1,39 @@
+{
+  "name": "Performance",
+  "date": "2022-03-23T21:02:39.244Z",
+  "version": "1.0.0",
+  "results": [
+    {
+      "name": "set speed checked",
+      "ops": 11145264,
+      "margin": 1.12,
+      "percentSlower": 0
+    },
+    {
+      "name": "set speed unchecked",
+      "ops": 7000367,
+      "margin": 1.82,
+      "percentSlower": 37.19
+    },
+    {
+      "name": "set speed simple",
+      "ops": 6733752,
+      "margin": 2.21,
+      "percentSlower": 39.58
+    },
+    {
+      "name": "set speed checking disabled",
+      "ops": 10617306,
+      "margin": 1.17,
+      "percentSlower": 4.74
+    }
+  ],
+  "fastest": {
+    "name": "set speed checked",
+    "index": 0
+  },
+  "slowest": {
+    "name": "set speed simple",
+    "index": 2
+  }
+}

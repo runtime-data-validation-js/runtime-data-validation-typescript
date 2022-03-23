@@ -55,6 +55,22 @@ For detailed documentation see: [`runtime-data-validation-js.github.io`](https:/
 
 For the API, see: [`runtime-data-validation-js.github.io/api`](https://runtime-data-validation-js.github.io/api/index.html)
 
+# Disabling validation
+
+You may be concerned about the performance impact of validation.  We tried to build a benchmark test to measure what is the impact, but got inconclusive results.  You'll find this in the `performance` directory of the package.
+
+But, while doing this an API method was added to disable validation.
+
+To start, import this function:
+
+```ts
+import {
+    setEnabled as ValidateEnabled
+} from 'runtime-data-validation';
+```
+
+Then, call `ValidateEnable(false)` to disable validation, or with `true` to enable it.  Your application can dynamically call this to enable or disable at will.
+
 # Installation
 
 On TechSparx there is [a complete overview of TypeScript decorators](https://techsparx.com/nodejs/typescript/decorators/introduction.html), that goes over setting up a Node.js project with decorator support.  Included in that article series is [a description of the theory behind this package](https://techsparx.com/nodejs/typescript/decorators/runtime-validation.html).

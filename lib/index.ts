@@ -201,18 +201,21 @@ export function ValidateParams(
     const savedValue = descriptor.value;
     // Attach validation logic
     descriptor.value = function(...args: any[]) {
-        let validators = Reflect.getMetadata(PARAMETER_VALIDATORS,
-                                target, propertyKey)
-                        || [];
-        // const validators = ParamValidators(target, propertyKey) || {};
+        // const enabled = Reflect.getMetadata(VALIDATION_ENABLED, target) || true;
+        if (enabled) {
+            let validators = Reflect.getMetadata(PARAMETER_VALIDATORS,
+                                    target, propertyKey)
+                            || [];
+            // const validators = ParamValidators(target, propertyKey) || {};
 
-        for (const key in Object.keys(validators)) {
-            if (key === 'length') continue;
-            const funclist = validators[key];
-            const value = args[key];
-            // console.log(`ValidateParams ${target} ${String(propertyKey)} ${key} value ${value} funclist`, funclist);
-            for (const func of funclist) {
-                func(value);
+            for (const key in Object.keys(validators)) {
+                if (key === 'length') continue;
+                const funclist = validators[key];
+                const value = args[key];
+                // console.log(`ValidateParams ${target} ${String(propertyKey)} ${key} value ${value} funclist`, funclist);
+                for (const func of funclist) {
+                    func(value);
+                }
             }
         }
         // Actually call the function
@@ -237,17 +240,39 @@ export function ValidateAccessor<T>() {
         };
         if (originals.set) {
             descriptor.set = function(newval: T) {
-                let validators =
-                    Reflect.getMetadata(ACCESSOR_VALIDATORS,
-                            target, propertyKey)
-                    || [];
-                // const validators = AccessorValidators(target, propertyKey);
-                // console.log(`AccessorValidation validators`, validators);
-                for (const func of validators) {
-                    func(newval);
+                if (enabled) {
+                    let validators =
+                        Reflect.getMetadata(ACCESSOR_VALIDATORS,
+                                target, propertyKey)
+                        || [];
+                    // const validators = AccessorValidators(target, propertyKey);
+                    // console.log(`AccessorValidation validators`, validators);
+                    for (const func of validators) {
+                        func(newval);
+                    }
                 }
                 originals.set.call(this, newval);
             };
         }
     }
+}
+
+let enabled: boolean = true;
+
+/**
+ * Allows an application to disable validation.  For example, the package
+ * can be enabled during testing and development, and disabled for 
+ * production use.  By default the package is `enabled`, meaning an
+ * internal flag variable is set to `true`.  To disable, call this 
+ * function with `false`.
+ * 
+ * This can be called as desired to enable or disable dynamically.  The
+ * effect is for the override functions to fall straight through to calling
+ * the original function.  This means the override functions are still
+ * installed, but will have no effect.
+ *
+ * @param enable Change whether the package is enabled
+ */
+export function setEnabled(enable: boolean): void {
+    enabled = enable;
 }
