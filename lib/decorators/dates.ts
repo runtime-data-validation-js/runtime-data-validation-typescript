@@ -27,6 +27,17 @@ export function IsISO8601(options?: validators.IsISO8601Options) {
 }
 
 /**
+ * Check if the string is a valid ISO 8601 Duration string.
+ * @returns 
+ */
+ export function IsISO8601Duration() {
+    return generateValidationDecorator(
+        (value) => validators.isISO8601Duration(value),
+        `Value :value: is not an ISO8601 Duration string`);
+
+}
+
+/**
  * check if the string is a valid RFC 3339 date.
  * {@link https://tools.ietf.org/html/rfc3339}
  * 

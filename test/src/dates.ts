@@ -1,7 +1,7 @@
 
 import { assert } from 'chai';
 import {
-    IsDate, conversions, IsISO8601, 
+    IsDate, conversions, IsISO8601, IsISO8601Duration,
     ValidateParams, ValidateAccessor
 } from 'runtime-data-validation';
 
@@ -684,6 +684,72 @@ describe('Dates', function(){
             let failed = false;
             try {
                 const result = de.checkDateFull(iv);
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+});
+
+describe('ISO8601 Duration', function() {
+
+    class ISO8601DurationExample {
+
+        #iso8601: string;
+
+        @ValidateAccessor<string>()
+        @IsISO8601Duration()
+        set iso8601(ni: string) { this.#iso8601 = ni; }
+        get iso8601() { return this.#iso8601; }
+
+        @ValidateParams
+        checkISO8601Duration(
+            @IsISO8601Duration() ndur: string
+        ) {
+            return ndur;
+        }
+
+    }
+
+    const validDurations = [ 'PT10S', 'P3Y6M4DT12H30M5S'   ];
+
+    const invalidDurations = [
+        'invalid'
+    ];
+
+    const isoe = new ISO8601DurationExample();
+
+    it('should validate correct ISO8601 durations accessors', function() {
+        for (const v of validDurations) {
+            isoe.iso8601 = v;
+            assert.equal(v, isoe.iso8601);
+        }
+    });
+
+    it('should validate correct ISO8601 durations parameters', function() {
+        for (const v of validDurations) {
+            const result = isoe.checkISO8601Duration(v);
+            assert.equal(v, result);
+        }
+    });
+
+    it('Should reject invalid ISO8601 durations accessors', function() {
+
+        for (const iv of invalidDurations) {
+            let failed = false;
+            try {
+                isoe.iso8601 = iv;
+            } catch (e) { failed = true; }
+            assert.equal(failed, true);
+        }
+    });
+
+    it('Should reject invalid ISO8601 durations parameters', function() {
+
+        for (const iv of invalidDurations) {
+            let failed = false;
+            try {
+                const result = isoe.checkISO8601Duration(iv);
             } catch (e) { failed = true; }
             assert.equal(failed, true);
         }
